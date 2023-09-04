@@ -1,0 +1,74 @@
+/*MODAL HEADER*/
+.modal-content{
+width: 1000px;
+display: flex-box;
+justify-content: center;
+}
+
+.modal-header{
+padding: 0,10px,0,0;
+
+}
+
+.title-modal
+{ 
+    font-size: 23px;
+    display: flexbox;
+    margin-left: 400px;
+   
+}
+
+/*MODAL BODY*/
+.group-form
+{
+ margin-left: 20px;
+ margin-bottom: 10px;
+ display: inline-block;
+}
+
+.group-form .labels
+{
+    color:#000000;
+    font-weight: 600;
+    font-family: 'Raleway', sans-serif;
+    font-family: 'Titillium Web', sans-serif;
+    font-style: italic;
+
+}
+
+.group-form .form-control
+{  
+    border-color: #FF034B;
+    border-style: inset;
+    border-radius: 5px;
+ 
+    
+}
+
+.group-form .select-form{
+    border-color: #FF034B;
+    border-style: inset;
+    border-radius: 5px;
+    height: 35px;
+    
+}
+.group-form .datepicker{
+    border-color: #FF034B;
+    border-style: inset;
+    border-radius: 5px;
+}
+
+/*MODAL FOOTER*/
+.modal-footer .btn_footer{
+
+    background-color:#FF034B;
+    border-color: #FF034B;
+    margin-right: 20px;
+    width: 90px;
+    height: 40px;
+    text-align: center;
+    font-weight: 600;
+    font-family: 'Raleway', sans-serif;
+    font-family: 'Titillium Web', sans-serif;
+    font-style: italic;
+}
