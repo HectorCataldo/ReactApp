@@ -1,12 +1,11 @@
 import React,{useState} from "react"
-import ReactDOM from 'react-dom/client'
 import Button from 'react-bootstrap/Button';
 import Col from 'react-bootstrap/Col';
 import Form from 'react-bootstrap/Form';
 import Row from 'react-bootstrap/Row';
 import * as formik from 'formik';
 import * as yup from 'yup';
-import './register-style.css';
+import '../CSS/register-style.css';
 //MODAL
 import Modal from 'react-bootstrap/Modal';
 
@@ -14,15 +13,11 @@ import Modal from 'react-bootstrap/Modal';
 import DatePicker from "react-datepicker";
 import 'react-datepicker/dist/react-datepicker.css'
 import 'react-datepicker/dist/react-datepicker-cssmodules.css'
-import DropdownItem from "react-bootstrap/esm/DropdownItem";
 
 
 
+export const Registro = (props) => {
 
-
-
-
-export const Registro = ({show,handleClose}) => {
 
     const [startDate, setStartDate] = useState(new Date());
     const { Formik } = formik;
@@ -40,33 +35,10 @@ export const Registro = ({show,handleClose}) => {
       gender: yup.string().required(),
     });
 
-    function DropdownItem(props){
-      return(
-        <li className="dropdownItem">
-          
-          <a>{props.text}</a>
-        </li>
-      );
-    }
       
     return(
-       <>
-      <div className="App">
-          <div className="menu-container">
-            <div className="menu-trigger">
-              <div className="dropdown-menu">
-                <h3>dropdown menu</h3>
-                <ul>
-                  <DropdownItem img={user} textc ={"My Profile"}/>
-                </ul>
-              </div>
-            </div>
-          </div>
-        </div>
-
-  
-
-      <Modal show={show} onHide={handleClose} size='xl'>
+<>
+      <Modal {...props}  size='xl'>
           <Modal.Header closeButton>
             <h1 className="title-modal">REGISTRAR</h1>
           </Modal.Header>
@@ -94,7 +66,7 @@ export const Registro = ({show,handleClose}) => {
 
                 <Form noValidate onSubmit={handleSubmit}>
                   <Row className="mb-6">
-
+                  <Form.Label className="labels-title">Información básica</Form.Label>
                     <Form.Group as={Col} md="3" className="group-form">
                       <Form.Label className="labels">ID Cliente</Form.Label>
 
@@ -110,7 +82,7 @@ export const Registro = ({show,handleClose}) => {
 
                     <Form.Group as={Col} md="3" className="group-form">
 
-                      <Form.Label className="labels">Numero de documento</Form.Label>
+                      <Form.Label className="labels">Número de documento</Form.Label>
 
                       <Form.Control
                         type="text"
@@ -119,8 +91,8 @@ export const Registro = ({show,handleClose}) => {
                         onChange={handleChange}
                         isValid={touched.numberdoc && !errors.numberdoc} /></Form.Group>
 
-
-
+                      <div className="linea"></div>
+                    <Form.Label className="labels-title">Información de contacto</Form.Label>
                     <Form.Group as={Col} md="3" className="group-form">
                       <Form.Label className="labels">Nombres</Form.Label>
                       <Form.Control
@@ -149,54 +121,18 @@ export const Registro = ({show,handleClose}) => {
                         onChange={handleChange}
                         isValid={touched.lastName2 && !errors.lastName2} /></Form.Group>
 
-
                     <Form.Group as={Col} md="3" className="group-form">
-                      <Form.Label className="labels">Direccion</Form.Label>
-                      <Form.Control
-                        type="text"
-                        name="address"
-                        value={values.address}
-                        onChange={handleChange}
-                        isValid={touched.address && !errors.address} /></Form.Group>
-
-                    <>
-                      <Form.Group as={Col} md="3" className="group-form">
-                        <Form.Label className="labels">Correo</Form.Label>
-                        <Form.Control
-                          type="text"
-                          name="email"
-                          value={values.email}
-                          onChange={handleChange}
-                          isValid={touched.email && !errors.email} />
-                      </Form.Group>
-                    </>
-
-                    <Form.Group as={Col} md="3" className="group-form">
-                      <Form.Label className="labels">Telefono</Form.Label>
-                      <Form.Control
-                        type="text"
-                        name="phone"
-                        value={values.phone}
-                        onChange={handleChange}
-                        isValid={touched.phone && !errors.phone} /></Form.Group>
-
-                    {/*FORM SELECT NACIONALIDAD Y GENERO*/}
-                    <Form.Group as={Col} md="3" className="group-form">
-                      <Form.Label className="labels">Genero</Form.Label>
-                      <Form.Select className="select-form" size='sm'>
-                        <option></option>
-                        <option value="1">Mujer</option>
-                        <option value="2">Hombre</option>
-                        <option value="3">Otro</option>
-                      </Form.Select>
+                      {/*DATE PICKER FOR BORN REGISTER*/}
+                      <Form.Label className="labels">Fecha de nacimiento</Form.Label>
+                      <DatePicker className="datepicker" selected={startDate} onChange={(date) => setStartDate(date)} />
                     </Form.Group>
 
                     <Form.Group as={Col} md="3" className="group-form">
-                      <Form.Label className="labels">Profesion</Form.Label>
+                      <Form.Label className="labels">Género</Form.Label>
                       <Form.Select className="select-form" size='sm'>
                         <option></option>
-                        <option value="1">Mujer</option>
-                        <option value="2">Hombre</option>
+                        <option value="1">Masculino</option>
+                        <option value="2">Femenino</option>
                         <option value="3">Otro</option>
                       </Form.Select>
                     </Form.Group>
@@ -211,15 +147,53 @@ export const Registro = ({show,handleClose}) => {
                       </Form.Select>
                     </Form.Group>
 
-                    <Form.Group as={Col} md="4" className="group-form">
-                      {/*DATE PICKER FOR BORN REGISTER*/}
-                      <Form.Label className="labels">Fecha de nacimiento</Form.Label>
-                      <DatePicker className="datepicker" selected={startDate} onChange={(date) => setStartDate(date)} />
+                  
+                    <Form.Group as={Col} md="3" className="group-form">
+                      <Form.Label className="labels">Teléfono</Form.Label>
+                      <Form.Control
+                        type="text"
+                        name="phone"
+                        value={values.phone}
+                        onChange={handleChange}
+                        isValid={touched.phone && !errors.phone} /></Form.Group>
+
+
+                    <Form.Group as={Col} md="3" className="group-form">
+                        <Form.Label className="labels">Correo</Form.Label>
+                        <Form.Control
+                          type="text"
+                          name="email"
+                          value={values.email}
+                          onChange={handleChange}
+                          isValid={touched.email && !errors.email} />
+                      </Form.Group>
+                      
+                    <Form.Group as={Col} md="6" className="group-form">
+                      <Form.Label className="labels">Dirección</Form.Label>
+                      <Form.Control
+                        className="form_dir"
+                        type="text"
+                        name="address"
+                        value={values.address}
+                        onChange={handleChange}
+                        isValid={touched.address && !errors.address} /></Form.Group>
+
+                  
+                      <div className="linea"></div>
+
+                  
+                      <Form.Label className="labels-title">Información adicional</Form.Label>
+
+                    <Form.Group as={Col} md="3" className="group-form">
+                      <Form.Label className="labels">Profesión</Form.Label>
+                      <Form.Select className="select-form" size='sm'>
+                        <option></option>
+                        <option value="1">a</option>
+                        <option value="2">b</option>
+                        <option value="3">c</option>
+                      </Form.Select>
                     </Form.Group>
-
                   </Row>
-
-
                 </Form>
               )}
             </Formik>
@@ -229,7 +203,7 @@ export const Registro = ({show,handleClose}) => {
           </Modal.Body>
           <Modal.Footer>
             <Button className="btn_footer" type="submit">Registrar</Button>
-            <Button className="btn_footer" onClick={handleClose} type="submit">Cancelar</Button>
+            <Button className="btn_footer" onClick={props.onHide}>Close</Button>
           </Modal.Footer>
         </Modal></>
 

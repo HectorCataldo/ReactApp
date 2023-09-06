@@ -45,6 +45,11 @@
 
 /*APP.JSX*/
 
+.selected-row { 
+  background-color: #777676; /*Color de fila seleccionada*/
+  color: #ffffff;
+}
+
 /* index.css */
 .App {
   font-family: Inter, system-ui, Avenir, Helvetica, Arial, sans-serif;
