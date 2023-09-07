@@ -6,6 +6,7 @@ import Row from 'react-bootstrap/Row';
 import * as formik from 'formik';
 import * as yup from 'yup';
 import '../CSS/register-style.css';
+import { useFetch } from '../assets/useFetch';
 //MODAL
 import Modal from 'react-bootstrap/Modal';
 
@@ -38,7 +39,14 @@ export const Modify = (props) => {
       gender: yup.string().required(),
     });
 
+    const {data} = useFetch("http://localhost:8080/api/profession");
+
       
+    // FORMULARIO 
+    
+
+
+
     return(
     <>
          <Modal
@@ -72,7 +80,7 @@ export const Modify = (props) => {
               {({ handleSubmit, handleChange, values, touched, errors }) => (
 
 
-                <Form noValidate onSubmit={handleSubmit}>
+                <Form noValidate onSubmit={handleSubmit} className="formulario">
                   <Row className="mb-6">
                   <Form.Label className="labels-title">INFORMACIÓN BÁSICA</Form.Label>
                     <Form.Group as={Col} md="3" className="group-form">
@@ -194,13 +202,15 @@ export const Modify = (props) => {
                   
                       <Form.Label className="labels-title">INFORMACIÓN ADICIONAL</Form.Label>
 
-                    <Form.Group as={Col} md="3" className="group-form">
+                      <Form.Group as={Col} md="3" className="group-form">
                       <Form.Label className="labels">Profesión</Form.Label>
                       <Form.Select className="select-form" size='sm'>
                         <option></option>
-                        <option value="1">a</option>
-                        <option value="2">b</option>
-                        <option value="3">c</option>
+                        {data && data.map((item) => (
+                          <option key={item.id} value={item.id}>
+                              {item.profession_Name}
+                          </option>
+                        )  )}
                       </Form.Select>
                     </Form.Group>
                   </Row>

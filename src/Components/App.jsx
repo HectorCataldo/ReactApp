@@ -32,7 +32,7 @@ export const App = () => {
 
         <button className='btn-buscar'>Buscar</button> 
         
-        <button className='btn-crear'     type= "submit" onClick={() => setModalShowC(true)} >Crear</button> 
+        <button className='btn-crear'     type= "button" onClick={() => setModalShowC(true)} >Crear</button> 
   
         <button className='btn-modificar' type="submit" onClick={() => setModalShowM(true)}>Modificar</button>
 
