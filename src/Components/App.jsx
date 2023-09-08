@@ -34,9 +34,9 @@ export const App = () => {
         
         <button className='btn-crear'     type= "button" onClick={() => setModalShowC(true)} >Crear</button> 
   
-        <button className='btn-modificar' type="submit" onClick={() => setModalShowM(true)}>Modificar</button>
+        <button className='btn-modificar' type="button" onClick={() => setModalShowM(true)}>Modificar</button>
 
-        <button className='btn-desactivar' type="submit" onClick={() => setModalShowD(true)} >Desactivar</button> 
+        <button className='btn-desactivar' type="button" onClick={() => setModalShowD(true)} >Desactivar</button> 
         </div>
       <div className='card'>
         <table>

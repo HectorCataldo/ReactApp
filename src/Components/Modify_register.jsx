@@ -50,15 +50,12 @@ export const Modify = (props) => {
     return(
     <>
          <Modal
-      {...props}
-      size="xl"
-      aria-labelledby="contained-modal-title-vcenter"
-      centered
+      {...props} size="xl"  aria-labelledby="contained-modal-title-vcenter" centered
     >
       <Modal.Header closeButton>
-        <Modal.Title >
-         <h1 className="title-modal">MODIFICAR</h1>
-        </Modal.Title>
+          <Modal.Title >
+          <h1 className="title-modal">MODIFICAR</h1>
+          </Modal.Title>
       </Modal.Header>
       <Modal.Body>
           <Formik
