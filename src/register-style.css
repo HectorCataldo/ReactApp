@@ -29,10 +29,13 @@ padding: 0,10px,0,0;
 .group-form .labels
 {
     color:#000000;
-    font-weight: 600;
-    font-family: 'Raleway', sans-serif;
-    font-family: 'Titillium Web', sans-serif;
-    font-style: italic;
+    /* font-weight: 600; */
+    /* font-family: 'Raleway', sans-serif;
+    font-family: 'Titillium Web', sans-serif; */
+    /* font-family: 'Barlow', sans-serif;
+    font-family: 'IM Fell English SC', serif;
+    font-family: 'Open Sans', sans-serif; */
+    /* font-style: italic; */
 
 }
 

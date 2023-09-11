@@ -1,0 +1,134 @@
+/*MODAL HEADER*/
+.modal-content{
+width: 1000px;
+display: flex-box;
+justify-content: center;
+}
+
+.modal-header{
+padding: 0,10px,0,0;
+
+}
+
+.title-modal
+{ 
+    font-size: 23px;
+    display: flexbox;
+    margin-left: 400px;
+   
+}
+
+/* MODAL HEADER DESACTIVATE*/
+
+.modal-title1{
+    text-align: center;
+    font-size: 25px;
+    margin-left: 150px;
+}
+
+/*MODAL BODY*/
+.group-form
+{
+ margin-left: 10px;
+ margin-bottom: 10px;
+ display: inline-block;
+}
+
+.group-form .labels
+{
+    color:#7F7F7F;
+    /* font-weight: 600; */
+    font-family: 'Barlow', sans-serif;
+    font-family: 'IM Fell English SC', serif;
+    font-family: 'Open Sans', sans-serif;
+    /* font-style: italic; */
+
+}
+
+.labels-title{
+
+    color:#C7C7C7;
+    font-weight: 600; 
+    font-size: 22px;
+    padding-top: 10px;
+    padding-bottom: 10px;
+}
+
+
+.group-form .form-control
+{  
+    border-color: #C7C7C7;
+    border-style: 2px solid;
+    border-radius: 5px;
+ 
+}
+
+.group-form .form_dir
+{  
+    
+    border-color: #C7C7C7;
+    border-style: 2px solid;
+    border-radius: 5px;
+    width: 482px;
+
+    
+ 
+}
+
+.group-form .select-form{
+    border-color: #C7C7C7;
+    border-style: 2px solid;
+    border-radius: 5px;
+    height: 35px;
+    
+}
+.group-form .datepicker{
+    border-color: #C7C7C7;
+    border-style: 2px solid;
+    border-radius: 5px;
+    width: 225px;
+    height: 35px;
+}
+
+.linea{
+    border-top: 1px solid rgb(224, 223, 223);
+    height: 2px;
+    padding: 0;
+    margin: 20px auto 0 auto;
+    
+}
+
+.body-msg{
+    font-size: 20px;
+    text-decoration: underline;
+    font-family: 'Open Sans', sans-serif;
+    
+}
+
+
+
+/*MODAL FOOTER*/
+.modal-footer .btn_footer{
+
+    background-color:#0B6087;
+    border-color:#0B6087;
+    margin-right: 10px;
+    width: 100px;
+    height: 40px;
+    text-align: center;
+    /*font-weight: 600;*/
+    font-family: 'Open Sans', sans-serif;
+   /* font-style: italic;*/
+}
+
+
+.modal-footer .btn_desactivate{
+    width: 100px;
+    height: 40px;
+    font-size: 15px;
+    border-color: #FF034B;
+    background-color:#FF034B;
+    font-weight: 600;
+    font-family: 'Open Sans', sans-serif;
+    
+}

@@ -45,6 +45,11 @@
 
 /*APP.JSX*/
 
+.selected-row { 
+  background-color: #777676; /*Color de fila seleccionada*/
+  color: #ffffff;
+}
+
 /* index.css */
 .App {
   font-family: Inter, system-ui, Avenir, Helvetica, Arial, sans-serif;
@@ -75,11 +80,7 @@ th, td {
 }
 
 th {
-  background-color: #e6e6e6;
-}
-.selected-row { /*(AGREGAR index.css)*/
-  background-color: #777676; /*Color de fila seleccionada*/
-  color: #ffffff;
+  background-color: #f2f2f2;
 }
 
 

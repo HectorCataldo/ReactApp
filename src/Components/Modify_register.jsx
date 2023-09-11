@@ -1,12 +1,13 @@
 import React,{useState} from "react"
-import ReactDOM from 'react-dom/client'
 import Button from 'react-bootstrap/Button';
 import Col from 'react-bootstrap/Col';
 import Form from 'react-bootstrap/Form';
 import Row from 'react-bootstrap/Row';
 import * as formik from 'formik';
 import * as yup from 'yup';
-import './register-style.css';
+import '../CSS/register-style.css';
+import { useFetch } from '../assets/useFetch';
+
 //MODAL
 import Modal from 'react-bootstrap/Modal';
 
@@ -14,20 +15,19 @@ import Modal from 'react-bootstrap/Modal';
 import DatePicker from "react-datepicker";
 import 'react-datepicker/dist/react-datepicker.css'
 import 'react-datepicker/dist/react-datepicker-cssmodules.css'
-import DropdownItem from "react-bootstrap/esm/DropdownItem";
 
 
 
+export const Modify = (props) => {
 
-
-
-
-export const Registro = ({show,handleClose}) => {
 
     const [startDate, setStartDate] = useState(new Date());
     const { Formik } = formik;
 
     //MODAL CONST
+    
+    
+
     const schema = yup.object().shape({
       idclient: yup.string().required(),
       numberdoc:yup.string().required(),
@@ -38,18 +38,27 @@ export const Registro = ({show,handleClose}) => {
       email: yup.string().required(),
       phone: yup.string().required(),
       gender: yup.string().required(),
-    });   
+    });
+
+    const {data: profession} = useFetch("http://localhost:8080/api/profession");
+    const {data: country} = useFetch("https://restcountries.com/v3.1/all");
+
       
     return(
-       <>
-      <Modal show={show} onHide={handleClose} size='xl'>
-          <Modal.Header closeButton>
-            <h1 className="title-modal">REGISTRAR</h1>
-          </Modal.Header>
-
-
-          <Modal.Body>
-            <Formik
+    <>
+         <Modal
+      {...props}
+      size="xl"
+      aria-labelledby="contained-modal-title-vcenter"
+      centered
+    >
+      <Modal.Header closeButton>
+        <Modal.Title >
+         <h1 className="title-modal">MODIFICAR</h1>
+        </Modal.Title>
+      </Modal.Header>
+      <Modal.Body>
+          <Formik
               validationSchema={schema}
               onSubmit={console.log}
               initialValues={{
@@ -70,7 +79,7 @@ export const Registro = ({show,handleClose}) => {
 
                 <Form noValidate onSubmit={handleSubmit}>
                   <Row className="mb-6">
-
+                  <Form.Label className="labels-title">INFORMACIÓN BÁSICA</Form.Label>
                     <Form.Group as={Col} md="3" className="group-form">
                       <Form.Label className="labels">ID Cliente</Form.Label>
 
@@ -86,17 +95,19 @@ export const Registro = ({show,handleClose}) => {
 
                     <Form.Group as={Col} md="3" className="group-form">
 
-                      <Form.Label className="labels">Numero de documento</Form.Label>
+                      <Form.Label className="labels">Número de documento</Form.Label>
 
                       <Form.Control
                         type="text"
                         name="numberdoc"
                         value={values.numberdoc}
                         onChange={handleChange}
-                        isValid={touched.numberdoc && !errors.numberdoc} /></Form.Group>
-
-
-
+                        isValid={touched.numberdoc && !errors.numberdoc} 
+                        disabled
+                        readOnly/></Form.Group>
+                        
+                      <div className="linea"></div>
+                    <Form.Label className="labels-title">INFORMACIÓN DE CONTACTO</Form.Label>
                     <Form.Group as={Col} md="3" className="group-form">
                       <Form.Label className="labels">Nombres</Form.Label>
                       <Form.Control
@@ -125,50 +136,14 @@ export const Registro = ({show,handleClose}) => {
                         onChange={handleChange}
                         isValid={touched.lastName2 && !errors.lastName2} /></Form.Group>
 
-
                     <Form.Group as={Col} md="3" className="group-form">
-                      <Form.Label className="labels">Direccion</Form.Label>
-                      <Form.Control
-                        type="text"
-                        name="address"
-                        value={values.address}
-                        onChange={handleChange}
-                        isValid={touched.address && !errors.address} /></Form.Group>
-
-                    <>
-                      <Form.Group as={Col} md="3" className="group-form">
-                        <Form.Label className="labels">Correo</Form.Label>
-                        <Form.Control
-                          type="text"
-                          name="email"
-                          value={values.email}
-                          onChange={handleChange}
-                          isValid={touched.email && !errors.email} />
-                      </Form.Group>
-                    </>
-
-                    <Form.Group as={Col} md="3" className="group-form">
-                      <Form.Label className="labels">Telefono</Form.Label>
-                      <Form.Control
-                        type="text"
-                        name="phone"
-                        value={values.phone}
-                        onChange={handleChange}
-                        isValid={touched.phone && !errors.phone} /></Form.Group>
-
-                    {/*FORM SELECT NACIONALIDAD Y GENERO*/}
-                    <Form.Group as={Col} md="3" className="group-form">
-                      <Form.Label className="labels">Genero</Form.Label>
-                      <Form.Select className="select-form" size='sm'>
-                        <option></option>
-                        <option value="1">Mujer</option>
-                        <option value="2">Hombre</option>
-                        <option value="3">Otro</option>
-                      </Form.Select>
+                      {/*DATE PICKER FOR BORN REGISTER*/}
+                      <Form.Label className="labels">Fecha de nacimiento</Form.Label>
+                      <DatePicker className="datepicker" selected={startDate} onChange={(date) => setStartDate(date)} />
                     </Form.Group>
 
                     <Form.Group as={Col} md="3" className="group-form">
-                      <Form.Label className="labels">Profesion</Form.Label>
+                      <Form.Label className="labels">Género</Form.Label>
                       <Form.Select className="select-form" size='sm'>
                         <option></option>
                         <option value="1">Mujer</option>
@@ -181,34 +156,75 @@ export const Registro = ({show,handleClose}) => {
                       <Form.Label className="labels">Nacionalidad</Form.Label>
                       <Form.Select className="select-form" size='sm'>
                         <option></option>
-                        <option value="1">Mujer</option>
-                        <option value="2">Hombre</option>
-                        <option value="3">Otro</option>
+                        {country && country.map((item) => (
+                          <option key={item.id} value={item.id}>
+                            {item.name.common}
+                          </option>
+                        ))
+
+                        }
                       </Form.Select>
                     </Form.Group>
 
-                    <Form.Group as={Col} md="4" className="group-form">
-                      {/*DATE PICKER FOR BORN REGISTER*/}
-                      <Form.Label className="labels">Fecha de nacimiento</Form.Label>
-                      <DatePicker className="datepicker" selected={startDate} onChange={(date) => setStartDate(date)} />
+                  
+                    <Form.Group as={Col} md="3" className="group-form">
+                      <Form.Label className="labels">Teléfono</Form.Label>
+                      <Form.Control
+                        type="text"
+                        name="phone"
+                        value={values.phone}
+                        onChange={handleChange}
+                        isValid={touched.phone && !errors.phone} /></Form.Group>
+
+
+                    <Form.Group as={Col} md="3" className="group-form">
+                        <Form.Label className="labels">Correo</Form.Label>
+                        <Form.Control
+                          type="text"
+                          name="email"
+                          value={values.email}
+                          onChange={handleChange}
+                          isValid={touched.email && !errors.email} />
+                      </Form.Group>
+                      
+                    <Form.Group as={Col} md="6" className="group-form">
+                      <Form.Label className="labels">Dirección</Form.Label>
+                      <Form.Control
+                        className="form_dir"
+                        type="text"
+                        name="address"
+                        value={values.address}
+                        onChange={handleChange}
+                        isValid={touched.address && !errors.address} /></Form.Group>
+
+                  
+                      <div className="linea"></div>
+
+                  
+                      <Form.Label className="labels-title">INFORMACIÓN ADICIONAL</Form.Label>
+
+                      <Form.Group as={Col} md="3" className="group-form">
+                      <Form.Label className="labels">Profesión</Form.Label>
+                      <Form.Select className="select-form" size='sm'>
+                        <option></option>
+                        {profession && profession.map((item) => (
+                          <option key={item.id} value={item.id}>
+                              {item.profession_Name}
+                          </option>
+                        )  )}
+                      </Form.Select>
                     </Form.Group>
-
                   </Row>
-
-
                 </Form>
               )}
             </Formik>
-
-
-
-          </Modal.Body>
-          <Modal.Footer>
-            <Button className="btn_footer" type="submit">Registrar</Button>
-            <Button className="btn_footer" onClick={handleClose} type="submit">Cancelar</Button>
-          </Modal.Footer>
-        </Modal></>
-
+      </Modal.Body>
+      <Modal.Footer>
+        <Button className="btn_footer" type="submit" >Guardar</Button>
+        <Button className="btn_footer" onClick={props.onHide}>Close</Button>
+      </Modal.Footer>
+    </Modal>
+    </>
   );
 }
        
