@@ -45,8 +45,8 @@
 
 /*APP.JSX*/
 
-.selected-row { 
-  background-color: #777676; /*Color de fila seleccionada*/
+.selectedClient { 
+  background-color: #0674a7; /*Color de fila seleccionada*/
   color: #ffffff;
 }
 
@@ -76,19 +76,20 @@ table {
 
 th, td {
   padding: 8px;
-  border-bottom: 1px solid #ddd;
+  border-bottom: 1px solid #0B6087;
 }
 
 th {
-  background-color: #f2f2f2;
+  background-color: #0B6087;
+  color: white;
 }
 
 
 /*GENERAL USO*/
  button{
   font-family: Inter, system-ui, Avenir, Helvetica, Arial, sans-serif;
-  background-color: #ddd;
-  color: black;
+  background-color: #0B6087;
+  color: white;
   height: 30px;  
   width: 10%;
   margin: 10px;
@@ -96,10 +97,17 @@ th {
   border-color: black;
  }
  button:hover{
-  background-color: black;
+  background-color: rgb(90, 90, 90);
   color: #ddd;
   border-color: white;
  }
+
+ button[disabled] {
+  background-color: #ccc; /* Cambia el color de fondo */
+  color: #999; /* Cambia el color del texto */
+  border-color: #999; /* Cambia el color del borde */
+  cursor: not-allowed; /* Cambia el cursor a 'no permitido' */
+}
 
 
  

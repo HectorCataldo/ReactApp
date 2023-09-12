@@ -16,10 +16,12 @@ export const App = () => {
   const [modalShowM, setModalShowM] = React.useState(false);
   const [modalShowD,setModalShowD] = React.useState(false);
 
-  const [selectedRow, setSelectedRow] = useState(); 
-  const handleRowClick = (index) => {setSelectedRow(index); 
-    console.log("seleccionado la fila " + index );          
-  };                                                        
+  const [selectedClient, setSelectedClient] = useState(); 
+
+  const handleRowClick = (rowData) => {
+    setSelectedClient(rowData); 
+    console.log( selectedClient );          
+  };
   
   return (
     <>
@@ -34,9 +36,9 @@ export const App = () => {
         
         <button className='btn-crear'     type= "submit" onClick={() => setModalShowC(true)} >Crear</button> 
   
-        <button className='btn-modificar' type="submit" onClick={() => setModalShowM(true)}>Modificar</button>
+        <button className='btn-modificar' type="submit" onClick={() => setModalShowM(true)} disabled={!selectedClient} >Modificar</button>
 
-        <button className='btn-desactivar' type="submit" onClick={() => setModalShowD(true)} >Desactivar</button> 
+        <button className='btn-desactivar' type="submit" onClick={() => setModalShowD(true)} disabled={!selectedClient}  >{selectedClient && selectedClient.state ? "Desactivar" : "Activar"}</button> 
         </div>
       <div className='card'>
         <table>
@@ -53,11 +55,12 @@ export const App = () => {
               <th>Email</th>
               <th>Dirección</th>
               <th>Profesión</th>
+              <th>Estado</th>
             </tr>
           </thead>
           <tbody>
-            {data?.map((item, index) => ( //(AGREGAR ABAJO DEL tbody)
-              <tr key={item.id} onClick={() => handleRowClick(index)} className={selectedRow === index ? 'selected-row' : '' }> {/*(AGREGAR)*/}
+            {data?.map((item) => ( 
+              <tr key={item.id} onClick={() => handleRowClick(item)} className={selectedClient && selectedClient.id === item.id ? 'selectedClient' : '' }>
                 <td>{item.documentNumber}</td>
                 <td>{item.firstName}</td>
                 <td>{item.lastName}</td>
@@ -69,18 +72,21 @@ export const App = () => {
                 <td>{item.email}</td>
                 <td>{item.address}</td>
                 <td>{item.profession.profession_Name}</td>
+                <td>{item.state ? 'Activo' : 'Inactivo'}</td>
               </tr>
             ))}
           </tbody>
-        </table>
-        <Link to = "/">
+        </table>        
+      </div>
+      <div className='container'>
+      <Link to = "/">
           <button>Volver</button>
         </Link>
       </div>
       
     </div>
     <Registro   show={modalShowC} onHide={() => setModalShowC(false)}/>
-    <Modify     show={modalShowM} onHide={() => setModalShowM(false)}/>
+    <Modify show={modalShowM} onHide={() => setModalShowM(false)} selectedClient={selectedClient} />
     <Desctivate show={modalShowD} onHide={() => setModalShowD(false)}/>
     </>
   );

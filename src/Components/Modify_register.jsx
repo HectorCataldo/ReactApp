@@ -1,4 +1,4 @@
-import React,{useState} from "react"
+import React,{useState, useEffect} from "react"
 import Button from 'react-bootstrap/Button';
 import Col from 'react-bootstrap/Col';
 import Form from 'react-bootstrap/Form';
@@ -23,6 +23,19 @@ export const Modify = (props) => {
 
     const [startDate, setStartDate] = useState(new Date());
     const { Formik } = formik;
+
+    const { show, onHide, selectedClient } = props;
+    const [selectedGender, setSelectedGender] = useState(null);
+    const [selectedProfession, setSelectedProfession] = useState(null);
+    const [selectedNationality, setSelectedNationality] = useState(null);
+
+    useEffect(() => {
+      if (show) {
+        setSelectedGender(selectedClient.gender || '');
+        setSelectedProfession(selectedClient.profession.profession_Name);
+        setSelectedNationality(selectedClient.nationality);
+      }
+    }, [show, selectedClient]);
 
     //MODAL CONST
     
@@ -87,7 +100,7 @@ export const Modify = (props) => {
                         type="text"
                         name="idclient"
                         className="form-control"
-                        value={values.idclient}
+                        value={selectedClient.id}
                         onChange={handleChange}
                         isValid={touched.idclient && !errors.idclient}
                         disabled
@@ -100,7 +113,7 @@ export const Modify = (props) => {
                       <Form.Control
                         type="text"
                         name="numberdoc"
-                        value={values.numberdoc}
+                        value={selectedClient.documentNumber}
                         onChange={handleChange}
                         isValid={touched.numberdoc && !errors.numberdoc} 
                         disabled
@@ -113,7 +126,7 @@ export const Modify = (props) => {
                       <Form.Control
                         type="text"
                         name="Names"
-                        value={values.firstName}
+                        value={selectedClient.firstName}
                         onChange={handleChange}
                         isValid={touched.firstName && !errors.firstName} /></Form.Group>
 
@@ -123,7 +136,7 @@ export const Modify = (props) => {
                       <Form.Control
                         type="text"
                         name="lastName1"
-                        value={values.lastName}
+                        value={selectedClient.lastName}
                         onChange={handleChange}
                         isValid={touched.lastName && !errors.lastName} /></Form.Group>
 
@@ -132,29 +145,39 @@ export const Modify = (props) => {
                       <Form.Control
                         type="text"
                         name="lastName2"
-                        value={values.lastName2}
+                        value={selectedClient.secondLastName}
                         onChange={handleChange}
                         isValid={touched.lastName2 && !errors.lastName2} /></Form.Group>
 
                     <Form.Group as={Col} md="3" className="group-form">
                       {/*DATE PICKER FOR BORN REGISTER*/}
                       <Form.Label className="labels">Fecha de nacimiento</Form.Label>
-                      <DatePicker className="datepicker" selected={startDate} onChange={(date) => setStartDate(date)} />
+                      <DatePicker className="datepicker" 
+                      selected={selectedClient.birthDate ? new Date(selectedClient.birthDate + 'T00:00:00Z') : null}
+                      onChange={(date) => setStartDate(date)} />
                     </Form.Group>
 
                     <Form.Group as={Col} md="3" className="group-form">
                       <Form.Label className="labels">Género</Form.Label>
-                      <Form.Select className="select-form" size='sm'>
+                      <Form.Select 
+                        className="select-form"
+                        size='sm'
+                        value={selectedGender}
+                        onChange={(e) => setSelectedGender(e.target.value)}>
                         <option></option>
-                        <option value="1">Mujer</option>
-                        <option value="2">Hombre</option>
-                        <option value="3">Otro</option>
+                        <option value="Masculino">Masculino</option>
+                        <option value="Femenino">Femenino</option>
+                        <option value="Otro">Otro</option>
                       </Form.Select>
                     </Form.Group>
 
                     <Form.Group as={Col} md="3" className="group-form">
                       <Form.Label className="labels">Nacionalidad</Form.Label>
-                      <Form.Select className="select-form" size='sm'>
+                      <Form.Select 
+                        className="select-form" 
+                        size='sm'
+                        value={selectedNationality}
+                        onChange={(e) => setSelectedNationality(e.target.value)}>
                         <option></option>
                         {country && country.map((item) => (
                           <option key={item.id} value={item.id}>
@@ -172,7 +195,7 @@ export const Modify = (props) => {
                       <Form.Control
                         type="text"
                         name="phone"
-                        value={values.phone}
+                        value={selectedClient.phoneNumber}
                         onChange={handleChange}
                         isValid={touched.phone && !errors.phone} /></Form.Group>
 
@@ -182,7 +205,7 @@ export const Modify = (props) => {
                         <Form.Control
                           type="text"
                           name="email"
-                          value={values.email}
+                          value={selectedClient.email}
                           onChange={handleChange}
                           isValid={touched.email && !errors.email} />
                       </Form.Group>
@@ -193,7 +216,7 @@ export const Modify = (props) => {
                         className="form_dir"
                         type="text"
                         name="address"
-                        value={values.address}
+                        value={selectedClient.address}
                         onChange={handleChange}
                         isValid={touched.address && !errors.address} /></Form.Group>
 
@@ -205,7 +228,11 @@ export const Modify = (props) => {
 
                       <Form.Group as={Col} md="3" className="group-form">
                       <Form.Label className="labels">Profesión</Form.Label>
-                      <Form.Select className="select-form" size='sm'>
+                      <Form.Select 
+                        className="select-form" 
+                        size='sm'
+                        value={selectedProfession}
+                        onChange={(e) => setSelectedProfession(e.target.value)}>
                         <option></option>
                         {profession && profession.map((item) => (
                           <option key={item.id} value={item.id}>
