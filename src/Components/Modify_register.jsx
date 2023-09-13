@@ -4,9 +4,10 @@ import Col from 'react-bootstrap/Col';
 import Form from 'react-bootstrap/Form';
 import Row from 'react-bootstrap/Row';
 import * as formik from 'formik';
-import * as yup from 'yup';
 import '../CSS/register-style.css';
 import { useFetch } from '../assets/useFetch';
+import { format } from 'date-fns';
+import moment from 'moment';
 
 //MODAL
 import Modal from 'react-bootstrap/Modal';
@@ -66,17 +67,7 @@ export const Modify = (props) => {
     
     
 
-    const schema = yup.object().shape({
-      idclient: yup.string().required(),
-      numberdoc:yup.string().required(),
-      firstName: yup.string().required(),
-      lastName: yup.string().required(),
-      lastName2: yup.string().required(),
-      address: yup.string().required(),
-      email: yup.string().required(),
-      phone: yup.string().required(),
-      gender: yup.string().required(),
-    });
+   
 
     const {data: profession} = useFetch("http://localhost:8080/api/profession");
     const {data: country} = useFetch("https://restcountries.com/v3.1/all");
@@ -97,7 +88,7 @@ export const Modify = (props) => {
       </Modal.Header>
       <Modal.Body>
           <Formik
-              validationSchema={schema}
+              validationSchema=""
               onSubmit={console.log}
               initialValues={{
                 idclient: '',
@@ -143,7 +134,8 @@ export const Modify = (props) => {
                         onChange={handleChange}
                         isValid={touched.numberdoc && !errors.numberdoc} 
                         disabled
-                        readOnly/></Form.Group>
+                        readOnly
+                        /></Form.Group>
                         
                       <div className="linea"></div>
                     <Form.Label className="labels-title">INFORMACIÓN DE CONTACTO</Form.Label>
@@ -176,13 +168,19 @@ export const Modify = (props) => {
                         onChange={(e) => setDataClient({...dataClient, secondLastName: e.target.value})}
                         isValid={touched.lastName2 && !errors.lastName2} /></Form.Group>
 
-                    <Form.Group as={Col} md="3" className="group-form">
-                      {/*DATE PICKER FOR BORN REGISTER*/}
-                      <Form.Label className="labels">Fecha de nacimiento</Form.Label>
-                      <DatePicker className="datepicker" 
-                      selected={dataClient.birthDate ? new Date(dataClient.birthDate + 'T00:01:00Z') : null}
-                      onChange={(date) => setDataClient( {...dataClient, birthDate:date })} />
-                    </Form.Group>
+                      <Form.Group as={Col} md="3" className="group-form">
+                        <Form.Label className="labels">Fecha de nacimiento</Form.Label>
+                        <DatePicker
+                          dateFormat="dd/MM/yyyy"
+                          className="datepicker"
+                          selected={
+                            dataClient.birthDate
+                              ? moment(dataClient.birthDate).toDate()
+                              : null
+                          }
+                          onChange={(date) => setStartDate(date)}
+                        />
+                      </Form.Group>
 
                     <Form.Group as={Col} md="3" className="group-form">
                       <Form.Label className="labels">Género</Form.Label>
@@ -222,8 +220,8 @@ export const Modify = (props) => {
                       <Form.Control
                         type="text"
                         name="phone"
-                        value={selectedClient.phoneNumber}
-                        onChange={handleChange}
+                        value={dataClient.phoneNumber}
+                        onChange={(e) => setDataClient({...dataClient, phoneNumber: e.target.value})}
                         isValid={touched.phone && !errors.phone} /></Form.Group>
 
 
@@ -232,8 +230,8 @@ export const Modify = (props) => {
                         <Form.Control
                           type="text"
                           name="email"
-                          value={selectedClient.email}
-                          onChange={handleChange}
+                          value={dataClient.email}
+                          onChange={(e) => setDataClient({...dataClient, email: e.target.value})}
                           isValid={touched.email && !errors.email} />
                       </Form.Group>
                       
@@ -243,8 +241,8 @@ export const Modify = (props) => {
                         className="form_dir"
                         type="text"
                         name="address"
-                        value={selectedClient.address}
-                        onChange={handleChange}
+                        value={dataClient.address}
+                        onChange={(e) => setDataClient({...dataClient, address: e.target.value})}
                         isValid={touched.address && !errors.address} /></Form.Group>
 
                   

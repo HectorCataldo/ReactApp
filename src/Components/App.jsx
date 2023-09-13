@@ -6,6 +6,7 @@ import { useState } from 'react';
 import { Registro } from './Create_register';
 import { Modify }   from './Modify_register';
 import { Desctivate } from './Desactivate_register';
+import moment from 'moment';
 
 
 export const App = () => {
@@ -65,7 +66,7 @@ export const App = () => {
                 <td>{item.firstName}</td>
                 <td>{item.lastName}</td>
                 <td>{item.secondLastName}</td>
-                <td>{item.birthDate}</td>
+                <td>{moment(item.birthDate).format('DD/MM/YYYY')}</td>
                 <td>{item.gender}</td>
                 <td>{item.nationality}</td>
                 <td>{item.phoneNumber}</td>
