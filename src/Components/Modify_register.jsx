@@ -28,12 +28,37 @@ export const Modify = (props) => {
     const [selectedGender, setSelectedGender] = useState(null);
     const [selectedProfession, setSelectedProfession] = useState(null);
     const [selectedNationality, setSelectedNationality] = useState(null);
+    const [dataClient, setDataClient] = useState({
+      id: '',
+      documentNumber: '',
+      firstName:'',
+      lastName:'',
+      secondLastName:'',
+      birthDate:'',
+      phoneNumber:'',
+      email:'',
+      address:''
+    }
+    );
 
     useEffect(() => {
       if (show) {
         setSelectedGender(selectedClient.gender || '');
         setSelectedProfession(selectedClient.profession.profession_Name);
         setSelectedNationality(selectedClient.nationality);
+        setDataClient((prevData) =>
+        ({
+          ...prevData,
+          id: selectedClient.id,
+          documentNumber: selectedClient.documentNumber,
+          firstName: selectedClient.firstName,
+          lastName:selectedClient.lastName,
+          secondLastName: selectedClient.secondLastName,
+          birthDate: selectedClient.birthDate,
+          phoneNumber: selectedClient.phoneNumber,
+          email: selectedClient.email,
+          address: selectedClient.address
+        }));
       }
     }, [show, selectedClient]);
 
@@ -103,8 +128,9 @@ export const Modify = (props) => {
                         value={selectedClient.id}
                         onChange={handleChange}
                         isValid={touched.idclient && !errors.idclient}
-                        disabled
-                        readOnly /></Form.Group>
+                        disabled 
+                        readOnly
+                         /></Form.Group>
 
                     <Form.Group as={Col} md="3" className="group-form">
 
@@ -126,9 +152,10 @@ export const Modify = (props) => {
                       <Form.Control
                         type="text"
                         name="Names"
-                        value={selectedClient.firstName}
-                        onChange={handleChange}
-                        isValid={touched.firstName && !errors.firstName} /></Form.Group>
+                        value={dataClient.firstName}
+                        onChange={(e) => setDataClient( { ...dataClient, firstName: e.target.value })}
+                        isValid={touched.firstName && !errors.firstName} />
+                    </Form.Group>
 
 
                     <Form.Group as={Col} md="3" className="group-form">
@@ -136,8 +163,8 @@ export const Modify = (props) => {
                       <Form.Control
                         type="text"
                         name="lastName1"
-                        value={selectedClient.lastName}
-                        onChange={handleChange}
+                        value={dataClient.lastName}
+                        onChange={(e) => setDataClient({...dataClient, lastName: e.target.value})}
                         isValid={touched.lastName && !errors.lastName} /></Form.Group>
 
                     <Form.Group as={Col} md="3" className="group-form">
@@ -145,16 +172,16 @@ export const Modify = (props) => {
                       <Form.Control
                         type="text"
                         name="lastName2"
-                        value={selectedClient.secondLastName}
-                        onChange={handleChange}
+                        value={dataClient.secondLastName}
+                        onChange={(e) => setDataClient({...dataClient, secondLastName: e.target.value})}
                         isValid={touched.lastName2 && !errors.lastName2} /></Form.Group>
 
                     <Form.Group as={Col} md="3" className="group-form">
                       {/*DATE PICKER FOR BORN REGISTER*/}
                       <Form.Label className="labels">Fecha de nacimiento</Form.Label>
                       <DatePicker className="datepicker" 
-                      selected={selectedClient.birthDate ? new Date(selectedClient.birthDate + 'T00:00:00Z') : null}
-                      onChange={(date) => setStartDate(date)} />
+                      selected={dataClient.birthDate ? new Date(dataClient.birthDate + 'T00:01:00Z') : null}
+                      onChange={(date) => setDataClient( {...dataClient, birthDate:date })} />
                     </Form.Group>
 
                     <Form.Group as={Col} md="3" className="group-form">
