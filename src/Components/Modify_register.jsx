@@ -8,6 +8,7 @@ import '../CSS/register-style.css';
 import { useFetch } from '../assets/useFetch';
 import { format } from 'date-fns';
 import moment from 'moment';
+import axios from 'axios';
 
 //MODAL
 import Modal from 'react-bootstrap/Modal';
@@ -22,12 +23,14 @@ import 'react-datepicker/dist/react-datepicker-cssmodules.css'
 export const Modify = (props) => {
 
 
-    const [startDate, setStartDate] = useState(new Date());
+    
     const { Formik } = formik;
 
+    //Constante que tiene que mantenerse en cambio individual
     const { show, onHide, selectedClient } = props;
+    const [selectedBirthDate, setSelectedBirthDate] = useState(new Date());
     const [selectedGender, setSelectedGender] = useState(null);
-    const [selectedProfession, setSelectedProfession] = useState(null);
+    const [selectedProfession, setSelectedProfession] = useState({});
     const [selectedNationality, setSelectedNationality] = useState(null);
     const [dataClient, setDataClient] = useState({
       id: '',
@@ -35,17 +38,19 @@ export const Modify = (props) => {
       firstName:'',
       lastName:'',
       secondLastName:'',
-      birthDate:'',
       phoneNumber:'',
       email:'',
       address:''
     }
     );
-
+    //Permite generar el valor a los input solo cuando el modal se muestre
     useEffect(() => {
       if (show) {
         setSelectedGender(selectedClient.gender || '');
-        setSelectedProfession(selectedClient.profession.profession_Name);
+        setSelectedProfession({
+          id_profession: selectedClient.profession.id_profession,
+          profession_Name : selectedClient.profession.profession_Name
+        });
         setSelectedNationality(selectedClient.nationality);
         setDataClient((prevData) =>
         ({
@@ -55,22 +60,48 @@ export const Modify = (props) => {
           firstName: selectedClient.firstName,
           lastName:selectedClient.lastName,
           secondLastName: selectedClient.secondLastName,
-          birthDate: selectedClient.birthDate,
           phoneNumber: selectedClient.phoneNumber,
           email: selectedClient.email,
           address: selectedClient.address
         }));
+        setSelectedBirthDate(selectedClient.birthDate);
       }
     }, [show, selectedClient]);
 
     //MODAL CONST
-    
-    
-
-   
-
     const {data: profession} = useFetch("http://localhost:8080/api/profession");
     const {data: country} = useFetch("https://restcountries.com/v3.1/all");
+
+    //Axios
+    const handleSave = async () => {
+      try {
+        const response = await axios.put('http://localhost:8080/api/clients', {
+          id: selectedClient.id,
+          documentNumber: selectedClient.documentNumber,
+          firstName: dataClient.firstName,
+          lastName: dataClient.lastName,
+          secondLastName : dataClient.secondLastName,
+          birthDate: selectedBirthDate,
+          gender: selectedGender,
+          nationality: selectedNationality,          
+          phoneNumber: dataClient.phoneNumber,
+          email: dataClient.email,
+          address: dataClient.address,
+          profession: {
+            id_profession: selectedProfession.id_profession,
+            profession_Name: selectedProfession.profession_Name
+          },
+          state: selectedClient.state
+        });    
+        // Maneja la respuesta de la API aquí
+        console.log('Respuesta de la API:', response.data);
+      }
+        
+        catch (error) {
+        // Maneja los errores aquí
+        console.error('Error al enviar la solicitud PUT:', error);
+      }
+    };
 
       
     return(
@@ -173,12 +204,8 @@ export const Modify = (props) => {
                         <DatePicker
                           dateFormat="dd/MM/yyyy"
                           className="datepicker"
-                          selected={
-                            dataClient.birthDate
-                              ? moment(dataClient.birthDate).toDate()
-                              : null
-                          }
-                          onChange={(date) => setStartDate(date)}
+                          selected={moment(selectedBirthDate).toDate()}
+                          onChange={(date) => setSelectedBirthDate(date)}
                         />
                       </Form.Group>
 
@@ -256,14 +283,18 @@ export const Modify = (props) => {
                       <Form.Select 
                         className="select-form" 
                         size='sm'
-                        value={selectedProfession}
-                        onChange={(e) => setSelectedProfession(e.target.value)}>
+                        value={selectedProfession.id_profession} // Utiliza selectedProfession.id_profession como valor
+                        onChange={(e) => setSelectedProfession({
+                          id_profession: e.target.value, // Captura el id_profession seleccionado
+                          profession_Name: e.target.options[e.target.selectedIndex].text // Captura el profession_Name seleccionado
+                        })}
+                      >
                         <option></option>
                         {profession && profession.map((item) => (
-                          <option key={item.id} value={item.id}>
-                              {item.profession_Name}
+                          <option key={item.id_profession} value={item.id_profession}>
+                            {item.profession_Name}
                           </option>
-                        )  )}
+                        ))}
                       </Form.Select>
                     </Form.Group>
                   </Row>
@@ -272,7 +303,7 @@ export const Modify = (props) => {
             </Formik>
       </Modal.Body>
       <Modal.Footer>
-        <Button className="btn_footer" type="submit" >Guardar</Button>
+        <Button className="btn_footer" type="button" onClick={handleSave} >Guardar</Button>
         <Button className="btn_footer" onClick={props.onHide}>Close</Button>
       </Modal.Footer>
     </Modal>
