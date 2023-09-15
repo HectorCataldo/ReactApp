@@ -108,7 +108,7 @@ padding: 0,10px,0,0;
 
 
 /*MODAL FOOTER*/
-.modal-footer .btn_footer{
+.modal-footer .btn_footer, .btn_desactivate{
 
     background-color:#0B6087;
     border-color:#0B6087;
@@ -120,20 +120,24 @@ padding: 0,10px,0,0;
     font-family: 'Open Sans', sans-serif;
    /* font-style: italic;*/
 }
-
-
-.modal-footer .btn_desactivate{
-    width: 100px;
-    height: 40px;
-    font-size: 15px;
-    border-color: #FF034B;
-    background-color:#FF034B;
-    font-weight: 600;
-    font-family: 'Open Sans', sans-serif;
-    
+.modal-footer .btn_footer:hover ,.btn_desactivate:hover{
+    background-color: #6CCB6B;
 }
+
+
 .error{
     font-size: 12px;    
     color: #FF034B;    
     margin-top: 1px;    
     }
+
+.scale-up-center{animation:scale-up-center 1s; }
+@keyframes scale-up-center{ 0%{transform:scale(.5)} 100%
+{transform:scale(1)} }
+
+.iconSuccess, .bodymsg{
+    display: flex;
+    justify-content: center;
+    width: auto;
+    height: auto;
+}

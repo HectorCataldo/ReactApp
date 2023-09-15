@@ -88,7 +88,7 @@ export const App = () => {
     </div>
     <Registro   show={modalShowC} onHide={() => setModalShowC(false)}/>
     <Modify show={modalShowM} onHide={() => setModalShowM(false)} selectedClient={selectedClient} />
-    <Desctivate show={modalShowD} onHide={() => setModalShowD(false)}/>
+    <Desctivate show={modalShowD} onHide={() => setModalShowD(false)} selectedClient ={selectedClient}/>
     </>
   );
 };

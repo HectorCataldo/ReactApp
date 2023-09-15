@@ -9,10 +9,9 @@ import { useFetch } from '../assets/useFetch';
 import { format } from 'date-fns';
 import moment from 'moment';
 import axios from 'axios';
-
 //MODAL
 import Modal from 'react-bootstrap/Modal';
-
+import { SuccessModal } from "./SuccessModal";
 //DATE PICKER
 import DatePicker from "react-datepicker";
 import 'react-datepicker/dist/react-datepicker.css'
@@ -25,6 +24,7 @@ export const Modify = (props) => {
 
     
     const { Formik } = formik;
+    const [showModal, setShowModal] = useState(false);
 
     //Constante que tiene que mantenerse en cambio individual
     const { show, onHide, selectedClient } = props;
@@ -95,12 +95,19 @@ export const Modify = (props) => {
         });    
         // Maneja la respuesta de la API aquí
         console.log('Respuesta de la API:', response.data);
+        setShowModal(true);
+        setTimeout(() => {
+          window.location.reload();
+        }, 4000);
       }
         
         catch (error) {
         // Maneja los errores aquí
         console.error('Error al enviar la solicitud PUT:', error);
       }
+    };
+    const closeModal = () => {
+      setShowModal(false);
     };
 
       
@@ -307,6 +314,7 @@ export const Modify = (props) => {
         <Button className="btn_footer" onClick={props.onHide}>Close</Button>
       </Modal.Footer>
     </Modal>
+    <SuccessModal show={showModal} onHide={closeModal} />
     </>
   );
 }
