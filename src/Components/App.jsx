@@ -16,8 +16,9 @@ export const App = () => {
   const [modalShowC, setModalShowC] = useState(false);
   const [modalShowM, setModalShowM] = React.useState(false);
   const [modalShowD,setModalShowD] = React.useState(false);
-
   const [selectedClient, setSelectedClient] = useState(); 
+  const [searchTerm , setSearchTerm] = useState('');
+
 
   const handleRowClick = (rowData) => {
     setSelectedClient(rowData); 
@@ -31,9 +32,7 @@ export const App = () => {
 
       <div className='container'>
 
-        <input placeholder='Buscar'></input>
-
-        <button className='btn-buscar'>Buscar</button> 
+      <input placeholder='Buscar'  value={searchTerm} onChange={(e)=> setSearchTerm(e.target.value)}></input>
         
         <button className='btn-crear'     type= "submit" onClick={() => setModalShowC(true)} >Crear</button> 
   
@@ -60,8 +59,29 @@ export const App = () => {
             </tr>
           </thead>
           <tbody>
-            {data?.map((item) => ( 
-              <tr key={item.id} onClick={() => handleRowClick(item)} className={selectedClient && selectedClient.id === item.id ? 'selectedClient' : '' }>
+            {data
+            ?.filter((item) => {
+              const searchText = searchTerm.toLowerCase();
+
+              return (
+                (item.documentNumber && item.documentNumber.toLowerCase().includes(searchText)) ||
+                (item.firstName && item.firstName.toLowerCase().includes(searchText)) ||
+                (item.lastName && item.lastName.toLowerCase().includes(searchText)) ||
+                (item.secondLastName && item.secondLastName.toLowerCase().includes(searchText)) ||
+                (item.birthDate && item.birthDate.toLowerCase().includes(searchText)) ||
+                (item.gender && item.gender.toLowerCase().includes(searchText)) ||
+                (item.nationality && item.nationality.toLowerCase().includes(searchText)) ||
+                (item.phoneNumber && item.phoneNumber.toLowerCase().includes(searchText)) ||
+                (item.email && item.email.toLowerCase().includes(searchText)) ||
+                (item.address && item.address.toLowerCase().includes(searchText)) ||
+                (item.profession && item.profession.profession_Name && item.profession.profession_Name.toLowerCase().includes(searchText)) ||
+                (item.state ? 'Activo' : 'Inactivo').toLowerCase().includes(searchText)
+              );
+            })
+            .map((item) => (
+              <tr
+                key={item.id} onClick={() => handleRowClick(item)} className={ selectedClient && selectedClient.id === item.id ? 'selectedClient'  : '' }
+              >
                 <td>{item.documentNumber}</td>
                 <td>{item.firstName}</td>
                 <td>{item.lastName}</td>
