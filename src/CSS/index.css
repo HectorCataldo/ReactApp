@@ -7,18 +7,25 @@
   flex-direction: column;
   align-items: center;
   justify-content: center;
-  min-height: 100vh;
+  /*min-height: 100vh;*/
   text-align: center;
+  color:#ffffff;
+  background-image:linear-gradient(rgba(0,0,0,0.5),rgba(0,0,0,0.5)), url("https://s1.1zoom.me/b4647/584/Cosmonauts_Surface_of_planets_525931_1920x1080.jpg");
+  background-size: cover;
+  background-attachment: fixed;
+  background-repeat: no-repeat;
+  min-height:91.8vh;
 
-  /* color-scheme: light dark; */
-  /* color: rgba(255, 255, 255, 0.87);
-  background-color: #242424; */
+}
 
-  /* font-synthesis: none;
-  text-rendering: optimizeLegibility;
-  -webkit-font-smoothing: antialiased;
-  -moz-osx-font-smoothing: grayscale;
-  -webkit-text-size-adjust: 100%; */
+.App{
+  text-align: center;
+  color:#ffffff;
+  background-image:linear-gradient(rgba(0,0,0,0.5),rgba(0,0,0,0.5)), url("https://s1.1zoom.me/b4647/584/Cosmonauts_Surface_of_planets_525931_1920x1080.jpg");
+  background-size: cover;
+  background-attachment: fixed;
+  background-repeat: no-repeat;
+  min-height:91.8vh;
 }
 
 
@@ -27,9 +34,18 @@
 .nav-bar{
   background-color: rgb(35,35,35);
   
+  
 }
 
 .nav-bar .colapse{
+  color :#fff;
+}
+
+.navbar-text{
+  color :#fff;
+}
+
+.navbar .link{
   color :#fff;
 }
 
@@ -109,5 +125,10 @@ th {
   cursor: not-allowed; /* Cambia el cursor a 'no permitido' */
 }
 
+.inBuscar{
+  border-radius: 5px;
+  border-color: solid 1px black;
+
+}
 
  

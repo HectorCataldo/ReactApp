@@ -141,3 +141,18 @@ padding: 0,10px,0,0;
     width: auto;
     height: auto;
 }
+
+.swal2-confirm{
+    width: 60px;
+    height:40px;
+    text-align: center;
+}
+
+.swal2-confirm.btn.btn-success{
+    width: 100px;
+}
+
+.swal2-cancel.btn.btn-danger{
+    width: 100px; 
+    height:40px;
+}

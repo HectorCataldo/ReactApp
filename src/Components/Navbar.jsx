@@ -20,7 +20,7 @@ function TextLinkExample() {
         <Navbar.Toggle />
         <Navbar.Collapse className="justify-content-end">
           <Navbar.Text>
-            Created by: <a   href="https://kopernicus.tech/">KPS</a>
+            Created by: <a className='link'   href="https://kopernicus.tech/">KPS</a>
           </Navbar.Text>
         </Navbar.Collapse>
       </Container>

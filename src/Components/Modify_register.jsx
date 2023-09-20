@@ -9,14 +9,11 @@ import { useFetch } from '../assets/useFetch';
 import { format } from 'date-fns';
 import moment from 'moment';
 import axios from 'axios';
-//MODAL
 import Modal from 'react-bootstrap/Modal';
-import { SuccessModal } from "./SuccessModal";
-//DATE PICKER
 import DatePicker from "react-datepicker";
 import 'react-datepicker/dist/react-datepicker.css'
 import 'react-datepicker/dist/react-datepicker-cssmodules.css'
-
+import Swal from 'sweetalert2';
 
 
 export const Modify = (props) => {
@@ -75,6 +72,25 @@ export const Modify = (props) => {
     //Axios
     const handleSave = async () => {
       try {
+        if(
+          !dataClient.documentNumber ||
+          !dataClient.firstName ||
+          !dataClient.lastName ||
+          !dataClient.secondLastName ||
+          !selectedBirthDate ||
+          !selectedGender ||
+          !selectedNationality ||
+          !dataClient.phoneNumber ||
+          !dataClient.email ||
+          !dataClient.address ||
+          !selectedProfession.id_profession
+        ){
+          Swal.fire({
+            icon: 'error',
+            title: 'Error',
+            text: 'Todos los campos deben ser completados.',});
+          return;
+        }
         const response = await axios.put('http://localhost:8080/api/clients', {
           id: selectedClient.id,
           documentNumber: selectedClient.documentNumber,
@@ -95,7 +111,10 @@ export const Modify = (props) => {
         });    
         // Maneja la respuesta de la API aquí
         console.log('Respuesta de la API:', response.data);
-        setShowModal(true);
+        Swal.fire({
+          icon: 'success',
+          title: 'Modificado',
+          text: 'Cliente modificado!'});
         setTimeout(() => {
           window.location.reload();
         }, 4000);
@@ -106,9 +125,7 @@ export const Modify = (props) => {
         console.error('Error al enviar la solicitud PUT:', error);
       }
     };
-    const closeModal = () => {
-      setShowModal(false);
-    };
+ 
 
       
     return(
@@ -314,7 +331,6 @@ export const Modify = (props) => {
         <Button className="btn_footer" onClick={props.onHide}>Close</Button>
       </Modal.Footer>
     </Modal>
-    <SuccessModal show={showModal} onHide={closeModal} />
     </>
   );
 }

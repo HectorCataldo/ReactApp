@@ -1,69 +1,68 @@
-import React,{useEffect, useState} from "react"
-import Button from 'react-bootstrap/Button';
-import '../CSS/register-style.css';
+import React, { useEffect, useState } from "react";
 import axios from "axios";
-//MODAL
-import Modal from 'react-bootstrap/Modal';
-
-
-
+import Swal from "sweetalert2";
 
 export const Desctivate = (props) => {
-    const client = props.selectedClient;
+  const client = props.selectedClient || {}; // Use an empty object as a default value
 
-    const [titulo, setTitulo] = useState();
-    const [mensaje, setMensaje] = useState();
-    const [boton,setBoton] = useState();
+  useEffect(() => {
+    if (props.show) {
+      const swalWithBootstrapButtons = Swal.mixin({
+        customClass: {
+          confirmButton: 'btn btn-success',
+          cancelButton: 'btn btn-danger'
+        },
+        buttonsStyling: false
+      });
 
-    useEffect( () => {
-      if(props.show && !client.state){
-        setTitulo('ACTIVAR');
-        setMensaje('¿Deseas activar a este usuario?');
-        setBoton('Activar');
-      }
-      else if(props.show && client.state){
-        setTitulo('DESACTIVAR');
-        setMensaje('¿Esta seguro que desea desactivar este usuario?');
-        setBoton('Desactivar');
-      }
-    });
+      const swalTitle = client.state ? "DESACTIVAR" : "ACTIVAR";
+      const swalText = client.state
+        ? "¿Está seguro que desea desactivar este usuario?"
+        : "¿Deseas activar a este usuario?";
 
-    
-
-    const changeState = async () =>{
-      try{
-        const response = await axios.put(`http://localhost:8080/api/clients/state/${client.id}`)
-        console.log('Respuesta de la API: ', response.data);
-        window.location.reload();
-      }
-      catch(error){
-        console.error('Error al enviar la solicitud a la API: ', error);
-      }
+      swalWithBootstrapButtons.fire({
+        title: swalTitle,
+        text: swalText,
+        icon: "question",
+        showCancelButton: true,
+        confirmButtonText: client.state ? "Desactivar" : "Activar",
+        cancelButtonText: "Cancelar",
+        reverseButtons: true
+      }).then((result) => {
+        if (result.isConfirmed) {
+          if (client.state) {
+            deactivateUser();
+          } else {
+            activateUser();
+          }
+        }
+      });
     }
+  }, [props.show, client.state]);
 
-   
-    return(
-    <>
-         <Modal
-      {...props}
-      size="xs"
-      aria-labelledby="contained-modal-title-vcenter"
-      centered
-    >
-      <Modal.Header closeButton>
-        <Modal.Title>
-        <h1  className="modal-title1" >{titulo}</h1>
-        </Modal.Title>
-      </Modal.Header>
-      <Modal.Body>
-        <h1 className="body-msg">{mensaje}</h1>
-      </Modal.Body>
-      <Modal.Footer>
-        <Button className="btn_desactivate" type="button" onClick={changeState} >{boton}</Button>
-        <Button className="btn_desactivate" onClick={props.onHide}>Cancelar</Button>
-      </Modal.Footer>
-    </Modal>
-    </>
-  );
-}
-       
+  const activateUser = async () => {
+    try {
+      const response = await axios.put(
+        `http://localhost:8080/api/clients/state/${client.id}`
+      );
+      console.log("Respuesta de la API: ", response.data);
+      window.location.reload();
+    } catch (error) {
+      console.error("Error al enviar la solicitud a la API: ", error);
+    }
+  };
+
+  const deactivateUser = async () => {
+    try {
+      const response = await axios.put(
+        `http://localhost:8080/api/clients/state/${client.id}`
+      );
+      console.log("Respuesta de la API: ", response.data);
+      window.location.reload();
+    } catch (error) {
+      console.error("Error al enviar la solicitud a la API: ", error);
+    }
+  };
+
+  return null; // This component doesn't render anything on the screen
+};

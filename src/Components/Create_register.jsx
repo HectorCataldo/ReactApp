@@ -13,6 +13,7 @@ import 'react-datepicker/dist/react-datepicker.css'
 import 'react-datepicker/dist/react-datepicker-cssmodules.css'
 import moment from 'moment';
 import axios from 'axios';
+import Swal from 'sweetalert2';
 
 
 export const Registro = (props) => {
@@ -42,6 +43,26 @@ export const Registro = (props) => {
 
     const handleSubmit = async () => {
       try {
+          if(
+            !dataClient.documentNumber ||
+            !dataClient.firstName ||
+            !dataClient.lastName ||
+            !dataClient.secondLastName ||
+            !selectedBirthDate ||
+            !selectedGender ||
+            !selectedNationality ||
+            !dataClient.phoneNumber ||
+            !dataClient.email ||
+            !dataClient.address ||
+            !selectedProfession.id_profession
+          ){
+            Swal.fire({
+              icon: 'error',
+              title: 'Error',
+              text: 'Por favor, complete todos los campos antes de enviar.',});
+            return;
+          }
+
         const reponse = await axios.post('http://localhost:8080/api/clients',{
           id: objetos,
           documentNumber: dataClient.documentNumber,
@@ -63,20 +84,17 @@ export const Registro = (props) => {
           
         });
         console.log('Respuesta de la API:',reponse.data);
-        window.location.reload();
+        Swal.fire({
+          icon: 'success',
+          title: 'Registrado',
+          text: 'Cliente Registrado!'});
+        setTimeout(()=>{window.location.reload();},4000)
 
       } catch (error) {console.error('Error Al enviar la solicitud POST',error);}
     }
 
 
-      // validacion 
-      const validateDocumentNumber = (value) => {
-        let error;
-        if(!value){
-          error = 'Campo Obligatorio';
-        }
-        return error;
-      }
+   
 
     useEffect(() =>{
       if (clients && Array.isArray(clients)) {
@@ -114,17 +132,6 @@ export const Registro = (props) => {
                 address:'',
               }}
 
-              validate={(values)=>{
-                const errors={};
-                errors.numberdoc = validateDocumentNumber(values.numberdoc);
-                errors.name = validateDocumentNumber(values.name);
-                errors.lastName1 = validateDocumentNumber(values.lastName1);
-                errors.secondLastName = validateDocumentNumber(values.secondLastName);
-                errors.phone = validateDocumentNumber(values.phone);
-                errors.email = validateDocumentNumber(values.email);
-                errors.address = validateDocumentNumber(values.address);
-                return errors;
-              }}
 
               
               //VALIDACION DE CAMPOS
@@ -160,10 +167,9 @@ export const Registro = (props) => {
                         placeholder="123456789" 
                         value={dataClient.numberdoc} 
                         onChange={(e) => setDataClient({...dataClient,documentNumber: e.target.value})}
-                        isInvalid={touched.numberdoc && errors.numberdoc}
                         onBlur={handleBlur}/>
                         
-                        <formik.ErrorMessage name='numberdoc' component="div" className="error-message"/>
+                       
                       </Form.Group>
 
                         <div className="linea"></div>
@@ -179,10 +185,7 @@ export const Registro = (props) => {
                         placeholder="Pedro" 
                         value={dataClient.name} 
                         onChange={(e) => setDataClient({...dataClient,firstName: e.target.value})}
-                        isInvalid={touched.name && errors.name}
                         onBlur={handleBlur}  />
-
-                      <formik.ErrorMessage name='name' component="div" className="error-message"/>
                       </Form.Group>
 
                       <Form.Group as={Col} md="3" className="group-form">
@@ -194,9 +197,7 @@ export const Registro = (props) => {
                           placeholder="Puebla" 
                           value={dataClient.lastName1} 
                           onChange={(e) => setDataClient({...dataClient,lastName: e.target.value})} 
-                          isInvalid={touched.lastName1 && errors.lastName1}
                           onBlur={handleBlur} />
-                          <formik.ErrorMessage name='lastName1' component="div" className="error-message"/>
                       </Form.Group>
 
 
@@ -209,9 +210,7 @@ export const Registro = (props) => {
                           placeholder="Ureta"  
                           onChange={(e) => setDataClient({...dataClient,secondLastName: e.target.value})}
                           value={dataClient.secondLastName}
-                          onBlur={handleBlur}
-                          isInvalid={touched.secondLastName && errors.secondLastName}  />
-                          <formik.ErrorMessage name='secondLastName' component="div" className="error-message"/>
+                          onBlur={handleBlur} />
                       </Form.Group>
 
                       <Form.Group as={Col} md="3" className="group-form">
@@ -222,10 +221,8 @@ export const Registro = (props) => {
                         dateFormat="dd/MM/yyyy"
                         selected={moment(selectedBirthDate).toDate()} 
                         onChange={(date)=>setSelectedBirthDate(date)}
-                        isInvalid={touched.datepicker && errors.datepicker}
                         onBlur={handleBlur} 
                         />
-                        <formik.ErrorMessage name='datepicker' component="div" className="error-message"/>
                       </Form.Group>
 
                       <Form.Group as={Col} md="3" className="group-form">
@@ -273,9 +270,9 @@ export const Registro = (props) => {
                           placeholder="956411424" 
                           onChange={(e) => setDataClient({...dataClient,phoneNumber: e.target.value})} 
                           value={dataClient.phoneNumber}
-                          isInvalid={touched.phone && errors.phone}
+                          
                           onBlur={handleBlur} />
-                          <formik.ErrorMessage name='phone' component="div" className="error-message"/>
+                          
                       </Form.Group>
 
 
@@ -290,8 +287,8 @@ export const Registro = (props) => {
                             onChange={(e) => setDataClient({...dataClient,email: e.target.value})} 
                             value={dataClient.email}
                             onBlur={handleBlur}  
-                            isInvalid={touched.email && errors.email}/>
-                          <formik.ErrorMessage name='email' component="div" className="error-message"/>
+                            />
+                          
 
                       </Form.Group>
                         
@@ -305,8 +302,7 @@ export const Registro = (props) => {
                           placeholder="Calle Caupolicán, 952 RM Providencia" 
                           value={dataClient.address}  
                           onChange={(e) => setDataClient({...dataClient,address: e.target.value})}
-                          isInvalid={touched.address && errors.address}/>
-                          <formik.ErrorMessage name='address' component="div" className="error-message"/>
+                          /> 
                        </Form.Group>
 
 

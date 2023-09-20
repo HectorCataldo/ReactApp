@@ -32,7 +32,7 @@ export const App = () => {
 
       <div className='container'>
 
-      <input placeholder='Buscar'  value={searchTerm} onChange={(e)=> setSearchTerm(e.target.value)}></input>
+      <input placeholder='Buscar' className='inBuscar'  value={searchTerm} onChange={(e)=> setSearchTerm(e.target.value)}></input>
         
         <button className='btn-crear'     type= "submit" onClick={() => setModalShowC(true)} >Crear</button> 
   
@@ -41,7 +41,7 @@ export const App = () => {
         <button className='btn-desactivar' type="submit" onClick={() => setModalShowD(true)} disabled={!selectedClient}  >{selectedClient && selectedClient.state ? "Desactivar" : "Activar"}</button> 
         </div>
       <div className='card'>
-        <table>
+        <table  >
         <thead>
             <tr>
               <th>Número de documento</th>
