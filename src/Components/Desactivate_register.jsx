@@ -7,27 +7,16 @@ export const Desctivate = (props) => {
 
   useEffect(() => {
     if (props.show) {
-      const swalWithBootstrapButtons = Swal.mixin({
-        customClass: {
-          confirmButton: 'btn btn-success',
-          cancelButton: 'btn btn-danger'
-        },
-        buttonsStyling: false
-      });
-
-      const swalTitle = client.state ? "DESACTIVAR" : "ACTIVAR";
-      const swalText = client.state
-        ? "¿Está seguro que desea desactivar este usuario?"
-        : "¿Deseas activar a este usuario?";
-
-      swalWithBootstrapButtons.fire({
-        title: swalTitle,
-        text: swalText,
-        icon: "question",
+      Swal.fire({
+        title: 'Warning',
+        text: client.state
+          ? "Esta seguro de desactivar este usuario?"
+          : "Esta seguro de activar este usuario?",
+        icon: 'warning',
         showCancelButton: true,
-        confirmButtonText: client.state ? "Desactivar" : "Activar",
-        cancelButtonText: "Cancelar",
-        reverseButtons: true
+        confirmButtonColor: '#3085d6',
+        cancelButtonColor: '#d33',
+        confirmButtonText: client.state ? 'Desactivar' : 'Activar'
       }).then((result) => {
         if (result.isConfirmed) {
           if (client.state) {
@@ -45,10 +34,15 @@ export const Desctivate = (props) => {
       const response = await axios.put(
         `http://localhost:8080/api/clients/state/${client.id}`
       );
-      console.log("Respuesta de la API: ", response.data);
-      window.location.reload();
+      console.log("API Response: ", response.data);
+      Swal.fire(
+        'Activado!',
+        'El usuario ha sido activado correctamente.',
+        'success'
+      );
+      setTimeout(() => { window.location.reload(); }, 1000);
     } catch (error) {
-      console.error("Error al enviar la solicitud a la API: ", error);
+      console.error("Error sending request to the API: ", error);
     }
   };
 
@@ -57,12 +51,17 @@ export const Desctivate = (props) => {
       const response = await axios.put(
         `http://localhost:8080/api/clients/state/${client.id}`
       );
-      console.log("Respuesta de la API: ", response.data);
-      window.location.reload();
+      console.log("API Response: ", response.data);
+      Swal.fire(
+        'Desactivado!',
+        'El usuario ha sido desactivado correctamente.',
+        'success'
+      );
+      setTimeout(() => { window.location.reload(); }, 1000);
     } catch (error) {
-      console.error("Error al enviar la solicitud a la API: ", error);
+      console.error("Error sending request to the API: ", error);
     }
   };
 
-  return null; // This component doesn't render anything on the screen
+  return null;
 };

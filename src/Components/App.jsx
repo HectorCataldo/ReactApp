@@ -41,8 +41,8 @@ export const App = () => {
         <button className='btn-desactivar' type="submit" onClick={() => setModalShowD(true)} disabled={!selectedClient}  >{selectedClient && selectedClient.state ? "Desactivar" : "Activar"}</button> 
         </div>
       <div className='card'>
-        <table  >
-        <thead>
+        <table >
+        <thead >
             <tr>
               <th>Número de documento</th>
               <th>Nombres</th>

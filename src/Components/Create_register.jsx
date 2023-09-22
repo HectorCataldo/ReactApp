@@ -88,7 +88,7 @@ export const Registro = (props) => {
           icon: 'success',
           title: 'Registrado',
           text: 'Cliente Registrado!'});
-        setTimeout(()=>{window.location.reload();},4000)
+        setTimeout(()=>{window.location.reload();},2000)
 
       } catch (error) {console.error('Error Al enviar la solicitud POST',error);}
     }

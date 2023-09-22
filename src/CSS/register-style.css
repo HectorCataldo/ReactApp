@@ -148,11 +148,11 @@ padding: 0,10px,0,0;
     text-align: center;
 }
 
-.swal2-confirm.btn.btn-success{
+.swal2-confirm.swal2-styled.swal2-default-outline{
     width: 100px;
 }
 
-.swal2-cancel.btn.btn-danger{
+.swal2-cancel.swal2-styled.swal2-default-outline{
     width: 100px; 
     height:40px;
 }
