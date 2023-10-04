@@ -10,7 +10,7 @@ export const Principal = () => {
     <div className='Principal'>
         <h1>API REST Clients</h1>
         <p>This is a API REST for testings by KPS</p>
-        <Link to="/app">
+        <Link to="/ApClients">
             <button>Clientes</button>
         </Link>
     </div>

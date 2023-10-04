@@ -14,7 +14,7 @@ createRoot(document.getElementById('root')).render( // Usar createRoot en lugar 
     <Router>
       <Routes>               
         <Route path="/" element={<Principal />} />
-        <Route path="/app" element={<App />} />
+        <Route path="/ApClients" element={<App />} />
         <Route path="/registro" element={<Registro/>}/>
         <Route path="/modify" element={<Modify/>}/>
         

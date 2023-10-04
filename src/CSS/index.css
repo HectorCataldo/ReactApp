@@ -20,8 +20,9 @@
 
 .App{
   text-align: center;
-  color:#ffffff;
-  background-image:linear-gradient(rgba(0,0,0,0.5),rgba(0,0,0,0.5)), url("https://s1.1zoom.me/b4647/584/Cosmonauts_Surface_of_planets_525931_1920x1080.jpg");
+  color:#000000;
+  /*background-image:linear-gradient(rgba(0,0,0,0.5),rgba(0,0,0,0.5)), url("https://s1.1zoom.me/b4647/584/Cosmonauts_Surface_of_planets_525931_1920x1080.jpg");*/
+  background-color: #e6e7e9;
   background-size: cover;
   background-attachment: fixed;
   background-repeat: no-repeat;
@@ -29,88 +30,56 @@
 }
 
 
- /*NAV BAR */
-
-.nav-bar{
-  background-color: rgb(35,35,35);
-  
-  
-}
-
-.nav-bar .colapse{
-  color :#fff;
-}
-
-.navbar-text{
-  color :#fff;
-}
-
-.navbar .link{
-  color :#fff;
-}
-
-.logo{
-
-  height: 50px;
-  width: 200px;
-
-}
-
-
 
 
 /*APP.JSX*/
 
-.selectedClient { 
-  background-color: #6CCB6B; /*Color de fila seleccionada*/
-  color: #ffffff;
-}
+.selectedClient { background-color: #f2f4f8; /*Color de fila seleccionada*/ color: #000000;}
 
-/* index.css */
+
 .App {
   font-family: Inter, system-ui, Avenir, Helvetica, Arial, sans-serif;
   display: flex;
   flex-direction: column;
   align-items: center;
-  justify-content: center;
   min-height: 100vh;
   text-align: center;
 }
 
-.card {
-  width: 90%;
-  margin-top: 20px;
-  padding: 20px;
-  box-shadow: 0px 0px 10px rgba(0, 0, 0, 0.1);
-  border-radius: 5px;
+.card{
+  width: 60%;
+  height: 90%;
+  margin-top: 10px;
+  
 }
 
-table {
-  width: 100%;
-  border-collapse: collapse;
+
+.titles{
+  text-align: left;
+  padding-left: 10px;
 }
 
-th, td {
-  padding: 8px;
-  border-bottom: 1px solid #0B6087;
+td{
+  width: 10px;
+  height: 10px;
+  text-align: left;
+  padding-left: 10px;
+  padding-right: 10px;
+  
 }
 
-th {
-  background-color: #0B6087;
-  color: white;
-}
 
 
 /*GENERAL USO*/
  button{
   font-family: Inter, system-ui, Avenir, Helvetica, Arial, sans-serif;
-  background-color: #0B6087;
+  background-color: #0f62fe;
   color: white;
   height: 30px;  
   width: 10%;
   margin: 10px;
-  border-radius: 5px;
-  border-color: black;
+  border-radius: 2px;
+  border:none;
  }
  button:hover{
   background-color: #6CCB6B;
@@ -119,15 +88,289 @@ th {
  }
 
  button[disabled] {
-  background-color: #ccc; /* Cambia el color de fondo */
-  color: #999; /* Cambia el color del texto */
-  border-color: #999; /* Cambia el color del borde */
-  cursor: not-allowed; /* Cambia el cursor a 'no permitido' */
+  background-color: #ccc; 
+  color: #999; 
+  border-color: #999; 
+  cursor: not-allowed; 
 }
 
 .inBuscar{
   border-radius: 5px;
-  border-color: solid 1px black;
+  border: none;
 
 }
+
+.container {
+  display: flex;
+  justify-content: space-between; 
+  align-items: flex-end; 
+  width: 60%;
+  margin-top: 0px;
+  padding-left: 0px;
+  padding-right: 0px;
+}
+.container-title{
+
+  display: flex;
+  width: 60%;
+  margin-top: 100px;
+  padding-left: 0px;
+  text-align: left;
+}
+
+.container-title .title{
+  
+  text-align: left;
+}
+
+.btn-crear {
+  font-size: small;
+  width: 150px;
+  height: 35px;
+  margin: 0px;
+}
+
+ 
+.btn-modificar {
+  background-color: #c3ced3;
+  color: white;
+  border: none;
+  margin: 0px;
+  padding: 0; 
+  width: 30px; 
+  height: 30px; 
+}
+
+.btn-modificar:hover {
+  background-color: #6CCB6B;
+  color: #ddd;
+  border-color: white;
+}
+
+
+
+.btn-desactivar {
+  background-color: #c3ced3;
+  color: white;
+  border: none;
+  margin: 0px;
+  padding: 0; /* Eliminar el relleno predeterminado */
+  width: 30px; /* Establecer el ancho deseado */
+  height: 30px; /* Establecer el alto deseado */
+}
+
+.btn-desactivar:hover {
+  background-color: #6CCB6B;
+  color: #ddd;
+  border-color: white;
+}
+
+.btn-volver {
+  font-size: medium;
+  width: 80px;
+  height: 35px;
+  margin-top: 10px;
+}
+
+
+
+th, td {
+  padding: 8px;
+  border-bottom: 1px solid #e6e7e9;
+}
+
+th {
+  background-color: #f2f4f8;
+  color: rgb(0, 0, 0);
+  height: 15px;
+  font-size: medium;
+
+}
+
+
+.icons {
+  display: inline-block; 
+  vertical-align: middle; 
+  margin-right: 5px;
+  padding-bottom: 3px;
+  position: flex;
+}
+
+
+
+/*Compaginado*/
+
+.pagination {
+  margin-top: 10px;
+  text-align: center;
+  margin-bottom: 10px;
+  display: flex;
+  justify-content: flex-end; 
+  align-items: flex-end; 
+}
+
+.pagination .pagination-btn {
+  background-color: transparent;
+  color: #868b91;
+  border: none;
+  margin: 0px;
+  width: 90px;
+  height: 35px;
+  font-size: small;
+  cursor: pointer;
+}
+
+
+.pagination .active {
+  background-color: #a6c8ff;
+  color: #000000;
+  border: none;
+  width: 40px;
+  height: 35px;
+  margin: 0px;
+  font-size: small;
+  cursor: pointer;
+  
+}
+
+.pagination .inactive {
+  background-color: transparent;
+  color: #868b91;
+  border: none;
+  width: 40px;
+  height: 35px;
+  margin: 0px;
+  font-size: small;
+  cursor: pointer;
+
+}
+
+
+td.statusC[data-state='Activo'] {
+  background-color: #ffffff;
+  }
+
+
+   /*NAV BAR */
+
+
+.navbar {
+  position: fixed;
+  top: 0;
+  left: 0;
+  width: 100%;
+  z-index: 1000; /* Un índice Z mayor que el Sidebar */
+  background-color: #f2f4f8;
+  border-bottom: 1px solid rgb(224, 223, 223);
+  height: 60px;
+  padding: 0 20px;
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+}
+
+.nav-bar .btn-admin-log{
+  vertical-align: super;
+}
+.nav-bar .admin-log{
+  vertical-align: middle;
+}
+
+.nav-bar .colapse{color :#fff;}
+.navbar-text{ color :#fff;}
+.navbar .link{color :#fff;}
+.logo{ height: 50px; width: 200px;}
+
+.nav-bar .anticon{
+  font-size: 15px; 
+  margin-right: 5px;
+  margin-bottom: 10px; 
+}
+
+  .title-bar{
+    color: #000000;
+    font-size: 40px;
+    font-weight: 500;
+    margin :0;
+    margin-left: 20px;
+  }  
+
+ .title-name{
+    color: #000000;
+    font-size: 10px;
+    text-decoration: none;
+    margin-left: 20px;
+  }
+
+
+
+
+/* Sidebar */
+.sidebar {
+  width: 250px;
+  height: 100%;
+  background-color: #f2f4f8;
+  color: #fff;
+  padding: 20px;
+  position: fixed;
+  box-shadow: 2px 2px 2px gray;
+  z-index: 999; /* Un índice Z menor que el Navbar */
+  top: 60px; /* Deja espacio para el Navbar */
+  left: 0;
+}
+
+.sidebar ul {
+  list-style-type: none;
+  padding: 0;
+  
+}
+
+.sidebar li {
+  margin-bottom: 10px;
+  cursor: pointer;
+  text-decoration: none;
+  display: flex;
+  align-items: center; 
+  margin-bottom: 10px; 
+}
+
+.sidebar li a{
+  text-decoration: none;
+  color:#000000;
+  font-weight: 600;
+  padding-top: 10px;
+}
+
+
+.sidebar .anticon {
+  font-size: 20px; 
+  margin-right: 5px; 
+}
+
+
+
+/* Contenido principal */
+.main-content {
+  margin-top: 60px; 
+  margin-left: 250px; 
+  padding: 20px;
+}
+
+
+
+
+/*search icon */
+
+.search-container {
+  display: flex;
+  align-items: center;
+  padding: 5px;
+  border: 1px solid #ffffff;
+  background-color:#ffffff;
+}
+
+.search-icon {
+  margin-right: 5px; 
+}
+
 
