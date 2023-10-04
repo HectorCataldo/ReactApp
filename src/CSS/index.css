@@ -374,3 +374,14 @@ td.statusC[data-state='Activo'] {
 }
 
 
+/*asterisco a la izq*/
+
+.labels {
+  display: flex;
+  align-items: center; /* Alinea verticalmente el contenido */
+}
+
+.asterisk {
+  margin-left: 5px; /* Agrega un pequeño espacio entre el texto y el asterisco */
+  color: red; /* Cambia el color del asterisco si es necesario */
+}

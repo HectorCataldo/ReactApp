@@ -15,17 +15,20 @@ import moment from "moment";
 import axios from "axios";
 import Swal from "sweetalert2";
 
+
+
 export const Registro = (props) => {
   const { Formik } = formik;
   const { data: clients } = useFetch("http://localhost:8080/api/clients");
   const { data: profession } = useFetch("http://localhost:8080/api/profession");
   const { data: country } = useFetch("https://restcountries.com/v3.1/all");
   const [objetos, setObjetos] = useState();
-  const [selectedBirthDate, setSelectedBirthDate] = useState(new Date());
+  const [selectedBirthDate, setSelectedBirthDate] = useState(moment(new Date()));
   const [selectedGender, setSelectedGender] = useState(null);
   const [selectedProfession, setSelectedProfession] = useState({});
   const [selectedTipo, setSelectedTipo]= useState(null);
   const [selectedNationality, setSelectedNationality] = useState(null);
+  const [currentDate, setCurrentDate] = useState(new Date());
   const [dataClient, setDataClient] = useState({
     id: "",
     documentNumber: "",
@@ -53,6 +56,8 @@ export const Registro = (props) => {
     setSelectedBirthDate(date);
   };
 
+  
+ 
   // METHOD POST
   const handleSubmit = async () => {
     try {
@@ -97,6 +102,7 @@ export const Registro = (props) => {
         },
         state: "True",
         tipo_persona: selectedTipo,
+        fecha_sistema: currentDate, 
       });
       console.log("Respuesta de la API:", response.data);
       Swal.fire({
@@ -120,6 +126,20 @@ export const Registro = (props) => {
       setObjetos(id + 1);
     }
   }, [clients]);
+
+
+
+
+  useEffect(() => {
+    const interval = setInterval(() => {
+      setCurrentDate(new Date());
+    }, 1000); // Actualiza la fecha cada segundo
+
+    return () => {
+      clearInterval(interval); // Limpia el intervalo al desmontar el componente
+    };
+  }, []);
+
 
 
   return (
@@ -182,7 +202,10 @@ export const Registro = (props) => {
               if (!selectedGender) {
                 errores.selectedGender = "Debes seleccionar un género.";
               }
-
+              
+              if (!selectedTipo) {
+                errores.selectedTipo = "Debes seleccionar un Tipo.";
+              }
               return errores;
             }}
             initialValues={{
@@ -208,7 +231,7 @@ export const Registro = (props) => {
                   </Form.Group>
 
                   <Form.Group as={Col} md="3" className={`group-form ${touched.numberdoc && errors.numberdoc ? "has-error" : ""}`}>
-                    <Form.Label className="labels">RUT</Form.Label>
+                    <Form.Label className="labels">RUT <span className="asterisk">*</span> </Form.Label>
 
                     <Form.Control
                       type="text"
@@ -223,7 +246,7 @@ export const Registro = (props) => {
                   </Form.Group>
 
                   <Form.Group as={Col} md="3" className="group-form">
-                    <Form.Label className="labels">Tipo persona</Form.Label>
+                    <Form.Label className="labels">Tipo persona <span className="asterisk">*</span></Form.Label>
 
                     <Form.Select
                       className="select-form"
@@ -241,28 +264,19 @@ export const Registro = (props) => {
                     {errors.selectedTipo && touched.selectedTipo && (
                       <div className="error">{errors.selectedTipo}</div>
                     )}
-                  </Form.Group>
+                  </Form.Group>  
 
                   <Form.Group as={Col} md="3" className="group-form">
-                    <Form.Label className="labels">Creado el: </Form.Label>
-
-                    <Form.Control
-                      type="text"
-                      name="create_date"
-                      value={dataClient.create_date}
-                      onBlur={handleBlur}
-                      disabled
-                      readOnly
-                    />
-                  </Form.Group>     
-
+                  <Form.Label className="labels">Fecha del Sistema:</Form.Label>
+                  <div className="date-system">{currentDate.toLocaleString()}</div>
+                  </Form.Group>
 
                   <div className="linea"></div>
 
                   <Form.Label className="labels-title">Información de contacto</Form.Label>
 
                   <Form.Group as={Col} md="3" className="group-form">
-                    <Form.Label className="labels">Nombres</Form.Label>
+                    <Form.Label className="labels">Nombres <span className="asterisk">*</span></Form.Label>
 
                     <Form.Control
                       type="text"
@@ -276,7 +290,7 @@ export const Registro = (props) => {
                   </Form.Group>
 
                   <Form.Group as={Col} md="3" className="group-form">
-                    <Form.Label className="labels">Primer Apellido</Form.Label>
+                    <Form.Label className="labels">Primer Apellido <span className="asterisk">*</span></Form.Label>
 
                     <Form.Control
                       type="text"
@@ -291,7 +305,7 @@ export const Registro = (props) => {
                   </Form.Group>
 
                   <Form.Group as={Col} md="3" className="group-form">
-                    <Form.Label className="labels">Segundo Apellido</Form.Label>
+                    <Form.Label className="labels">Segundo Apellido </Form.Label>
 
                     <Form.Control
                       type="text"
@@ -306,7 +320,7 @@ export const Registro = (props) => {
                   </Form.Group>
 
                   <Form.Group as={Col} md="3" className="group-form">
-                    <Form.Label className="labels">Fecha de nacimiento</Form.Label>
+                    <Form.Label className="labels">Fecha de nacimiento <span className="asterisk">*</span></Form.Label>
 
                     <DatePicker
                       className="datepicker"
@@ -315,11 +329,13 @@ export const Registro = (props) => {
                       onChange={handleDateChange}
                       maxDate={maxDate}
                       onBlur={handleBlur}
-                    />
+                    /> 
+
+                      
                   </Form.Group>
 
                   <Form.Group as={Col} md="3" className="group-form">
-                    <Form.Label className="labels">Género</Form.Label>
+                    <Form.Label className="labels">Género <span className="asterisk">*</span></Form.Label>
 
                     <Form.Select
                       className="select-form"
@@ -340,7 +356,7 @@ export const Registro = (props) => {
                   </Form.Group>
 
                   <Form.Group as={Col} md="3" className="group-form">
-                    <Form.Label className="labels">Nacionalidad</Form.Label>
+                    <Form.Label className="labels">Nacionalidad <span className="asterisk">*</span></Form.Label>
 
                     <Form.Select
                       className="select-form"
@@ -360,7 +376,7 @@ export const Registro = (props) => {
                   </Form.Group>
 
                   <Form.Group as={Col} md="3" className="group-form">
-                    <Form.Label className="labels">Teléfono</Form.Label>
+                    <Form.Label className="labels">Teléfono <span className="asterisk">*</span></Form.Label>
 
                     <Form.Control
                       type="text"
@@ -375,7 +391,7 @@ export const Registro = (props) => {
                   </Form.Group>
 
                   <Form.Group as={Col} md="3" className="group-form">
-                    <Form.Label className="labels">Correo</Form.Label>
+                    <Form.Label className="labels">Correo <span className="asterisk">*</span></Form.Label>
 
                     <Form.Control
                       type="email"
@@ -390,7 +406,7 @@ export const Registro = (props) => {
                   </Form.Group>
 
                   <Form.Group as={Col} md="6" className="group-form">
-                    <Form.Label className="labels">Dirección</Form.Label>
+                    <Form.Label className="labels">Dirección <span className="asterisk">*</span></Form.Label>
 
                     <Form.Control
                       type="address"
@@ -409,7 +425,7 @@ export const Registro = (props) => {
                   <Form.Label className="labels-title">Información adicional</Form.Label>
 
                   <Form.Group as={Col} md="3" className="group-form">
-                    <Form.Label className="labels">Profesión</Form.Label>
+                    <Form.Label className="labels">Profesión <span className="asterisk">*</span></Form.Label>
                     <Form.Select
                       className="select-form"
                       size="sm"

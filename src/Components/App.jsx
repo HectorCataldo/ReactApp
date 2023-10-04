@@ -1,18 +1,16 @@
 import React, { useState, useEffect } from 'react';
 import { useFetch } from '../assets/useFetch';
 import '../CSS/index.css';
-import { Link } from 'react-router-dom';
+
 import { Registro } from './Create_register';
 import { Modify } from './Modify_register';
-import { Desctivate } from './Desactivate_register';
+import { View   } from './View_register'
 import moment from 'moment';
-import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
-import { faPencilAlt, faToggleOn, faToggleOff } from '@fortawesome/free-solid-svg-icons';
-import { faSearch } from '@fortawesome/free-solid-svg-icons';
-import { PlusOutlined,LeftOutlined,RightOutlined,SearchOutlined } from '@ant-design/icons';
+import { PlusOutlined,LeftOutlined,RightOutlined,SearchOutlined,EyeOutlined,EditOutlined } from '@ant-design/icons';
 import _ from 'lodash';
 import  TextLinkExample  from './Navbar';
 import Sidebar from './sidebar'; // Importa el componente de la barra lateral
+
 
 
 
@@ -24,7 +22,7 @@ export const App = () => {
   // MODAL
   const [modalShowC, setModalShowC] = useState(false);
   const [modalShowM, setModalShowM] = useState(false);
-  const [modalShowD, setModalShowD] = useState(false);
+  const [modalShowV, setModalShowV] = useState(false);
   const [selectedClient, setSelectedClient] = useState(null);
   const [searchTerm, setSearchTerm] = useState('');
   const [currentPage, setCurrentPage] = useState(1);
@@ -109,10 +107,11 @@ while (currentClients.length < clientsPerPage) {
               <tr>
                 <th className='titles'>RUT</th>
                 <th className='titles'>Nombre completo</th>
+                <th className='titles'>Tipo</th>
                 <th className='titles'>Fecha de nacimiento</th>
                 <th className='titles'>Estado</th>
                 <th className='titles'></th>
-                <th className='titles'></th>
+                
               </tr>
             </thead>
             <tbody>
@@ -124,11 +123,13 @@ while (currentClients.length < clientsPerPage) {
                 >
                   <td className='containerCell'>{item.documentNumber}</td>
                   <td className='containerCell'>{`${item.firstName} ${item.lastName}`}</td>
+                  <td className='containerCell'>{`${item.tipo_persona}`}</td>
                   <td className='containerCell'>{moment(item.birthDate).format('DD/MM/YYYY')}</td>
+                  {/* <td className='containerCell'>{`${item.create_date}`}</td> */}
                   <td className='statusC' data-state={item.state ? 'Activo' : 'Inactivo'}>{item.state ? 'Activo' : 'Inactivo'}</td>
 
-                  <td> <button className={`btn-modificar  ${modalShowM ? 'selected' : ''}`} type='submit' onClick={() => setModalShowM(true)} disabled={!selectedClient}> <FontAwesomeIcon icon={faPencilAlt} /> </button></td>
-                  <td> <button className={`btn-desactivar ${modalShowD ? 'selected' : ''}`} type='submit' onClick={() => setModalShowD(true)} disabled={!selectedClient}> <FontAwesomeIcon  icon={selectedClient && selectedClient.state ? faToggleOn : faToggleOff} /> </button> </td>
+                  <td> <button className={`btn-modificar       ${modalShowM ? 'selected' : ''}`} type='submit' onClick={() => setModalShowM(true)} disabled={!selectedClient}> <EditOutlined />  </button></td>
+                  <td> <button className={`btn-modificar       ${modalShowV ? 'selected' : ''}`} type='submit' onClick={() => setModalShowV(true)} disabled={!selectedClient}> <EyeOutlined /> </button></td>
                 </tr>
               ))}
             </tbody>
@@ -142,7 +143,7 @@ while (currentClients.length < clientsPerPage) {
       </div>
       <Registro show={modalShowC} onHide={() => setModalShowC(false)} />
       <Modify show={modalShowM} onHide={() => setModalShowM(false)} selectedClient={selectedClient} />
-      <Desctivate show={modalShowD} onHide={() => setModalShowD(false)} selectedClient={selectedClient} />
+      <View show={modalShowV} onHide={() => setModalShowV(false)} selectedClient={selectedClient} />
     </>
   );
 };

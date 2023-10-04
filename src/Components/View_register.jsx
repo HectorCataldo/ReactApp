@@ -13,11 +13,8 @@ import DatePicker from "react-datepicker";
 import 'react-datepicker/dist/react-datepicker.css'
 import 'react-datepicker/dist/react-datepicker-cssmodules.css'
 import Swal from 'sweetalert2';
-import { Desctivate } from './Desactivate_register';
-import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
-import { faPencilAlt, faToggleOn, faToggleOff } from '@fortawesome/free-solid-svg-icons';
 
-export const Modify = (props) => {
+export const View = (props) => {
 
 
     
@@ -138,8 +135,6 @@ export const Modify = (props) => {
     >
       <Modal.Header closeButton>
         <Modal.Title >
-         <h1 className="title-modal">MODIFICAR</h1>
-         <td> <button className={`btn-desactivar ${modalShowD ? 'selected' : ''}`} type='submit' onClick={() => setModalShowD(true)} disabled={!selectedClient}> <FontAwesomeIcon  icon={selectedClient && selectedClient.state ? faToggleOn : faToggleOff} /> </button> </td>
         </Modal.Title>
       </Modal.Header>
       <Modal.Body>
@@ -202,7 +197,9 @@ export const Modify = (props) => {
                         name="Names"
                         value={dataClient.firstName}
                         onChange={(e) => setDataClient( { ...dataClient, firstName: e.target.value })}
-                        isValid={touched.firstName && !errors.firstName} />
+                        isValid={touched.firstName && !errors.firstName} 
+                        disabled 
+                        readOnly/>
                     </Form.Group>
 
 
@@ -213,7 +210,9 @@ export const Modify = (props) => {
                         name="lastName1"
                         value={dataClient.lastName}
                         onChange={(e) => setDataClient({...dataClient, lastName: e.target.value})}
-                        isValid={touched.lastName && !errors.lastName} /></Form.Group>
+                        isValid={touched.lastName && !errors.lastName} 
+                        disabled 
+                        readOnly/></Form.Group>
 
                     <Form.Group as={Col} md="3" className="group-form">
                       <Form.Label className="labels">Segundo Apellido</Form.Label>
@@ -222,7 +221,9 @@ export const Modify = (props) => {
                         name="lastName2"
                         value={dataClient.secondLastName}
                         onChange={(e) => setDataClient({...dataClient, secondLastName: e.target.value})}
-                        isValid={touched.lastName2 && !errors.lastName2} /></Form.Group>
+                        isValid={touched.lastName2 && !errors.lastName2}
+                        disabled 
+                        readOnly /></Form.Group>
 
                       <Form.Group as={Col} md="3" className="group-form">
                         <Form.Label className="labels">Fecha de nacimiento</Form.Label>
@@ -231,6 +232,8 @@ export const Modify = (props) => {
                           className="datepicker"
                           selected={moment(selectedBirthDate).toDate()}
                           onChange={(date) => setSelectedBirthDate(date)}
+                          disabled 
+                          readOnly
                         />
                       </Form.Group>
 
@@ -240,11 +243,14 @@ export const Modify = (props) => {
                         className="select-form"
                         size='sm'
                         value={selectedGender}
-                        onChange={(e) => setSelectedGender(e.target.value)}>
+                        onChange={(e) => setSelectedGender(e.target.value)}
+                        disabled 
+                        readOnly>
                         <option></option>
                         <option value="Masculino">Masculino</option>
                         <option value="Femenino">Femenino</option>
                         <option value="Otro">Otro</option>
+
                       </Form.Select>
                     </Form.Group>
 
@@ -254,7 +260,9 @@ export const Modify = (props) => {
                         className="select-form" 
                         size='sm'
                         value={selectedNationality}
-                        onChange={(e) => setSelectedNationality(e.target.value)}>
+                        onChange={(e) => setSelectedNationality(e.target.value)}
+                        disabled 
+                        readOnly>
                         <option></option>
                         {country && country.map((item) => (
                           <option key={item.id} value={item.id}>
@@ -274,7 +282,9 @@ export const Modify = (props) => {
                         name="phone"
                         value={dataClient.phoneNumber}
                         onChange={(e) => setDataClient({...dataClient, phoneNumber: e.target.value})}
-                        isValid={touched.phone && !errors.phone} /></Form.Group>
+                        isValid={touched.phone && !errors.phone} 
+                        disabled 
+                        readOnly/></Form.Group>
 
 
                     <Form.Group as={Col} md="3" className="group-form">
@@ -284,7 +294,9 @@ export const Modify = (props) => {
                           name="email"
                           value={dataClient.email}
                           onChange={(e) => setDataClient({...dataClient, email: e.target.value})}
-                          isValid={touched.email && !errors.email} />
+                          isValid={touched.email && !errors.email} 
+                          disabled 
+                          readOnly/>
                       </Form.Group>
                       
                     <Form.Group as={Col} md="6" className="group-form">
@@ -295,7 +307,9 @@ export const Modify = (props) => {
                         name="address"
                         value={dataClient.address}
                         onChange={(e) => setDataClient({...dataClient, address: e.target.value})}
-                        isValid={touched.address && !errors.address} /></Form.Group>
+                        isValid={touched.address && !errors.address} 
+                        disabled 
+                        readOnly/></Form.Group>
 
                   
                       <div className="linea"></div>
@@ -308,11 +322,13 @@ export const Modify = (props) => {
                       <Form.Select 
                         className="select-form" 
                         size='sm'
-                        value={selectedProfession.id_profession} // Utiliza selectedProfession.id_profession como valor
+                        value={selectedProfession.id_profession} 
                         onChange={(e) => setSelectedProfession({
-                          id_profession: e.target.value, // Captura el id_profession seleccionado
-                          profession_Name: e.target.options[e.target.selectedIndex].text // Captura el profession_Name seleccionado
+                          id_profession: e.target.value, 
+                          profession_Name: e.target.options[e.target.selectedIndex].text 
                         })}
+                        disabled 
+                        readOnly
                       >
                         <option></option>
                         {profession && profession.map((item) => (
@@ -328,11 +344,9 @@ export const Modify = (props) => {
             </Formik>
       </Modal.Body>
       <Modal.Footer>
-        <Button className="btn_footer" type="button" onClick={handleSave} >Guardar</Button>
         <Button className="btn_footer" onClick={props.onHide}>Close</Button>
       </Modal.Footer>
     </Modal>
-    <Desctivate show={modalShowD} onHide={() => setModalShowD(false)} selectedClient={selectedClient} />
     </>
   );
 }
