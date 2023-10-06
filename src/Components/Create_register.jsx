@@ -24,9 +24,10 @@ import { DatePicker } from '@mui/x-date-pickers/DatePicker';
 
 
 export const Registro = (props) => {
+  const { data: country } = useFetch( "https://gist.githubusercontent.com/HectorCataldo/ceee7aa2b93e83d7d04f752e3adbe623/raw/25b49d88975f0031ebfbd9abd0b5881e92a9303d/paises.json" )
+  const { data: regions} = useFetch("https://gist.githubusercontent.com/HectorCataldo/11e149d5ba18e9dfe72b6c21e38ca439/raw/b7281863b44021b362338493025cc0723e39b7a9/regions.json");
   const { data: clients } = useFetch("http://localhost:8080/api/clients");
   const { data: profession } = useFetch("http://localhost:8080/api/profession");
-  const { data: country } = useFetch("https://restcountries.com/v3.1/all");
   const [selectedBirthDate, setSelectedBirthDate] = useState(new Date());
   const [objetos, setObjetos] = useState();
   const [selectedcreateDate] = useState(moment(new Date()));
@@ -50,6 +51,30 @@ export const Registro = (props) => {
   const caracRegex = /^[a-zA-Z]+$/;
   const ndocRegex = /^[Kk0-9-]+$/;
   const numberRegex = /^[0-9]+$/;
+
+
+  // COMUNAS Y REGIONES 
+  const [seRegion, setSeRegion] = useState('');
+  const [fcomunas, setfcomunas] = useState([]);
+  const [seComuna, setSeComuna] = useState();
+
+  //Filtrado de Comunas por Región
+  const RegionChange = (e) => {
+    //Obtenemos Región
+    const selectedRegion = e.target.value;
+    setSeRegion(selectedRegion);
+
+    const regionData = regions.regions.find((region) => region.name === selectedRegion);
+    if (regionData) {
+      setfcomunas(regionData.communes);
+      setSeComuna('');
+    }
+    else{
+      setfcomunas([]);
+      setSeComuna('');
+    }
+  };
+
 
 
 
@@ -149,7 +174,7 @@ export const Registro = (props) => {
 
        <Button className="btn_footer" type="Submit" onClick={handleSubmit}>Registrar</Button>
        <Button className="btn_footer">Close</Button>
-       
+
         </div> 
 
 
@@ -324,24 +349,52 @@ export const Registro = (props) => {
                     )}
                   </Col>
 
+
+                        {/* INFORMACION DE LOCACION */}
+                        
                   <Col md="3" className="group-form">
                     <FormControl variant="filled" className="select-form">
-                      <InputLabel htmlFor="nacionalidad">Nacionalidad *</InputLabel>
+                      <InputLabel htmlFor="nacionalidad">Pais de origen *</InputLabel>
                       <Select
                         id="nacionalidad"
                         value={selectedNationality}
                         onChange={(e) => setSelectedNationality(e.target.value)}
                         onBlur={handleBlur}
                         label="Nacionalidad *">
-                        {country &&
-                          country.map((item) => (
-                            <MenuItem key={item.id} value={item.name.common}>
-                              {item.name.common}
-                            </MenuItem>
-                          ))}
+                        
                       </Select>
                     </FormControl>
                   </Col>
+
+                  <Col md="3" className="group-form">
+                    <FormControl variant="filled" className="select-form">
+                      <InputLabel htmlFor="nacionalidad">Región *</InputLabel>
+                      <Select
+                        id="region"
+                        value={selectedNationality}
+                        onChange={(e) => setSelectedNationality(e.target.value)}
+                        onBlur={handleBlur}
+                        label="Región *">
+                      </Select>
+                    </FormControl>
+                  </Col>
+                
+
+                  <Col md="3" className="group-form">
+                    <FormControl variant="filled" className="select-form">
+                      <InputLabel htmlFor="nacionalidad">Comuna *</InputLabel>
+                      <Select
+                        id="comuna"
+                        value={selectedNationality}
+                        onChange={(e) => setSelectedNationality(e.target.value)}
+                        onBlur={handleBlur}
+                        label="Comuna *">
+                      </Select>
+                    </FormControl>
+                  </Col>
+
+                  {/*   fin de  informacion de locacion   */}
+
 
                   <Col md="3" className="group-form">
                     <TextField
