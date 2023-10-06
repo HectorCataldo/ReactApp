@@ -41,19 +41,7 @@ export const App = () => {
     const searchText = searchTerm.toLowerCase();
     return (
       (item.documentNumber && item.documentNumber.toLowerCase().includes(searchText)) ||
-      (item.firstName && item.firstName.toLowerCase().includes(searchText)) ||
-      (item.lastName && item.lastName.toLowerCase().includes(searchText)) ||
-      (item.secondLastName && item.secondLastName.toLowerCase().includes(searchText)) ||
-      (item.birthDate && item.birthDate.toLowerCase().includes(searchText)) ||
-      (item.gender && item.gender.toLowerCase().includes(searchText)) ||
-      (item.nationality && item.nationality.toLowerCase().includes(searchText)) ||
-      (item.phoneNumber && item.phoneNumber.toLowerCase().includes(searchText)) ||
-      (item.email && item.email.toLowerCase().includes(searchText)) ||
-      (item.address && item.address.toLowerCase().includes(searchText)) ||
-      (item.profession &&
-        item.profession.profession_Name &&
-        item.profession.profession_Name.toLowerCase().includes(searchText)) ||
-      (item.state ? 'Activo' : 'Inactivo').toLowerCase().includes(searchText)
+      (item.firstName && item.firstName.toLowerCase().includes(searchText)) 
     );
   });
 
@@ -109,6 +97,7 @@ while (currentClients.length < clientsPerPage) {
                 <th className='titles'>Nombre completo</th>
                 <th className='titles'>Tipo</th>
                 <th className='titles'>Fecha de nacimiento</th>
+                <th className='titles'>Creado El</th>
                 <th className='titles'>Estado</th>
                 <th className='titles'></th>
                 
@@ -125,7 +114,7 @@ while (currentClients.length < clientsPerPage) {
                   <td className='containerCell'>{`${item.firstName} ${item.lastName}`}</td>
                   <td className='containerCell'>{`${item.tipo_persona}`}</td>
                   <td className='containerCell'>{moment(item.birthDate).format('DD/MM/YYYY')}</td>
-                  {/* <td className='containerCell'>{`${item.create_date}`}</td> */}
+                  <td className='containerCell'>{`${item.fechaCreacion}`}</td> 
                   <td className='statusC' data-state={item.state ? 'Activo' : 'Inactivo'}>{item.state ? 'Activo' : 'Inactivo'}</td>
 
                   <td> <button className={`btn-modificar       ${modalShowM ? 'selected' : ''}`} type='submit' onClick={() => setModalShowM(true)} disabled={!selectedClient}> <EditOutlined />  </button></td>

@@ -24,11 +24,11 @@ export const Registro = (props) => {
   const { data: country } = useFetch("https://restcountries.com/v3.1/all");
   const [objetos, setObjetos] = useState();
   const [selectedBirthDate, setSelectedBirthDate] = useState(moment(new Date()));
+  const [selectedcreateDate,setSelectedcreateDate] = useState(moment(new Date()));
   const [selectedGender, setSelectedGender] = useState(null);
   const [selectedProfession, setSelectedProfession] = useState({});
   const [selectedTipo, setSelectedTipo]= useState(null);
   const [selectedNationality, setSelectedNationality] = useState(null);
-  const [currentDate, setCurrentDate] = useState(new Date());
   const [dataClient, setDataClient] = useState({
     id: "",
     documentNumber: "",
@@ -75,6 +75,7 @@ export const Registro = (props) => {
         !selectedProfession.id_profession||
         !selectedTipo
         
+        
       ) {
         Swal.fire({
           icon: "error",
@@ -102,7 +103,7 @@ export const Registro = (props) => {
         },
         state: "True",
         tipo_persona: selectedTipo,
-        fecha_sistema: currentDate, 
+        fechaCreacion: selectedcreateDate,
       });
       console.log("Respuesta de la API:", response.data);
       Swal.fire({
@@ -266,9 +267,23 @@ export const Registro = (props) => {
                     )}
                   </Form.Group>  
 
-                  <Form.Group as={Col} md="3" className="group-form">
-                  <Form.Label className="labels">Fecha del Sistema:</Form.Label>
-                  <div className="date-system">{currentDate.toLocaleString()}</div>
+                   {/*FECHA DE CREACION */}
+
+                   <Form.Group as={Col} md="3" className="group-form">
+                    <Form.Label className="labels">Fecha Creacion </Form.Label>
+
+                    <DatePicker
+                      className="datepicker"
+                      dateFormat="dd/MM/yyyy"
+                      selected={moment(selectedcreateDate).toDate()}
+                      onChange={handleDateChange}
+                      maxDate={maxDate}
+                      onBlur={handleBlur}
+                      disabled
+                      readOnly
+                    /> 
+
+                      
                   </Form.Group>
 
                   <div className="linea"></div>

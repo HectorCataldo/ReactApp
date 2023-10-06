@@ -26,9 +26,12 @@ export const Modify = (props) => {
     //Constante que tiene que mantenerse en cambio individual
     const { show, onHide, selectedClient } = props;
     const [selectedBirthDate, setSelectedBirthDate] = useState(new Date());
+    const [selectedcreateDate,setSelectedcreateDate] = useState(moment(new Date()));
     const [selectedGender, setSelectedGender] = useState(null);
     const [selectedProfession, setSelectedProfession] = useState({});
     const [selectedNationality, setSelectedNationality] = useState(null);
+    const [selectedTipo, setSelectedTipo]= useState(null);
+    const [maxDate, setMaxDate] = useState(new Date());
     const [dataClient, setDataClient] = useState({
       id: '',
       documentNumber: '',
@@ -49,6 +52,7 @@ export const Modify = (props) => {
           profession_Name : selectedClient.profession.profession_Name
         });
         setSelectedNationality(selectedClient.nationality);
+       
         setDataClient((prevData) =>
         ({
           ...prevData,
@@ -62,6 +66,9 @@ export const Modify = (props) => {
           address: selectedClient.address
         }));
         setSelectedBirthDate(selectedClient.birthDate);
+        
+        setSelectedTipo(selectedClient.tipo_persona);
+        setSelectedcreateDate(selectedClient.fechaCreacion);
       }
     }, [show, selectedClient]);
 
@@ -107,7 +114,9 @@ export const Modify = (props) => {
             id_profession: selectedProfession.id_profession,
             profession_Name: selectedProfession.profession_Name
           },
-          state: selectedClient.state
+          state: selectedClient.state,
+          tipo_persona:selectedTipo,
+          fechaCreacion:selectedcreateDate,
         });    
         // Maneja la respuesta de la API aquí
         console.log('Respuesta de la API:', response.data);
@@ -126,7 +135,12 @@ export const Modify = (props) => {
       }
     };
  
-
+    const handleDateChange = (date) => {
+      if (moment(date).isAfter(maxDate)) {
+        return; 
+      }
+      setSelectedBirthDate(date);
+    };
       
     return(
     <>
@@ -159,7 +173,7 @@ export const Modify = (props) => {
               }}
             >
 
-              {({ handleSubmit, handleChange, values, touched, errors }) => (
+              {({ handleSubmit, handleChange,handleDateChange, values, touched, errors }) => (
 
 
                 <Form noValidate onSubmit={handleSubmit}>
@@ -193,6 +207,45 @@ export const Modify = (props) => {
                         readOnly
                         /></Form.Group>
                         
+                        <Form.Group as={Col} md="3" className="group-form">
+                          <Form.Label className="labels">Tipo persona <span className="asterisk">*</span></Form.Label>
+
+                          <Form.Select
+                            className="select-form"
+                            size="sm"
+                            value={selectedTipo}
+                            onChange={(e) =>setSelectedTipo(e.target.value)}
+                            >
+
+                            <option value=""></option>
+                            <option value="Natural">Natural</option>
+                            <option value="Juridica">Júridica</option>
+                            
+                          </Form.Select>
+
+                          {errors.selectedTipo && touched.selectedTipo && (
+                            <div className="error">{errors.selectedTipo}</div>
+                          )}
+                        </Form.Group>  
+
+                        {/*FECHA DE CREACION */}
+
+                        <Form.Group as={Col} md="3" className="group-form">
+                          <Form.Label className="labels">Fecha Creacion </Form.Label>
+
+                          <DatePicker
+                            className="datepicker"
+                            dateFormat="dd/MM/yyyy"
+                            selected={moment(selectedcreateDate).toDate()}
+                            onChange={handleDateChange}
+                            maxDate={maxDate}
+                            
+                            disabled
+                            readOnly
+                          /> 
+
+                            
+                        </Form.Group>
                       <div className="linea"></div>
                     <Form.Label className="labels-title">INFORMACIÓN DE CONTACTO</Form.Label>
                     <Form.Group as={Col} md="3" className="group-form">
@@ -231,6 +284,7 @@ export const Modify = (props) => {
                           className="datepicker"
                           selected={moment(selectedBirthDate).toDate()}
                           onChange={(date) => setSelectedBirthDate(date)}
+                          maxDate={maxDate}
                         />
                       </Form.Group>
 

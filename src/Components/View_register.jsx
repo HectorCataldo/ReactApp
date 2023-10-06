@@ -23,6 +23,9 @@ export const View = (props) => {
     //Constante que tiene que mantenerse en cambio individual
     const { show, onHide, selectedClient } = props;
     const [selectedBirthDate, setSelectedBirthDate] = useState(new Date());
+    const [selectedcreateDate,setSelectedcreateDate] = useState(moment(new Date()));
+    const [selectedTipo, setSelectedTipo]= useState(null);
+
     const [selectedGender, setSelectedGender] = useState(null);
     const [selectedProfession, setSelectedProfession] = useState({});
     const [selectedNationality, setSelectedNationality] = useState(null);
@@ -37,6 +40,16 @@ export const View = (props) => {
       address:''
     }
     );
+
+    const [maxDate, setMaxDate] = useState(new Date());
+
+    const handleDateChange = (date) => {
+      if (moment(date).isAfter(maxDate)) {
+        return; 
+      }
+      setSelectedBirthDate(date);
+    };
+  
     //Permite generar el valor a los input solo cuando el modal se muestre
     useEffect(() => {
       if (show) {
@@ -59,6 +72,8 @@ export const View = (props) => {
           address: selectedClient.address
         }));
         setSelectedBirthDate(selectedClient.birthDate);
+        setSelectedTipo(selectedClient.tipo_persona);
+        setSelectedcreateDate(selectedClient.fechaCreacion);
       }
     }, [show, selectedClient]);
 
@@ -104,7 +119,9 @@ export const View = (props) => {
             id_profession: selectedProfession.id_profession,
             profession_Name: selectedProfession.profession_Name
           },
-          state: selectedClient.state
+          state: selectedClient.state,
+          tipo_persona: selectedTipo,
+          fechaCreacion: selectedcreateDate,
         });    
         // Maneja la respuesta de la API aquí
         console.log('Respuesta de la API:', response.data);
@@ -188,6 +205,48 @@ export const View = (props) => {
                         readOnly
                         /></Form.Group>
                         
+
+                              <Form.Group as={Col} md="3" className="group-form">
+                                <Form.Label className="labels">Tipo persona <span className="asterisk">*</span></Form.Label>
+
+                                <Form.Select
+                                  className="select-form"
+                                  size="sm"
+                                  value={selectedTipo}
+                                  onChange={(e) =>setSelectedTipo(e.target.value)}
+                                  disabled
+                                  readOnly
+                                 >
+
+                                  <option value=""></option>
+                                  <option value="Natural">Natural</option>
+                                  <option value="Juridica">Júridica</option>
+                                  
+                                </Form.Select>
+
+                                {errors.selectedTipo && touched.selectedTipo && (
+                                  <div className="error">{errors.selectedTipo}</div>
+                                )}
+                              </Form.Group>  
+
+                              {/*FECHA DE CREACION */}
+
+                              <Form.Group as={Col} md="3" className="group-form">
+                                <Form.Label className="labels">Fecha Creacion </Form.Label>
+
+                                <DatePicker
+                                  className="datepicker"
+                                  dateFormat="dd/MM/yyyy"
+                                  selected={moment(selectedcreateDate).toDate()}
+                                  onChange={handleDateChange}
+                                  maxDate={maxDate}
+                                  
+                                  disabled
+                                  readOnly
+                                /> 
+
+                                  
+                              </Form.Group>
                       <div className="linea"></div>
                     <Form.Label className="labels-title">INFORMACIÓN DE CONTACTO</Form.Label>
                     <Form.Group as={Col} md="3" className="group-form">
