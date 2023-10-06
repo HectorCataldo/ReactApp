@@ -4,7 +4,7 @@ import Col from 'react-bootstrap/Col';
 import Form from 'react-bootstrap/Form';
 import Row from 'react-bootstrap/Row';
 import * as formik from 'formik';
-import '../CSS/register-style.css';
+import '../CSS/register-style.scss';
 import { useFetch } from '../assets/useFetch';
 import moment from 'moment';
 import axios from 'axios';

@@ -1,3 +1,23 @@
+/* CONTENEDOR TOTAL DEL CREATE*/
+
+@use "@material/floating-label/mdc-floating-label";
+@use "@material/line-ripple/mdc-line-ripple";
+@use "@material/notched-outline/mdc-notched-outline";
+@use "@material/textfield";
+@include textfield.core-styles;
+
+
+
+
+.container-TOTAL{
+    margin-left: 400px;
+    margin-top: 100px;
+    width: 60%;
+    height: 90%;
+}
+
+
+
 /*MODAL HEADER*/
 .modal-content{
 width: 1000px;
@@ -34,6 +54,10 @@ padding: 0,10px,0,0;
  display: inline-block;
 }
 
+
+
+
+
 .group-form .labels
 {
     color:#7F7F7F;
@@ -63,6 +87,9 @@ padding: 0,10px,0,0;
  
 }
 
+.group-form .select-form{
+    width: 100%;
+}
 .group-form .form_dir
 {  
     
@@ -161,3 +188,56 @@ padding: 0,10px,0,0;
     width: 100px; 
     height:40px;
 }
+
+/* Estilos para Text Fields */
+.mdc-text-field {
+    width: 100%;
+    margin-bottom: 10px;
+  }
+  
+  .mdc-text-field.mdc-text-field--invalid .mdc-text-field__input {
+    border-color: red; /* Color del borde cuando hay errores */
+  }
+  
+  .mdc-text-field__ripple {
+    background-color: transparent;
+  }
+  
+  .mdc-floating-label {
+    color: #7F7F7F;
+    font-weight: 600;
+  }
+  
+  .mdc-text-field__input {
+    border-color: #C7C7C7;
+    border-style: solid;
+    border-width: 2px;
+    border-radius: 5px;
+    padding: 10px;
+  }
+  
+  .mdc-line-ripple {
+    border-top: 1px solid rgb(224, 223, 223);
+    height: 2px;
+    margin: 20px auto 0 auto;
+  }
+  
+  /* Estilos para selects */
+  .mdc-text-field select {
+    width: 100%;
+    height: 35px;
+  }
+  
+  /* Estilos para datepicker */
+  .mdc-text-field .datepicker {
+    width: 100%;
+    height: 35px;
+  }
+  
+  /* Estilos para etiquetas de error */
+  .mdc-text-field-helper-text--validation-msg {
+    font-size: 12px;
+    color: #FF034B;
+    margin-top: 1px;
+  }
+  

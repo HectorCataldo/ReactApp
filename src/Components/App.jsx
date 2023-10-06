@@ -1,7 +1,7 @@
 import React, { useState, useEffect } from 'react';
 import { useFetch } from '../assets/useFetch';
 import '../CSS/index.css';
-
+import { Link } from 'react-router-dom';
 import { Registro } from './Create_register';
 import { Modify } from './Modify_register';
 import { View   } from './View_register'
@@ -9,7 +9,7 @@ import moment from 'moment';
 import { PlusOutlined,LeftOutlined,RightOutlined,SearchOutlined,EyeOutlined,EditOutlined } from '@ant-design/icons';
 import _ from 'lodash';
 import  TextLinkExample  from './Navbar';
-import Sidebar from './sidebar'; // Importa el componente de la barra lateral
+import Sidebar from './sidebar'; 
 
 
 
@@ -86,7 +86,7 @@ while (currentClients.length < clientsPerPage) {
           <input placeholder="Buscar" className="inBuscar" value={searchTerm} onChange={(e) => setSearchTerm(e.target.value)}/>
 
           </div>
-          <button className='btn-crear' type='submit' onClick={() => setModalShowC(true)}><PlusOutlined className='icons' /> Agregar Nuevo</button>
+          <Link to="/registro"><button className='btn-crear' type='submit' ><PlusOutlined className='icons' /> Agregar Nuevo</button></Link>
           </div>
 
         <div className='card'>
