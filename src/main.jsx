@@ -5,7 +5,7 @@ import { Principal } from '../src/Components/Principal';
 import { App } from './Components/App';
 import { Registro } from './Components/Create_register';
 import { Modify } from './Components/Modify_register';
-import './CSS/index.css';
+import './CSS/index.scss';
 
 createRoot(document.getElementById('root')).render(
   <React.StrictMode>

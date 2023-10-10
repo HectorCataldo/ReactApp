@@ -1,6 +1,6 @@
 import React, { useState, useEffect } from 'react';
 import { useFetch } from '../assets/useFetch';
-import '../CSS/index.css';
+import '../CSS/index.scss';
 import { Link } from 'react-router-dom';
 import { Registro } from './Create_register';
 import { Modify } from './Modify_register';
