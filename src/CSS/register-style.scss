@@ -68,26 +68,63 @@
 // PANEL DE USUARIO 
 .Panel-User
 {
+    display: flex;
+    justify-content: space-between;
+    align-items:center;
     margin-top: 10px;
     margin-left: 263px;
     width: 82%;
-    height: 70px;
+    height: 120px;
     margin-bottom: 40px;
     box-shadow:
     inset 
     0 0 0 1px white,
     0.1em 0.1em 0.5em rgba(36, 36, 36, 0.6);
 
-    display: flex;
-    justify-items: flex-end;
+    
 }
+.Panel-User .user-info-container {
+    display: flex;
+    align-items: center;
+    margin-left: 10px;
+}
+
+// Ajusta los márgenes según tus necesidades de diseño
+.Panel-User .user-info-container h1 {
+    margin-right: 850px; 
+    font-size: 20px
+}
+
 // FIN DEL PANEL DE USUARIO
 .Panel-User .group-user{
     width: 120px;
-    margin-right: 10px;
+    margin-right: 20px;
     margin-top: 10px;
     margin-bottom: 10px;
 
+   
+}
+
+.Panel-User .user-info-container {
+    display: flex;
+    flex-direction: column; /* Esto coloca los elementos uno encima del otro */
+    align-items: flex-start; /* Esto alinea los elementos a la izquierda */
+    margin-left: 10px;
+}
+
+.Panel-User .user-info-container h1 {
+    font-size: 20px;
+    margin-right: 0; /* Esto elimina el margen derecho del h1 */
+}
+
+.Panel-User .user-info-container h1.title-user {
+    margin-right: 0;
+    margin-top: 10px;
+}
+
+.Panel-User .user-info-container h1.title-newuser {
+    margin-top: 2px; /* Esto agrega un margen superior al título "Cliente nuevo" */
+    font-size: 15px;
 }
 
 
@@ -95,22 +132,35 @@
 // CONTENEDOR DE LOS CONTENEDORES {
 .Containers-stacks2{
     width: 90%;
+    display: flex;
 }
 //}
 
 // CONTENEDORES NUEVOS 
 
 .Containers-Stack {
-    width: 300px;
-    margin-left: 20px;
+    width: 33.33%;
+    
+    align-items: center;
+    display: flex;
+    flex-direction: column;
     margin-right: 20px;
-    border-color: #C7C7C7;
+    border-color: #000000;
     border-style: 2px solid;
 }
+
+/* Anula la propiedad margin-left en Stack */
+.css-ycrhu6-MuiStack-root > :not(style) ~ :not(style) {
+    margin-left: 0 !important; }
+
 .Containers-Stack .Containers-Item {
     width: 300px;
     height: 100%;
     align-items: center;
+    flex-grow: 1; /* Hace que los elementos internos utilicen todo el espacio vertical disponible. */
+    margin-right: 20px;
+    border-color: #000000;
+    border-style: 2px solid;
 }
 
 .Containers-Stack .Containers-Item .group-form{

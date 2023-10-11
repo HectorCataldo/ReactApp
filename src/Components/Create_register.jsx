@@ -24,7 +24,7 @@ import '../CSS/register-style.scss';
 
 
 export const Registro = (props) => {
-  const { data: country } = useFetch( "https://gist.githubusercontent.com/HectorCataldo/ceee7aa2b93e83d7d04f752e3adbe623/raw/25b49d88975f0031ebfbd9abd0b5881e92a9303d/paises.json" )
+  const { data: country } = useFetch( "https://gist.githubusercontent.com/HectorCataldo/ceee7aa2b93e83d7d04f752e3adbe623/raw/81b6bc11b965720e6717975f665fe85869c71e81/paises.json" )
   const { data: regions} = useFetch("https://gist.githubusercontent.com/HectorCataldo/11e149d5ba18e9dfe72b6c21e38ca439/raw/b7281863b44021b362338493025cc0723e39b7a9/regions.json");
   const { data: clients } = useFetch("http://localhost:8080/api/clients");
   const { data: profession } = useFetch("http://localhost:8080/api/profession");
@@ -74,11 +74,6 @@ export const Registro = (props) => {
       setSeComuna('');
     }
   };
-
-
-  const [userName, setUserName] = useState("Usuario");
-
-
 
   const isValidProfession = typeof selectedProfession === 'object' &&
     'id_profession' in selectedProfession &&
@@ -166,6 +161,27 @@ export const Registro = (props) => {
     };
   }, []);
 
+
+
+  //  USER NAME DINAMICO
+  const [userName, setUserName] = useState("Usuario");
+
+  const updateUserName = (firstName, lastName, secondLastName) => {
+    let userFullName = firstName || "Usuario";
+  
+    if (lastName) {
+      userFullName += ` ${lastName}`;
+    }
+  
+    if (secondLastName) {
+      userFullName += ` ${secondLastName}`;
+    }
+  
+    setUserName(userFullName);
+  };
+  
+  
+
   return (
     <>
     <TextLinkExample />
@@ -197,22 +213,25 @@ export const Registro = (props) => {
 
 
                        
-                          <Stack direction="row" className="Panel-User">
-
-                         
+                   <Stack direction="row" className="Panel-User">
+                            <div className="user-info-container">
+                                 <h1 className="title-user"> {userName ? userName : 'Usuario'}</h1>  
+                                 <h1 className="title-newuser">Cliente nuevo</h1>
+                            </div>
+                              <Stack direction="row">
                               <Item className="group-user">
-                                 
-                                 <TextField
-                                   id="id filled-disabled"
-                                   label="ID Cliente" 
-                                   value={objetos}
-                                   onChange={handleChange}
-                                   InputProps={{
-                                     readOnly: true,
-                                   }}
-                                   disabled
-                                   variant="filled"/> 
-                                 </Item>
+                                    
+                                    <TextField
+                                      id="id filled-disabled"
+                                      label="ID Cliente" 
+                                      value={objetos}
+                                      onChange={handleChange}
+                                      InputProps={{
+                                        readOnly: true,
+                                      }}
+                                      disabled
+                                      variant="filled"/> 
+                                    </Item>
 
                                     <Item className="group-user">
                                         <TextField
@@ -229,24 +248,26 @@ export const Registro = (props) => {
                                           disabled
                                         />
                                       </Item>
+                              </Stack>
+                                  
                            </Stack>            
                     
   
                    <div className="container-TOTAL">
-                    <Stack direction="row" className="Containers-stacks2">
+                    <Stack direction="row" spacing={30} className="Containers-stacks2">
                   
                         <Stack md="4" direction="row" className="Containers-Stack">
                           <Item md="12" className="Containers-Item">
                           <span>Contenedor 1</span>
                               <Modal.Body className="MBody">
-                                
-              
+
                                 <Item className="group-form">
                                   <TextField
                                     id="rut"
                                     label="RUT"
                                     type="text"
                                     variant="filled"
+                                    placeholder="11.111.111-1"
                                     value={dataClient.documentNumber}
                                     onChange={(e) => setDataClient({ ...dataClient, documentNumber: e.target.value })}
                                     error={touched.numberdoc && !!errors.numberdoc}
@@ -286,7 +307,7 @@ export const Registro = (props) => {
                                     name="name"
                                     value={dataClient.name}
                                     onChange={(e) => {setDataClient({ ...dataClient, firstName: e.target.value });
-                                              updateUserName(e.target.value, dataClient.lastName1);
+                                                      updateUserName(e.target.value,dataClient.lastName1,dataClient.secondLastName); 
                                             }}
                                     error={touched.name && !!errors.name}
                                     helperText={touched.name && errors.name}
@@ -300,8 +321,10 @@ export const Registro = (props) => {
                                     variant="filled"
                                     name="lastName1"
                                     value={dataClient.lastName1}
-                                    onChange={(e) => {setDataClient({ ...dataClient, lastName: e.target.value });
-                                           updateUserName(DataClient.firstName, e.target.value)}}
+                                    onChange={(e) => {setDataClient((prevData)=>({...prevData , lastName: e.target.value }));
+                                                      updateUserName(dataClient.firstName,e.target.value,dataClient.secondLastName);
+                                          }}
+
                                     error={touched.lastName1 && !!errors.lastName1}
                                     helperText={touched.lastName1 && errors.lastName1}
                                   />
@@ -313,7 +336,9 @@ export const Registro = (props) => {
                                     type="text"
                                     variant="filled"
                                     name="secondLastName"
-                                    onChange={(e) => setDataClient({ ...dataClient, secondLastName: e.target.value })}
+                                    onChange={(e) => {setDataClient((prevData)=>({ ...prevData, secondLastName: e.target.value }));
+                                                      updateUserName(dataClient.firstName,dataClient.lastName,e.target.value);
+                                  }}
                                     value={dataClient.secondLastName}
                                   />
                                 </Item>
@@ -335,89 +360,11 @@ export const Registro = (props) => {
                           </Item>
                         </Stack>
               
-                        {/* Contenedor 2 */}
-                       
-                        <Stack md="4" className="Containers-Stack">
-                          <Item md="12" className="Containers-Item">
-                         
-                            <span>Contenedor 2</span>
-                            <div className="container">
-                              <Modal.Body className="MBody">
-                            
 
-                                <Item className="group-form">
-                                  <FormControl variant="filled" className="select-form">
-                                    <InputLabel htmlFor="gender">Género *</InputLabel>
-                                    <Select
-                                      id="gender"
-                                      value={selectedGender}
-                                      onChange={(e) => setSelectedGender(e.target.value)}
-                                      onBlur={handleBlur}
-                                      label="Género *"
-                                      error={touched.selectedGender && !!errors.selectedGender}
-                                    >
-                                      <MenuItem value=""></MenuItem>
-                                      <MenuItem value="Masculino">Masculino</MenuItem>
-                                      <MenuItem value="Femenino">Femenino</MenuItem>
-                                      <MenuItem value="Otro">Otro</MenuItem>
-                                    </Select>
-                                  </FormControl>
-                                  {errors.selectedGender && touched.selectedGender && (
-                                    <div className="error">{errors.selectedGender}</div>
-                                  )}
-                                </Item>
-              
-                                {/* INFORMACION DE LOCACION */}
-                                <Item className="group-form">
-                                  <FormControl variant="filled" className="select-form">
-                                    <InputLabel htmlFor="nacionalidad">Pais de origen *</InputLabel>
-                                    <Select
-                                      id="nacionalidad"
-                                      value={selectedNationality}
-                                      onChange={(e) => setSelectedNationality(e.target.value)}
-                                      onBlur={handleBlur}
-                                      label="Nacionalidad *"
-                                    >
-                                     
-                                    </Select>
-                                  </FormControl>
-                                </Item>
-
-                                <Item className="group-form">
-                                  <FormControl variant="filled" className="select-form">
-                                    <InputLabel htmlFor="nacionalidad">Región *</InputLabel>
-                                    <Select
-                                      id="region"
-                                      value={selectedNationality}
-                                      onChange={(e) => setSelectedNationality(e.target.value)}
-                                      onBlur={handleBlur}
-                                      label="Región *">
-                                    </Select>
-                                  </FormControl>
-                                </Item>
-
-                                <Item className="group-form">
-                                  <FormControl variant="filled" className="select-form">
-                                    <InputLabel htmlFor="nacionalidad">Comuna *</InputLabel>
-                                    <Select
-                                      id="comuna"
-                                      value={selectedNationality}
-                                      onChange={(e) => setSelectedNationality(e.target.value)}
-                                      onBlur={handleBlur}
-                                      label="Comuna *">
-                                    </Select>
-                                  </FormControl>
-                                </Item>
-
-                              </Modal.Body>
-                            </div>
-                          </Item>
-                        </Stack>
-
-                      {/* Contenedor 3 */}
+                      {/* Contenedor 2 */}
                         <Stack md="4" className="Containers-Stack">
                           <Item md="12" className="Containers-Item">                 
-                            <span>Contenedor 3</span>
+                            <span>Contenedor 2</span>
                             <div className="container">
                               <Modal.Body className="MBody">
                              
@@ -430,6 +377,7 @@ export const Registro = (props) => {
                                     type="text"
                                     variant="filled"
                                     name="phone"
+                                    placeholder="911111111"
                                     onChange={(e) => setDataClient({ ...dataClient, phoneNumber: e.target.value })}
                                     value={dataClient.phoneNumber}
                                     error={touched.phone && !!errors.phone}
@@ -493,7 +441,112 @@ export const Registro = (props) => {
                             </div>
                           </Item>
                         </Stack>
-                      </Stack>  
+
+                            {/* Contenedor 2 */}
+                       
+                        <Stack md="4" className="Containers-Stack">
+                          <Item md="12" className="Containers-Item">
+                         
+                            <span>Contenedor 3</span>
+                            <div className="container">
+                              <Modal.Body className="MBody">
+                            
+
+                                <Item className="group-form">
+                                  <FormControl variant="filled" className="select-form">
+                                    <InputLabel htmlFor="gender">Género *</InputLabel>
+                                    <Select
+                                      id="gender"
+                                      value={selectedGender}
+                                      onChange={(e) => setSelectedGender(e.target.value)}
+                                      onBlur={handleBlur}
+                                      label="Género *"
+                                      error={touched.selectedGender && !!errors.selectedGender}
+                                    >
+                                      <MenuItem value=""></MenuItem>
+                                      <MenuItem value="Masculino">Masculino</MenuItem>
+                                      <MenuItem value="Femenino">Femenino</MenuItem>
+                                      <MenuItem value="Otro">Otro</MenuItem>
+                                    </Select>
+                                  </FormControl>
+                                  {errors.selectedGender && touched.selectedGender && (
+                                    <div className="error">{errors.selectedGender}</div>
+                                  )}
+                                </Item>
+              
+                                {/* INFORMACION DE LOCACION */}
+                                <Item className="group-form">
+                                  <FormControl variant="filled" className="select-form">
+                                    <InputLabel htmlFor="nacionalidad">Pais de origen *</InputLabel>
+                                    <Select
+                                      id="nacionalidad"
+                                      required
+                                      value={selectedNationality}
+                                      onChange={(e) => setSelectedNationality(e.target.value)}
+                                      onBlur={handleBlur}
+                                      label="Nacionalidad"
+                                    >
+                                      {Array.isArray(country?.paises) &&
+                                        country.paises.map((pais, index) =>
+                                        (<MenuItem key={index} value={pais}>
+                                            {pais}
+                                          </MenuItem>
+                                        ))}                                     
+                                    </Select>
+                                  </FormControl>
+                                </Item>
+
+                                <Item className="group-form">
+                                  <FormControl variant="filled" className="select-form">
+                                    <InputLabel htmlFor="region">Región *</InputLabel>
+                                    <Select
+                                      id="region"
+                                      value={seRegion}
+                                      onChange={RegionChange}
+                                      onBlur={handleBlur}
+                                      required
+                                      label="Región">
+                                        <MenuItem value = "">
+                                         Seleccione una región
+                                        </MenuItem>
+                                        {Array.isArray(regions?.regions) &&
+                                          regions.regions.map((region, index) =>(
+                                            <MenuItem key={index} value={region.name}>
+                                            {region.name}
+                                            </MenuItem>
+                                          ))}
+                                    </Select>
+                                  </FormControl>
+                                </Item>
+
+                                <Item className="group-form">
+                                  <FormControl variant="filled" className="select-form">
+                                    <InputLabel htmlFor="comuna">Comuna</InputLabel>
+                                    <Select
+                                      id="comuna"
+                                      value={seComuna}
+                                      onChange={(e) => setSeComuna(e.target.value)}
+                                      onBlur={handleBlur}
+                                      disabled ={!seRegion}
+                                      label="Comuna"
+                                      required>
+                                        {Array.isArray(fcomunas) &&
+                                          fcomunas.map((comuna, index) =>
+                                          (
+                                            <MenuItem key={index} value={comuna.name}>
+                                              {comuna.name}
+                                            </MenuItem>
+                                          ))}
+                                    </Select>
+                                  </FormControl>
+                                </Item>
+
+                              </Modal.Body>
+                            </div>
+                          </Item>
+                        </Stack>
+
+                   </Stack>  
           
           </div>
   
