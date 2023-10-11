@@ -208,13 +208,6 @@ export const Registro = (props) => {
       {({ errors, touched, handleSubmit: formikHandleSubmit, handleChange, handleBlur }) => (
         <Form className="formulario" onSubmit={formikHandleSubmit}>
 
-<<<<<<< Updated upstream
-          <div className="container-TOTAL">
-                <Item md= "12">
-                        {/* Contenedor 1 */}
-                        
-                        <Stack spacing={1} direction="row" className="Containers-Stack">
-=======
 
                        
                           <Stack direction="row" className="Panel-User">
@@ -257,7 +250,6 @@ export const Registro = (props) => {
                     <Stack direction="row" className="Containers-stacks2">
                   
                         <Stack md="4" direction="row" className="Containers-Stack">
->>>>>>> Stashed changes
                           <Item md="12" className="Containers-Item">
                            
                               <Modal.Body className="MBody">
@@ -538,7 +530,7 @@ export const Registro = (props) => {
                           </Item>
                         </Stack>
           
-                </Item>
+                </Stack>
           </div>
   
         </Form>
