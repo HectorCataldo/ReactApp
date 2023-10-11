@@ -1,7 +1,5 @@
 import React, { useState, useEffect } from "react";
 import Button from "react-bootstrap/Button";
-import Col from "react-bootstrap/Col";
-import Row from "react-bootstrap/Row";
 import Modal from "react-bootstrap/Modal";
 import moment from "moment";
 import axios from "axios";
@@ -22,6 +20,7 @@ import { DatePicker } from '@mui/x-date-pickers/DatePicker';
 import { CloseCircleOutlined,PlusCircleOutlined } from '@ant-design/icons';
 import Stack from '@mui/material/Stack';
 import Item from '@mui/material/Stack';
+import '../CSS/register-style.scss';
 
 
 export const Registro = (props) => {
@@ -79,15 +78,7 @@ export const Registro = (props) => {
 
   const [userName, setUserName] = useState("Usuario");
 
-  const updateUserName = (firstName, lastName1) => {
-    const fullName = firstName+lastName1 || "Usuario";
-    if (lastName) {
-      setUserName(`${fullName} ${lastName}`);
-    } else {
-      setUserName(fullName);
-    }
-  };
-  
+
 
   const isValidProfession = typeof selectedProfession === 'object' &&
     'id_profession' in selectedProfession &&
@@ -180,12 +171,8 @@ export const Registro = (props) => {
     <TextLinkExample />
     <Sidebar />
     <div className="Pane-Control">
-      <Button className="btn_footer" type="Submit" onClick={handleSubmit}>
-        <PlusCircleOutlined className="create-log" /> Crear
-      </Button>
-      <Button className="btn_footer">
-        <CloseCircleOutlined className="cancel-log" /> Cancelar
-      </Button>
+      <Button className="btn_create" type="Submit" onClick={handleSubmit}> <PlusCircleOutlined className="create-log" /> Crear</Button>
+      <Button className="btn_cancel"><CloseCircleOutlined className="cancel-log" /> Cancelar </Button>
     </div>
   
     <Formik
@@ -212,8 +199,7 @@ export const Registro = (props) => {
                        
                           <Stack direction="row" className="Panel-User">
 
-                          <h1>{userName}</h1>
-
+                         
                               <Item className="group-user">
                                  
                                  <TextField
@@ -251,24 +237,11 @@ export const Registro = (props) => {
                   
                         <Stack md="4" direction="row" className="Containers-Stack">
                           <Item md="12" className="Containers-Item">
-                           
+                          <span>Contenedor 1</span>
                               <Modal.Body className="MBody">
-                                <Item md="3" className="group-form">
-                                  <span>Contenedor 1</span>
-                                  <TextField
-                                    id="id"
-                                    label="ID Cliente"
-                                    type="text"
-                                    variant="filled"
-                                    value={objetos}
-                                    onChange={handleChange}
-                                    InputProps={{
-                                      readOnly: true,
-                                    }}
-                                  />
-                                </Item>
+                                
               
-                                <Item md="3" className="group-form">
+                                <Item className="group-form">
                                   <TextField
                                     id="rut"
                                     label="RUT"
@@ -281,7 +254,7 @@ export const Registro = (props) => {
                                   />
                                 </Item>
               
-                                <Item md="3" className="group-form">
+                                <Item className="group-form">
                                   <FormControl className="select-form">
                                     <InputLabel htmlFor="tipo-persona">Tipo persona *</InputLabel>
                                     <Select
@@ -303,21 +276,9 @@ export const Registro = (props) => {
                                   )}
                                 </Item>
               
-                                <Item md="3" className="group-form">
-                                  <TextField
-                                    id="fechacreacion"
-                                    label="Fecha Creacion"
-                                    type="text"
-                                    variant="filled"
-                                    handleBlur={handleBlur}
-                                    value={moment(selectedcreateDate).format("DD/MM/YYYY")}
-                                    InputProps={{
-                                      readOnly: true,
-                                    }}
-                                  />
-                                </Item>
+                               
               
-                                <Item md="3" className="group-form">
+                                <Item className="group-form">
                                   <TextField
                                     label="Nombres *"
                                     type="text"
@@ -332,7 +293,7 @@ export const Registro = (props) => {
                                   />
                                 </Item>
               
-                                <Item md="3" className="group-form">
+                                <Item className="group-form">
                                   <TextField
                                     label="Primer Apellido *"
                                     type="text"
@@ -346,7 +307,7 @@ export const Registro = (props) => {
                                   />
                                 </Item>
               
-                                <Item md="3" className="group-form">
+                                <Item className="group-form">
                                   <TextField
                                     label="Segundo Apellido"
                                     type="text"
@@ -356,22 +317,12 @@ export const Registro = (props) => {
                                     value={dataClient.secondLastName}
                                   />
                                 </Item>
-                              </Modal.Body>
-                           
-                          </Item>
-                        </Stack>
-              
-                        {/* Contenedor 2 */}
-                        <Stack md="4" className="Containers-Stack">
-                          <Item md="12" className="Containers-Item">
-                            <span>Contenedor 2</span>
-                            <div className="container">
-                              <Modal.Body>
-                                <Item md="3" className="group-form">
+                                <Item className="group-form">
                                   <LocalizationProvider dateAdapter={AdapterDayjs}>
                                     <DatePicker
                                       className="datepicker"
                                       dateFormat="dd/MM/yyyy"
+                                      
                                       selected={moment(selectedBirthDate).toDate()}
                                       onChange={(date) => setSelectedBirthDate(date)}
                                       onBlur={handleBlur}
@@ -379,8 +330,22 @@ export const Registro = (props) => {
                                     />
                                   </LocalizationProvider>
                                 </Item>
+                              </Modal.Body>
+                           
+                          </Item>
+                        </Stack>
               
-                                <Item md="3" className="group-form">
+                        {/* Contenedor 2 */}
+                       
+                        <Stack md="4" className="Containers-Stack">
+                          <Item md="12" className="Containers-Item">
+                         
+                            <span>Contenedor 2</span>
+                            <div className="container">
+                              <Modal.Body className="MBody">
+                            
+
+                                <Item className="group-form">
                                   <FormControl variant="filled" className="select-form">
                                     <InputLabel htmlFor="gender">Género *</InputLabel>
                                     <Select
@@ -403,7 +368,7 @@ export const Registro = (props) => {
                                 </Item>
               
                                 {/* INFORMACION DE LOCACION */}
-                                <Item md="3" className="group-form">
+                                <Item className="group-form">
                                   <FormControl variant="filled" className="select-form">
                                     <InputLabel htmlFor="nacionalidad">Pais de origen *</InputLabel>
                                     <Select
@@ -413,23 +378,12 @@ export const Registro = (props) => {
                                       onBlur={handleBlur}
                                       label="Nacionalidad *"
                                     >
-                                      {/* Agrega opciones para países */}
+                                     
                                     </Select>
                                   </FormControl>
                                 </Item>
-                              </Modal.Body>
-                            </div>
-                          </Item>
-                        </Stack>
 
-                      {/* Contenedor 3 */}
-                        <Stack md="4" className="Containers-Stack">
-                          <Item md="12" className="Containers-Item">
-                      
-                            <span>Contenedor 3</span>
-                            <div className="container">
-                              <Modal.Body>
-                                <Item md="3" className="group-form">
+                                <Item className="group-form">
                                   <FormControl variant="filled" className="select-form">
                                     <InputLabel htmlFor="nacionalidad">Región *</InputLabel>
                                     <Select
@@ -437,14 +391,12 @@ export const Registro = (props) => {
                                       value={selectedNationality}
                                       onChange={(e) => setSelectedNationality(e.target.value)}
                                       onBlur={handleBlur}
-                                      label="Región *"
-                                    >
-                                      {/* Agrega opciones para regiones */}
+                                      label="Región *">
                                     </Select>
                                   </FormControl>
                                 </Item>
-              
-                                <Item md="3" className="group-form">
+
+                                <Item className="group-form">
                                   <FormControl variant="filled" className="select-form">
                                     <InputLabel htmlFor="nacionalidad">Comuna *</InputLabel>
                                     <Select
@@ -452,16 +404,27 @@ export const Registro = (props) => {
                                       value={selectedNationality}
                                       onChange={(e) => setSelectedNationality(e.target.value)}
                                       onBlur={handleBlur}
-                                      label="Comuna *"
-                                    >
-                                      {/* Agrega opciones para comunas */}
+                                      label="Comuna *">
                                     </Select>
                                   </FormControl>
                                 </Item>
-              
+
+                              </Modal.Body>
+                            </div>
+                          </Item>
+                        </Stack>
+
+                      {/* Contenedor 3 */}
+                        <Stack md="4" className="Containers-Stack">
+                          <Item md="12" className="Containers-Item">                 
+                            <span>Contenedor 3</span>
+                            <div className="container">
+                              <Modal.Body className="MBody">
+                             
+
                                 {/*   fin de  informacion de locacion   */}
               
-                                <Item md="3" className="group-form">
+                                <Item className="group-form">
                                   <TextField
                                     label="Teléfono *"
                                     type="text"
@@ -474,7 +437,7 @@ export const Registro = (props) => {
                                   />
                                 </Item>
               
-                                <Item md="3" className="group-form">
+                                <Item className="group-form">
                                   <TextField
                                     label="Correo *"
                                     type="email"
@@ -501,7 +464,7 @@ export const Registro = (props) => {
                                   />
                                 </Item>
               
-                                <Item md="3" className="group-form">
+                                <Item className="group-form">
                                   <FormControl variant="filled" className="select-form">
                                     <InputLabel htmlFor="profesion">Profesión *</InputLabel>
                                     <Select
@@ -525,12 +488,13 @@ export const Registro = (props) => {
                                     </Select>
                                   </FormControl>
                                 </Item>
+                               
                               </Modal.Body>
                             </div>
                           </Item>
                         </Stack>
+                      </Stack>  
           
-                </Stack>
           </div>
   
         </Form>
