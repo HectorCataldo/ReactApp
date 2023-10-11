@@ -77,7 +77,17 @@ export const Registro = (props) => {
   };
 
 
+  const [userName, setUserName] = useState("Usuario");
 
+  const updateUserName = (firstName, lastName1) => {
+    const fullName = firstName+lastName1 || "Usuario";
+    if (lastName) {
+      setUserName(`${fullName} ${lastName}`);
+    } else {
+      setUserName(fullName);
+    }
+  };
+  
 
   const isValidProfession = typeof selectedProfession === 'object' &&
     'id_profession' in selectedProfession &&
@@ -198,11 +208,56 @@ export const Registro = (props) => {
       {({ errors, touched, handleSubmit: formikHandleSubmit, handleChange, handleBlur }) => (
         <Form className="formulario" onSubmit={formikHandleSubmit}>
 
+<<<<<<< Updated upstream
           <div className="container-TOTAL">
                 <Item md= "12">
                         {/* Contenedor 1 */}
                         
                         <Stack spacing={1} direction="row" className="Containers-Stack">
+=======
+
+                       
+                          <Stack direction="row" className="Panel-User">
+
+                          <h1>{userName}</h1>
+
+                              <Item className="group-user">
+                                 
+                                 <TextField
+                                   id="id filled-disabled"
+                                   label="ID Cliente" 
+                                   value={objetos}
+                                   onChange={handleChange}
+                                   InputProps={{
+                                     readOnly: true,
+                                   }}
+                                   disabled
+                                   variant="filled"/> 
+                                 </Item>
+
+                                    <Item className="group-user">
+                                        <TextField
+                                          id="fechacreacion"
+                                          label="Fecha Creacion"
+                                          type="text"
+                                          variant="filled"
+                                          fullWidth
+                                          handleBlur={handleBlur}
+                                          value={moment(selectedcreateDate).format("DD/MM/YYYY")}
+                                          InputProps={{
+                                            readOnly: true,
+                                          }}
+                                          disabled
+                                        />
+                                      </Item>
+                           </Stack>            
+                    
+  
+                   <div className="container-TOTAL">
+                    <Stack direction="row" className="Containers-stacks2">
+                  
+                        <Stack md="4" direction="row" className="Containers-Stack">
+>>>>>>> Stashed changes
                           <Item md="12" className="Containers-Item">
                            
                               <Modal.Body className="MBody">
@@ -277,7 +332,9 @@ export const Registro = (props) => {
                                     variant="filled"
                                     name="name"
                                     value={dataClient.name}
-                                    onChange={(e) => setDataClient({ ...dataClient, firstName: e.target.value })}
+                                    onChange={(e) => {setDataClient({ ...dataClient, firstName: e.target.value });
+                                              updateUserName(e.target.value, dataClient.lastName1);
+                                            }}
                                     error={touched.name && !!errors.name}
                                     helperText={touched.name && errors.name}
                                   />
@@ -290,7 +347,8 @@ export const Registro = (props) => {
                                     variant="filled"
                                     name="lastName1"
                                     value={dataClient.lastName1}
-                                    onChange={(e) => setDataClient({ ...dataClient, lastName: e.target.value })}
+                                    onChange={(e) => {setDataClient({ ...dataClient, lastName: e.target.value });
+                                           updateUserName(DataClient.firstName, e.target.value)}}
                                     error={touched.lastName1 && !!errors.lastName1}
                                     helperText={touched.lastName1 && errors.lastName1}
                                   />
