@@ -28,6 +28,7 @@ export const Registro = (props) => {
   const { data: regions} = useFetch("https://gist.githubusercontent.com/HectorCataldo/11e149d5ba18e9dfe72b6c21e38ca439/raw/b7281863b44021b362338493025cc0723e39b7a9/regions.json");
   const { data: clients } = useFetch("http://localhost:8080/api/clients");
   const { data: profession } = useFetch("http://localhost:8080/api/profession");
+  const { data: gender} = useFetch("http://localhost:8080/api/gender");
   const [selectedBirthDate, setSelectedBirthDate] = useState(new Date());
   const [objetos, setObjetos] = useState();
   const [selectedcreateDate] = useState(moment(new Date()));
@@ -287,7 +288,7 @@ export const Registro = (props) => {
                                       label="Tipo persona *"
                                       error={touched.selectedTipo && !!errors.selectedTipo}
                                     >
-                                      <MenuItem value=""></MenuItem>
+                                      <MenuItem value="">Seleccione un tipo de persona</MenuItem>
                                       <MenuItem value="Natural">Natural</MenuItem>
                                       <MenuItem value="Juridica">Júridica</MenuItem>
                                     </Select>
@@ -296,9 +297,7 @@ export const Registro = (props) => {
                                     <div className="error">{errors.selectedTipo}</div>
                                   )}
                                 </Item>
-              
-                               
-              
+                                              
                                 <Item className="group-form">
                                   <TextField
                                     label="Nombres *"
@@ -427,6 +426,9 @@ export const Registro = (props) => {
                                       onBlur={handleBlur}
                                       label="Profesión *"
                                     >
+                                      <MenuItem value="">
+                                      Selecciona una profesión
+                                      </MenuItem>
                                       {profession &&
                                         profession.map((item) => (
                                           <MenuItem key={item.id_profession} value={item.id_profession}>
@@ -463,10 +465,12 @@ export const Registro = (props) => {
                                       label="Género *"
                                       error={touched.selectedGender && !!errors.selectedGender}
                                     >
-                                      <MenuItem value=""></MenuItem>
-                                      <MenuItem value="Masculino">Masculino</MenuItem>
-                                      <MenuItem value="Femenino">Femenino</MenuItem>
-                                      <MenuItem value="Otro">Otro</MenuItem>
+                                      <MenuItem value="">Selecciona un género</MenuItem>
+                                      {gender && gender.map((item)=>(
+                                         <MenuItem key={item.id_gender} value={item.gender}>
+                                          {item.gender}
+                                         </MenuItem> 
+                                      ))}
                                     </Select>
                                   </FormControl>
                                   {errors.selectedGender && touched.selectedGender && (
@@ -486,6 +490,7 @@ export const Registro = (props) => {
                                       onBlur={handleBlur}
                                       label="Nacionalidad"
                                     >
+                                      <MenuItem value = "">Seleccione un País</MenuItem>
                                       {Array.isArray(country?.paises) &&
                                         country.paises.map((pais, index) =>
                                         (<MenuItem key={index} value={pais}>
@@ -521,7 +526,7 @@ export const Registro = (props) => {
 
                                 <Item className="group-form">
                                   <FormControl variant="filled" className="select-form">
-                                    <InputLabel htmlFor="comuna">Comuna</InputLabel>
+                                    <InputLabel htmlFor="comuna">Comuna *</InputLabel>
                                     <Select
                                       id="comuna"
                                       value={seComuna}
@@ -530,6 +535,7 @@ export const Registro = (props) => {
                                       disabled ={!seRegion}
                                       label="Comuna"
                                       required>
+                                        <MenuItem value="">Seleccione una comuna</MenuItem>
                                         {Array.isArray(fcomunas) &&
                                           fcomunas.map((comuna, index) =>
                                           (
