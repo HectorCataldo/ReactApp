@@ -273,16 +273,14 @@ export const Registro = (props) => {
                                       </Item>
                               </Stack>
                                   
-                           </Stack>            
-                    
-  
-                   <div className="container-TOTAL">
+                   </Stack>      
+
                     <Stack direction="row" spacing={30} className="Containers-stacks2">
-                  
-                        <Stack md="4" direction="row" className="Containers-Stack">
+
+                        {/* Contenedor 1 */}
+                        <Stack md="4" className="Containers-Stack">
                           <Item md="12" className="Containers-Item">
-                          <span>Contenedor 1</span>
-                              <Modal.Body className="MBody">
+                          <span className="title-stack">Datos Personales</span>
 
                                 <Item className="group-form">
                                   <TextField
@@ -375,23 +373,15 @@ export const Registro = (props) => {
                                       label="Fecha de Nacimiento"
                                     />
                                   </LocalizationProvider>
-                                </Item>
-                              </Modal.Body>
-                           
+                                </Item>    
                           </Item>
                         </Stack>
-              
 
                       {/* Contenedor 2 */}
                         <Stack md="4" className="Containers-Stack">
                           <Item md="12" className="Containers-Item">                 
-                            <span>Contenedor 2</span>
-                            <div className="container">
-                              <Modal.Body className="MBody">
-                             
+                            <span className="title-stack" >Datos de Contacto</span>
 
-                                {/*   fin de  informacion de locacion   */}
-              
                                 <Item className="group-form">
                                   <TextField
                                     label="Teléfono *"
@@ -460,21 +450,13 @@ export const Registro = (props) => {
                                     </Select>
                                   </FormControl>
                                 </Item>
-                               
-                              </Modal.Body>
-                            </div>
+
                           </Item>
                         </Stack>
-
-                            {/* Contenedor 2 */}
-                       
+                       {/* Contenedor 3 */}
                         <Stack md="4" className="Containers-Stack">
-                          <Item md="12" className="Containers-Item">
-                         
-                            <span>Contenedor 3</span>
-                            <div className="container">
-                              <Modal.Body className="MBody">
-                            
+                          <Item md="12" className="Containers-Item">    
+                            <span className="title-stack">Datos Adicionales</span>
 
                                 <Item className="group-form">
                                   <FormControl variant="filled" className="select-form">
@@ -576,15 +558,12 @@ export const Registro = (props) => {
                                     </Select>
                                   </FormControl>
                                 </Item>
-
-                              </Modal.Body>
-                            </div>
                           </Item>
                         </Stack>
 
                    </Stack>  
           
-          </div>
+        
   
         </Form>
       )}

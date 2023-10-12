@@ -6,14 +6,9 @@
 @use "@material/textfield";
 @include textfield.core-styles;
 
-
-
-
-.container-TOTAL{
-    margin-left: 290px;
-    margin-top: 100px;
-    width: 80%;
-    height: 90%;
+.formulario{
+    background-color: rgb(255, 255, 255);
+    height: 100% !important;
 }
 
 
@@ -75,11 +70,11 @@
     margin-left: 263px;
     width: 82%;
     height: 120px;
-    margin-bottom: 40px;
+    margin-bottom: 20px;
     box-shadow:
     inset 
     0 0 0 1px white,
-    0.1em 0.1em 0.5em rgba(36, 36, 36, 0.6);
+    0.1em 0.1em 0.1em rgba(36, 36, 36, 0.6);
 
     
 }
@@ -131,36 +126,47 @@
 
 // CONTENEDOR DE LOS CONTENEDORES {
 .Containers-stacks2{
-    width: 90%;
+    width: 85%;
+    height: 600px;
     display: flex;
+    margin-left: 240px;
 }
 //}
 
 // CONTENEDORES NUEVOS 
 
 .Containers-Stack {
-    width: 33.33%;
+    width: 500px;
     
-    align-items: center;
+    align-items: start;
     display: flex;
     flex-direction: column;
+    margin-left: 20px;
     margin-right: 20px;
     border-color: #000000;
     border-style: 2px solid;
 }
 
-/* Anula la propiedad margin-left en Stack */
-.css-ycrhu6-MuiStack-root > :not(style) ~ :not(style) {
-    margin-left: 0 !important; }
+
+
+
+.Containers-stacks2 .Containers-Stack {
+    border: 1px solid #ccc; 
+    padding: 10px; 
+    margin-left: 20px;
+    margin-right:20px;
+}
+
 
 .Containers-Stack .Containers-Item {
-    width: 300px;
+    width: 500px;
     height: 100%;
-    align-items: center;
-    flex-grow: 1; /* Hace que los elementos internos utilicen todo el espacio vertical disponible. */
-    margin-right: 20px;
+        align-items: start !important;
+    flex-grow: 1; 
+    
     border-color: #000000;
     border-style: 2px solid;
+    
 }
 
 .Containers-Stack .Containers-Item .group-form{
@@ -178,9 +184,16 @@
     margin-top: 0px;
     margin-bottom: 20px;
 }
+
 /// FIN DE LOS CONTENEDORES 
+/// 
+/// 
 
+ // regla de contenedores offf
 
+.css-ycrhu6-MuiStack-root > :not(style) ~ :not(style) {
+    margin-left: 0 !important; }
+ // fin regla de contenedores offf
 
 
 .group-form .labels
@@ -202,43 +215,22 @@
     padding-bottom: 10px;
 }
 
-.group-form .form-control
-{  
-    border-color: #C7C7C7;
-    border-style: 2px solid;
-    border-radius: 5px;
- 
-}
-
-.group-form .select-form{
-    width: 100%;
-}
-
-.group-form .datepicker{
-    height: 100px;
-}
 
 
-.group-form .select-form{
+.Containers-Stack .Containers-Item  .select-form{
     border-color: #C7C7C7;
     border-style: 2px solid;
     border-radius: 5px;
     height: 35px;
+    width: 220px;
     
 }
 .group-form .datepicker{
     border-color: #C7C7C7;
     border-style: 2px solid;
     border-radius: 5px;
-    width: 225px;
+    width: 220px;
     height: 35px;
 }
 
-.linea{
-    border-top: 1px solid rgb(224, 223, 223);
-    height: 2px;
-    padding: 0;
-    margin: 20px auto 0 auto;
-    
-}
 
