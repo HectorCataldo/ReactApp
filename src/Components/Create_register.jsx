@@ -47,6 +47,7 @@ export const Registro = (props) => {
     email: "",
     address: "",
   });
+  const [disableGender, setDisableGender] = useState(true);
 
   const emailRegex = /^[A-Z0-9._%+-]+@[A-Z0-9.-]+\.[A-Z]{2,4}$/i;
   const caracRegex = /^[a-zA-Z]+$/;
@@ -58,6 +59,27 @@ export const Registro = (props) => {
   const [seRegion, setSeRegion] = useState('');
   const [fcomunas, setfcomunas] = useState([]);
   const [seComuna, setSeComuna] = useState();
+
+
+
+  //Filtrar Generos
+  const GendersFilter = (e) => {
+    const tp = e.target.value;
+    setSelectedTipo(tp);
+
+    if (tp === 'Natural'){
+      setDisableGender(false);
+    }
+    else if( tp === 'Juridica'){
+      setDisableGender(true);
+      setSelectedGender("Compañía");
+    }
+    else if( tp != 'Juridica' || tp != 'Natural'){
+      setDisableGender(true);
+      setSelectedGender();
+    }
+
+  }
 
   //Filtrado de Comunas por Región
   const RegionChange = (e) => {
@@ -283,12 +305,12 @@ export const Registro = (props) => {
                                       id="tipo-persona"
                                       variant="filled"
                                       value={selectedTipo}
-                                      onChange={(e) => setSelectedTipo(e.target.value)}
+                                      onChange={GendersFilter}
                                       onBlur={handleBlur}
                                       label="Tipo persona *"
                                       error={touched.selectedTipo && !!errors.selectedTipo}
                                     >
-                                      <MenuItem value="">Seleccione un tipo de persona</MenuItem>
+                                      <MenuItem>Seleccione un tipo de persona</MenuItem>
                                       <MenuItem value="Natural">Natural</MenuItem>
                                       <MenuItem value="Juridica">Júridica</MenuItem>
                                     </Select>
@@ -463,12 +485,20 @@ export const Registro = (props) => {
                                       onChange={(e) => setSelectedGender(e.target.value)}
                                       onBlur={handleBlur}
                                       label="Género *"
+                                      disabled= {disableGender}
                                       error={touched.selectedGender && !!errors.selectedGender}
                                     >
                                       <MenuItem value="">Selecciona un género</MenuItem>
-                                      {gender && gender.map((item)=>(
+                                      {selectedTipo !== 'Natural' && (
+                                        gender && gender.slice(0, 1).map((item) => (
+                                          <MenuItem key={item.id_gender} value={item.gender}>
+                                            {item.gender}
+                                          </MenuItem>
+                                        ))
+                                      )}
+                                      {gender && gender.slice(-2).map((item)=>(
                                          <MenuItem key={item.id_gender} value={item.gender}>
-                                          {item.gender}
+                                          {item.id_gender + "."} {item.gender}
                                          </MenuItem> 
                                       ))}
                                     </Select>
