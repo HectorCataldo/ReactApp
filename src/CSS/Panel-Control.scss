@@ -65,3 +65,39 @@
     display: flex;
     align-items: center;
 }
+
+
+
+// RESPONSIVE 
+
+.Panel-Control {
+    /* Tus estilos actuales */
+
+    @media (max-width: 768px) {
+        width: 100%; /* Hacer que el panel ocupe el ancho completo en pantallas más pequeñas */
+        margin-left: 0; /* Eliminar el margen izquierdo en pantallas más pequeñas */
+        /* Otros ajustes de estilo para pantallas más pequeñas */
+    }
+}
+
+
+.Panel-Control Button {
+    /* Tus estilos actuales */
+
+    @media (max-width: 768px) {
+        height: 40px; /* Reducir la altura de los botones en pantallas más pequeñas */
+        padding-bottom: 5px; /* Ajustar el espacio inferior de los botones en pantallas más pequeñas */
+        /* Otros ajustes de estilo para pantallas más pequeñas */
+    }
+}
+
+
+.search-container {
+    /* Tus estilos actuales */
+
+    @media (max-width: 768px) {
+        width: 150px; /* Reducir el ancho del contenedor de búsqueda en pantallas más pequeñas */
+        /* Otros ajustes de estilo para pantallas más pequeñas */
+    }
+}
+

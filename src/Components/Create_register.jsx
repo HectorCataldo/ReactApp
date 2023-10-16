@@ -232,9 +232,9 @@ export const Registro = (props) => {
     >
       {({ errors, touched, handleSubmit: formikHandleSubmit, handleChange, handleBlur }) => (
         <Form className="formulario" onSubmit={formikHandleSubmit}>
-
-
                       {/* PANEL DE CONTROL */}
+
+
                    <Stack direction="row" className="Panel-User">
                             <div className="user-info-container">
                                  <h1 className="title-user"> {userName ? userName : 'Usuario'}</h1>  
@@ -270,17 +270,8 @@ export const Registro = (props) => {
                                           disabled
                                         />
                                       </Item>
-                              </Stack>
-                                  
-                   </Stack>      
-
-                    <Stack direction="row" spacing={30} className="Containers-stacks2">
-
-                        {/* Contenedor 1 */}
-                        <Stack md="4" className="Containers-Stack">
-                          <Item md="12" className="Containers-Item">
-                          <span className="title-stack">Datos Personales</span>
-                          <Item className="group-form">
+                                      
+                                  <Item className="group-user">
                                   <FormControl className="select-form">
                                     <InputLabel htmlFor="tipo-persona">Tipo persona </InputLabel>
                                     <Select
@@ -301,278 +292,535 @@ export const Registro = (props) => {
                                     <div className="error">{errors.selectedTipo}</div>
                                   )}
                                 </Item>
+                              </Stack>           
+                   </Stack>  
 
-                                <Item className="group-form">
-                                  <TextField
-                                    id="rut"
-                                    className="text-field custom-text-field"
-                                    label="RUT"
-                                    type="text"
-                                    variant="filled"
-                                    placeholder="11.111.111-1"
-                                    value={dataClient.documentNumber}
-                                    onChange={(e) => setDataClient({ ...dataClient, documentNumber: e.target.value })}
-                                    error={touched.numberdoc && !!errors.numberdoc}
-                                    helperText={touched.numberdoc && errors.numberdoc}
-                                  />
-                                </Item>
-              
-                          
-                                              
-                                <Item className="group-form">
-                                  <TextField
-                                    label="Nombres"
-                                    type="text"
-                                    variant="filled"
-                                    name="name"
-                                    value={dataClient.name}
-                                    onChange={(e) => {setDataClient({ ...dataClient, firstName: e.target.value });
-                                                      updateUserName(e.target.value,dataClient.lastName1,dataClient.secondLastName); 
-                                            }}
-                                    error={touched.name && !!errors.name}
-                                    helperText={touched.name && errors.name}
-                                  />
-                                </Item>
-              
-                                <Item className="group-form">
-                                  <TextField
-                                    label="Primer Apellido"
-                                    type="text"
-                                    variant="filled"
-                                    name="lastName1"
-                                    value={dataClient.lastName1}
-                                    onChange={(e) => {setDataClient((prevData)=>({...prevData , lastName: e.target.value }));
-                                                      updateUserName(dataClient.firstName,e.target.value,dataClient.secondLastName);
-                                          }}
 
-                                    error={touched.lastName1 && !!errors.lastName1}
-                                    helperText={touched.lastName1 && errors.lastName1}
-                                  />
-                                </Item>
-              
-                                <Item className="group-form">
-                                  <TextField
-                                    label="Segundo Apellido"
-                                    type="text"
-                                    variant="filled"
-                                    name="secondLastName"
-                                    onChange={(e) => {setDataClient((prevData)=>({ ...prevData, secondLastName: e.target.value }));
-                                                      updateUserName(dataClient.firstName,dataClient.lastName,e.target.value);
-                                  }}
-                                    value={dataClient.secondLastName}
-                                  />
-                                </Item>
-                                <Item className="group-form">
-                                  <LocalizationProvider dateAdapter={AdapterDayjs}>
-                                    <DatePicker
-                                      className="datepicker"
-                                      dateFormat="dd/MM/yyyy"
-                                      
-                                      selected={moment(selectedBirthDate).toDate()}
-                                      onChange={(date) => setSelectedBirthDate(date)}
-                                      onBlur={handleBlur}
-                                      label="Fecha de Nacimiento"
-                                    />
-                                  </LocalizationProvider>
-                                </Item>    
-                          </Item>
-                        </Stack>
+                       {/* PERSONA NATURAL */}
+                       {selectedTipo === "Natural" && (
 
-                      {/* Contenedor 2 */}
-                        <Stack md="4" className="Containers-Stack">
-                          <Item md="12" className="Containers-Item">                 
-                            <span className="title-stack" >Datos de Contacto</span>
+                          <Stack direction="row" spacing={30} className="Containers-stacks2">
 
-                            <Item className="group-form">
-                                  <TextField
-                                    label="Correo "
-                                    type="email"
-                                    variant="filled"
-                                    name="email"
-                                    placeholder="Correo@example.com"
-                                    onChange={(e) => setDataClient({ ...dataClient, email: e.target.value })}
-                                    value={dataClient.email}
-                                    error={touched.email && !!errors.email}
-                                    helperText={touched.email && errors.email}
-                                  />
-                                </Item>
-
+                              {/* Contenedor 1 */}
+                              <Stack md="4" className="Containers-Stack">
+                                <Item md="12" className="Containers-Item">
+                                <span className="title-stack">Datos Personales</span>
                                 <Item className="group-form">
-                                  <TextField
-                                    label="Teléfono "
-                                    type="text"
-                                    variant="filled"
-                                    name="phone"
-                                    placeholder="911111111"
-                                    onChange={(e) => setDataClient({ ...dataClient, phoneNumber: e.target.value })}
-                                    value={dataClient.phoneNumber}
-                                    error={touched.phone && !!errors.phone}
-                                    helperText={touched.phone && errors.phone}
-                                  />
-                                </Item>
-              
-                         
-              
-                                <Item md="6" className="group-form">
-                                  <TextField
-                                    label="Dirección "
-                                    type="text"
-                                    variant="filled"
-                                    name="address"
-                                    value={dataClient.address}
-                                    onChange={(e) => setDataClient({ ...dataClient, address: e.target.value })}
-                                    error={touched.address && !!errors.address}
-                                    helperText={touched.address && errors.address}
-                                  />
-                                </Item>
-              
-                                <Item className="group-form">
-                                  <FormControl variant="filled" className="select-form">
-                                    <InputLabel htmlFor="region">Región </InputLabel>
-                                    <Select
-                                      id="region"
-                                      value={seRegion}
-                                      onChange={RegionChange}
-                                      onBlur={handleBlur}
-                                      required
-                                      label="Región">
-                                        <MenuItem value = "">
-                                         Seleccione una región
-                                        </MenuItem>
-                                        {Array.isArray(regions?.regions) &&
-                                          regions.regions.map((region, index) =>(
-                                            <MenuItem key={index} value={region.name}>
-                                            {region.name}
-                                            </MenuItem>
-                                          ))}
-                                    </Select>
-                                  </FormControl>
-                                </Item>
+                                      <FormControl className="select-form">
+                                        <InputLabel htmlFor="tipo-persona">Tipo persona </InputLabel>
+                                        <Select
+                                          id="tipo-persona"
+                                          variant="filled"
+                                          value={selectedTipo}
+                                          onChange={GendersFilter}
+                                          onBlur={handleBlur}
+                                          label="Tipo persona "
+                                          error={touched.selectedTipo && !!errors.selectedTipo}
+                                        >
+                                          {/*<MenuItem>Seleccione un tipo de persona</MenuItem>*/}
+                                          <MenuItem value="Natural">Natural</MenuItem>
+                                          <MenuItem value="Juridica">Júridica</MenuItem>
+                                        </Select>
+                                      </FormControl>
+                                      {errors.selectedTipo && touched.selectedTipo && (
+                                        <div className="error">{errors.selectedTipo}</div>
+                                      )}
+                                    </Item>
 
-                                <Item className="group-form">
-                                  <FormControl variant="filled" className="select-form">
-                                    <InputLabel htmlFor="comuna">Comuna </InputLabel>
-                                    <Select
-                                      id="comuna"
-                                      value={seComuna}
-                                      onChange={(e) => setSeComuna(e.target.value)}
-                                      onBlur={handleBlur}
-                                      disabled ={!seRegion}
-                                      label="Comuna"
-                                      required>
-                                        <MenuItem value="">Seleccione una comuna</MenuItem>
-                                        {Array.isArray(fcomunas) &&
-                                          fcomunas.map((comuna, index) =>
-                                          (
-                                            <MenuItem key={index} value={comuna.name}>
-                                              {comuna.name}
-                                            </MenuItem>
-                                          ))}
-                                    </Select>
-                                  </FormControl>
-                                </Item>
+                                      <Item className="group-form">
+                                        <TextField
+                                          id="rut"
+                                          className="text-field custom-text-field"
+                                          label="RUT"
+                                          type="text"
+                                          variant="filled"
+                                          placeholder="11.111.111-1"
+                                          value={dataClient.documentNumber}
+                                          onChange={(e) => setDataClient({ ...dataClient, documentNumber: e.target.value })}
+                                          error={touched.numberdoc && !!errors.numberdoc}
+                                          helperText={touched.numberdoc && errors.numberdoc}
+                                        />
+                                      </Item>
+             
+                                      <Item className="group-form">
+                                        <TextField
+                                          label="Nombres"
+                                          type="text"
+                                          variant="filled"
+                                          name="name"
+                                          value={dataClient.name}
+                                          onChange={(e) => {setDataClient({ ...dataClient, firstName: e.target.value });
+                                                            updateUserName(e.target.value,dataClient.lastName1,dataClient.secondLastName); 
+                                                  }}
+                                          error={touched.name && !!errors.name}
+                                          helperText={touched.name && errors.name}
+                                        />
+                                      </Item>
 
-                          </Item>
-                        </Stack>
-                       {/* Contenedor 3 */}
-                        <Stack md="4" className="Containers-Stack">
-                          <Item md="12" className="Containers-Item">    
-                            <span className="title-stack">Datos Adicionales</span>
+                                      <Item className="group-form">
+                                        <TextField
+                                          label="Primer Apellido"
+                                          type="text"
+                                          variant="filled"
+                                          name="lastName1"
+                                          value={dataClient.lastName1}
+                                          onChange={(e) => {setDataClient((prevData)=>({...prevData , lastName: e.target.value }));
+                                                            updateUserName(dataClient.firstName,e.target.value,dataClient.secondLastName);
+                                                }}
+
+                                          error={touched.lastName1 && !!errors.lastName1}
+                                          helperText={touched.lastName1 && errors.lastName1}
+                                        />
+                                      </Item>
+
+                                      <Item className="group-form">
+                                        <TextField
+                                          label="Segundo Apellido"
+                                          type="text"
+                                          variant="filled"
+                                          name="secondLastName"
+                                          onChange={(e) => {setDataClient((prevData)=>({ ...prevData, secondLastName: e.target.value }));
+                                                            updateUserName(dataClient.firstName,dataClient.lastName,e.target.value);
+                                        }}
+                                          value={dataClient.secondLastName}
+                                        />
+                                      </Item>
+                                      <Item className="group-form">
+                                        <LocalizationProvider dateAdapter={AdapterDayjs}>
+                                          <DatePicker
+                                            className="datepicker"
+                                            dateFormat="dd/MM/yyyy"
+                                            
+                                            selected={moment(selectedBirthDate).toDate()}
+                                            onChange={(date) => setSelectedBirthDate(date)}
+                                            onBlur={handleBlur}
+                                            label="Fecha de Nacimiento"
+                                          />
+                                        </LocalizationProvider>
+                                      </Item>    
+                                </Item>
+                              </Stack>
+
+                              {/* Contenedor 2 */}
+                              <Stack md="4" className="Containers-Stack">
+                                <Item md="12" className="Containers-Item">                 
+                                  <span className="title-stack" >Datos de Contacto</span>
+
+                                  <Item className="group-form">
+                                        <TextField
+                                          label="Correo "
+                                          type="email"
+                                          variant="filled"
+                                          name="email"
+                                          placeholder="Correo@example.com"
+                                          onChange={(e) => setDataClient({ ...dataClient, email: e.target.value })}
+                                          value={dataClient.email}
+                                          error={touched.email && !!errors.email}
+                                          helperText={touched.email && errors.email}
+                                        />
+                                      </Item>
+
+                                      <Item className="group-form">
+                                        <TextField
+                                          label="Teléfono "
+                                          type="text"
+                                          variant="filled"
+                                          name="phone"
+                                          placeholder="911111111"
+                                          onChange={(e) => setDataClient({ ...dataClient, phoneNumber: e.target.value })}
+                                          value={dataClient.phoneNumber}
+                                          error={touched.phone && !!errors.phone}
+                                          helperText={touched.phone && errors.phone}
+                                        />
+                                      </Item>
+
                               
 
-                           
+                                      <Item md="6" className="group-form">
+                                        <TextField
+                                          label="Dirección "
+                                          type="text"
+                                          variant="filled"
+                                          name="address"
+                                          value={dataClient.address}
+                                          onChange={(e) => setDataClient({ ...dataClient, address: e.target.value })}
+                                          error={touched.address && !!errors.address}
+                                          helperText={touched.address && errors.address}
+                                        />
+                                      </Item>
 
-                                <Item className="group-form">
-                                  <FormControl variant="filled" className="select-form">
-                                    <InputLabel htmlFor="gender">Género </InputLabel>
-                                    <Select
-                                      id="gender"
-                                      value={selectedGender}
-                                      onChange={(e) => setSelectedGender(e.target.value)}
-                                      onBlur={handleBlur}
-                                      label="Género"
-                                      disabled= {disableGender}
-                                      error={touched.selectedGender && !!errors.selectedGender}
-                                    >
-                                      <MenuItem value="">Selecciona un género</MenuItem>
-                                      {selectedTipo !== 'Natural' && (
-                                        gender && gender.slice(0, 1).map((item) => (
-                                          <MenuItem key={item.id_gender} value={item.gender}>
-                                            {item.gender}
-                                          </MenuItem>
-                                        ))
-                                      )}
-                                      {gender && gender.slice(-2).map((item)=>(
-                                         <MenuItem key={item.id_gender} value={item.gender}>
-                                          {item.id_gender + "."} {item.gender}
-                                         </MenuItem> 
-                                      ))}
-                                    </Select>
-                                  </FormControl>
-                                  {errors.selectedGender && touched.selectedGender && (
-                                    <div className="error">{errors.selectedGender}</div>
-                                  )}
+                                      <Item className="group-form">
+                                        <FormControl variant="filled" className="select-form">
+                                          <InputLabel htmlFor="region">Región </InputLabel>
+                                          <Select
+                                            id="region"
+                                            value={seRegion}
+                                            onChange={RegionChange}
+                                            onBlur={handleBlur}
+                                            required
+                                            label="Región">
+                                              <MenuItem value = "">
+                                              Seleccione una región
+                                              </MenuItem>
+                                              {Array.isArray(regions?.regions) &&
+                                                regions.regions.map((region, index) =>(
+                                                  <MenuItem key={index} value={region.name}>
+                                                  {region.name}
+                                                  </MenuItem>
+                                                ))}
+                                          </Select>
+                                        </FormControl>
+                                      </Item>
+
+                                      <Item className="group-form">
+                                        <FormControl variant="filled" className="select-form">
+                                          <InputLabel htmlFor="comuna">Comuna </InputLabel>
+                                          <Select
+                                            id="comuna"
+                                            value={seComuna}
+                                            onChange={(e) => setSeComuna(e.target.value)}
+                                            onBlur={handleBlur}
+                                            disabled ={!seRegion}
+                                            label="Comuna"
+                                            required>
+                                              <MenuItem value="">Seleccione una comuna</MenuItem>
+                                              {Array.isArray(fcomunas) &&
+                                                fcomunas.map((comuna, index) =>
+                                                (
+                                                  <MenuItem key={index} value={comuna.name}>
+                                                    {comuna.name}
+                                                  </MenuItem>
+                                                ))}
+                                          </Select>
+                                        </FormControl>
+                                      </Item>
+
                                 </Item>
-              
-                                {/* INFORMACION DE LOCACION */}
-                                <Item className="group-form">
-                                  <FormControl variant="filled" className="select-form">
-                                    <InputLabel htmlFor="nacionalidad">Pais de origen </InputLabel>
-                                    <Select
-                                      id="nacionalidad"
-                                      required
-                                      value={selectedNationality}
-                                      onChange={(e) => setSelectedNationality(e.target.value)}
-                                      onBlur={handleBlur}
-                                      label="Nacionalidad"
-                                    >
-                                      <MenuItem value = "">Seleccione un País</MenuItem>
-                                      {Array.isArray(country?.paises) &&
-                                        country.paises.map((pais, index) =>
-                                        (<MenuItem key={index} value={pais}>
-                                            {pais}
-                                          </MenuItem>
-                                        ))}                                     
-                                    </Select>
-                                  </FormControl>
+                              </Stack>
+                              {/* Contenedor 3 */}
+                              <Stack md="4" className="Containers-Stack">
+                                <Item md="12" className="Containers-Item">    
+                                  <span className="title-stack">Datos Adicionales</span>
+                                    
+
+                                
+
+                                      <Item className="group-form">
+                                        <FormControl variant="filled" className="select-form">
+                                          <InputLabel htmlFor="gender">Género </InputLabel>
+                                          <Select
+                                            id="gender"
+                                            value={selectedGender}
+                                            onChange={(e) => setSelectedGender(e.target.value)}
+                                            onBlur={handleBlur}
+                                            label="Género"
+                                            disabled= {disableGender}
+                                            error={touched.selectedGender && !!errors.selectedGender}
+                                          >
+                                            <MenuItem value="">Selecciona un género</MenuItem>
+                                            {selectedTipo !== 'Natural' && (
+                                              gender && gender.slice(0, 1).map((item) => (
+                                                <MenuItem key={item.id_gender} value={item.gender}>
+                                                  {item.gender}
+                                                </MenuItem>
+                                              ))
+                                            )}
+                                            {gender && gender.slice(-2).map((item)=>(
+                                              <MenuItem key={item.id_gender} value={item.gender}>
+                                                {item.id_gender + "."} {item.gender}
+                                              </MenuItem> 
+                                            ))}
+                                          </Select>
+                                        </FormControl>
+                                        {errors.selectedGender && touched.selectedGender && (
+                                          <div className="error">{errors.selectedGender}</div>
+                                        )}
+                                      </Item>
+
+                                      {/* INFORMACION DE LOCACION */}
+                                      <Item className="group-form">
+                                        <FormControl variant="filled" className="select-form">
+                                          <InputLabel htmlFor="nacionalidad">Pais de origen </InputLabel>
+                                          <Select
+                                            id="nacionalidad"
+                                            required
+                                            value={selectedNationality}
+                                            onChange={(e) => setSelectedNationality(e.target.value)}
+                                            onBlur={handleBlur}
+                                            label="Nacionalidad"
+                                          >
+                                            <MenuItem value = "">Seleccione un País</MenuItem>
+                                            {Array.isArray(country?.paises) &&
+                                              country.paises.map((pais, index) =>
+                                              (<MenuItem key={index} value={pais}>
+                                                  {pais}
+                                                </MenuItem>
+                                              ))}                                     
+                                          </Select>
+                                        </FormControl>
+                                      </Item>
+
+                                      <Item className="group-form">
+                                        <FormControl variant="filled" className="select-form">
+                                          <InputLabel htmlFor="profesion">Profesión </InputLabel>
+                                          <Select
+                                            id="profesion"
+                                            value={selectedProfession ? selectedProfession.id_profession : ''}
+                                            onChange={(e) => {
+                                              const selectedProfessionId = e.target.value;
+                                              const selectedProfessionObject = profession.find(item => item.id_profession === selectedProfessionId);
+
+                                              setSelectedProfession(selectedProfessionObject || null);
+                                            }}
+                                            onBlur={handleBlur}
+                                            label="Profesión "
+                                          >
+                                            <MenuItem value="">
+                                            Selecciona una profesión
+                                            </MenuItem>
+                                            {profession &&
+                                              profession.map((item) => (
+                                                <MenuItem key={item.id_profession} value={item.id_profession}>
+                                                  {item.profession_Name}
+                                                </MenuItem>
+                                              ))}
+                                          </Select>
+                                        </FormControl>
+                                      </Item>
+
+                                  
                                 </Item>
+                              </Stack>
 
-                                <Item className="group-form">
-                                  <FormControl variant="filled" className="select-form">
-                                    <InputLabel htmlFor="profesion">Profesión </InputLabel>
-                                    <Select
-                                      id="profesion"
-                                      value={selectedProfession ? selectedProfession.id_profession : ''}
-                                      onChange={(e) => {
-                                        const selectedProfessionId = e.target.value;
-                                        const selectedProfessionObject = profession.find(item => item.id_profession === selectedProfessionId);
-              
-                                        setSelectedProfession(selectedProfessionObject || null);
-                                      }}
-                                      onBlur={handleBlur}
-                                      label="Profesión "
-                                    >
-                                      <MenuItem value="">
-                                      Selecciona una profesión
-                                      </MenuItem>
-                                      {profession &&
-                                        profession.map((item) => (
-                                          <MenuItem key={item.id_profession} value={item.id_profession}>
-                                            {item.profession_Name}
+                          </Stack>  
+                                                          )}  
+                        
+                        {/* PERSONA JURIDICA */}
+
+                        {selectedTipo === "Juridica" && (
+                          <Stack direction="row" spacing={30} className="Containers-stacks2">
+
+                          {/* Contenedor 1 */}
+                          <Stack md="4" className="Containers-Stack">
+                            <Item md="12" className="Containers-Item">
+                               <span className="title-stack">Datos de la Empresa</span>
+
+                              <Item className="group-form">
+                                    <FormControl className="select-form">
+                                      <InputLabel htmlFor="tipo-persona">Tipo persona </InputLabel>
+                                      <Select
+                                        id="tipo-persona"
+                                        variant="filled"
+                                        value={selectedTipo}
+                                        onChange={GendersFilter}
+                                        onBlur={handleBlur}
+                                        label="Tipo persona "
+                                        error={touched.selectedTipo && !!errors.selectedTipo}
+                                      >
+                                        <MenuItem>Seleccione un tipo de persona</MenuItem>
+                                        <MenuItem value="Natural">Natural</MenuItem>
+                                        <MenuItem value="Juridica">Júridica</MenuItem>
+                                      </Select>
+                                    </FormControl>
+                                    {errors.selectedTipo && touched.selectedTipo && (
+                                      <div className="error">{errors.selectedTipo}</div>
+                                    )}
+                                  </Item>
+
+                                  <Item className="group-form">
+                                    <TextField
+                                      id="rut"
+                                      className="text-field custom-text-field"
+                                      label="RUT"
+                                      type="text"
+                                      variant="filled"
+                                      placeholder="11.111.111-1"
+                                      value={dataClient.documentNumber}
+                                      onChange={(e) => setDataClient({ ...dataClient, documentNumber: e.target.value })}
+                                      error={touched.numberdoc && !!errors.numberdoc}
+                                      helperText={touched.numberdoc && errors.numberdoc}
+                                    />
+                                  </Item>
+                                                
+                                  <Item className="group-form">
+                                    <TextField
+                                      label="Razon Social"
+                                      type="text"
+                                      variant="filled"
+                                      name="razonsocial"
+                                      value={dataClient.name}
+                                      onChange={(e) => {setDataClient({ ...dataClient, firstName: e.target.value });
+                                                        updateUserName(e.target.value,dataClient.lastName1); 
+                                              }}
+                                      error={touched.name && !!errors.name}
+                                      helperText={touched.name && errors.name}
+                                    />
+                                  </Item>
+
+                                  <Item className="group-form">
+                                    <TextField
+                                      label="Nombre de Fantasía"
+                                      type="text"
+                                      variant="filled"
+                                      name="name"
+                                      value={dataClient.name}
+                                      onChange={(e) => {setDataClient({ ...dataClient, firstName: e.target.value });
+                                                        updateUserName(e.target.value,dataClient.lastName1); 
+                                              }}
+                                      error={touched.name && !!errors.name}
+                                      helperText={touched.name && errors.name}
+                                    />
+                                  </Item>
+
+                            </Item>
+                          </Stack>
+
+                          {/* Contenedor 2 */}
+                          <Stack md="4" className="Containers-Stack">
+                            <Item md="12" className="Containers-Item">                 
+                              <span className="title-stack" >Datos de Contacto</span>
+
+                              <Item className="group-form">
+                                    <TextField
+                                      label="Correo "
+                                      type="email"
+                                      variant="filled"
+                                      name="email"
+                                      placeholder="Correo@example.com"
+                                      onChange={(e) => setDataClient({ ...dataClient, email: e.target.value })}
+                                      value={dataClient.email}
+                                      error={touched.email && !!errors.email}
+                                      helperText={touched.email && errors.email}
+                                    />
+                                  </Item>
+
+                                  <Item className="group-form">
+                                    <TextField
+                                      label="Teléfono "
+                                      type="text"
+                                      variant="filled"
+                                      name="phone"
+                                      placeholder="911111111"
+                                      onChange={(e) => setDataClient({ ...dataClient, phoneNumber: e.target.value })}
+                                      value={dataClient.phoneNumber}
+                                      error={touched.phone && !!errors.phone}
+                                      helperText={touched.phone && errors.phone}
+                                    />
+                                  </Item>
+
+                          
+
+                                  <Item md="6" className="group-form">
+                                    <TextField
+                                      label="Dirección "
+                                      type="text"
+                                      variant="filled"
+                                      name="address"
+                                      value={dataClient.address}
+                                      onChange={(e) => setDataClient({ ...dataClient, address: e.target.value })}
+                                      error={touched.address && !!errors.address}
+                                      helperText={touched.address && errors.address}
+                                    />
+                                  </Item>
+
+                                  <Item className="group-form">
+                                    <FormControl variant="filled" className="select-form">
+                                      <InputLabel htmlFor="region">Región </InputLabel>
+                                      <Select
+                                        id="region"
+                                        value={seRegion}
+                                        onChange={RegionChange}
+                                        onBlur={handleBlur}
+                                        required
+                                        label="Región">
+                                          <MenuItem value = "">
+                                          Seleccione una región
                                           </MenuItem>
-                                        ))}
-                                    </Select>
-                                  </FormControl>
+                                          {Array.isArray(regions?.regions) &&
+                                            regions.regions.map((region, index) =>(
+                                              <MenuItem key={index} value={region.name}>
+                                              {region.name}
+                                              </MenuItem>
+                                            ))}
+                                      </Select>
+                                    </FormControl>
+                                  </Item>
+
+                                  <Item className="group-form">
+                                    <FormControl variant="filled" className="select-form">
+                                      <InputLabel htmlFor="comuna">Comuna </InputLabel>
+                                      <Select
+                                        id="comuna"
+                                        value={seComuna}
+                                        onChange={(e) => setSeComuna(e.target.value)}
+                                        onBlur={handleBlur}
+                                        disabled ={!seRegion}
+                                        label="Comuna"
+                                        required>
+                                          <MenuItem value="">Seleccione una comuna</MenuItem>
+                                          {Array.isArray(fcomunas) &&
+                                            fcomunas.map((comuna, index) =>
+                                            (
+                                              <MenuItem key={index} value={comuna.name}>
+                                                {comuna.name}
+                                              </MenuItem>
+                                            ))}
+                                      </Select>
+                                    </FormControl>
+                                  </Item>
+                                  
+                     
+                            </Item>
+                          </Stack>
+                      
+                              {/* Contenedor 3 */}
+                              <Stack md="4" className="Containers-Stack">
+                                <Item md="12" className="Containers-Item">    
+                                  <span className="title-stack">Datos Adicionales</span>
+                                    
+
+                                  <Item className="group-form">
+                                    <TextField
+                                      label="GIRO"
+                                      type="text"
+                                      variant="filled"
+                                      name="secondLastName"
+                                      onChange={(e) => {setDataClient((prevData)=>({ ...prevData, secondLastName: e.target.value }));
+                                                        updateUserName(dataClient.firstName,dataClient.lastName,e.target.value);
+                                    }}
+                                      value={dataClient.secondLastName}
+                                    />
+                                  </Item>
+
+                                  <Item className="group-form">
+                                    <FormControl variant="filled" className="select-form">
+                                      <InputLabel htmlFor="nacionalidad">Pais de origen </InputLabel>
+                                      <Select
+                                        id="nacionalidad"
+                                        required
+                                        value={selectedNationality}
+                                        onChange={(e) => setSelectedNationality(e.target.value)}
+                                        onBlur={handleBlur}
+                                        label="Nacionalidad"
+                                      >
+                                        <MenuItem value = "">Seleccione un País</MenuItem>
+                                        {Array.isArray(country?.paises) &&
+                                          country.paises.map((pais, index) =>
+                                          (<MenuItem key={index} value={pais}>
+                                              {pais}
+                                            </MenuItem>
+                                          ))}                                     
+                                      </Select>
+                                    </FormControl>
+                                  </Item>   
+                                
+
                                 </Item>
+                              </Stack>
+                          </Stack> 
 
-                             
-                          </Item>
-                        </Stack>
 
-                   </Stack>  
-          
-        
-  
+                                                          )}                 
         </Form>
       )}
     </Formik>

@@ -37,12 +37,12 @@ const PanelControl = (props) => {
                 <button className={`btn-modificar ${modalShowV ? 'selected' : ''}`} type='submit' onClick={() => setModalShowV(true)} disabled={!selectedClient}> <EyeOutlined /> Ver </button>
                 </div>
 
-                <div className="search-container">
+                {/* <div className="search-container">
                 <FormControl variant="standard">
                 <InputLabel htmlFor="input-with-icon-adornment">Buscar</InputLabel>
                 <Input className="inBuscar" value={searchTerm} onChange={(e) => setSearchTerm(e.target.value)} startAdornment={ <InputAdornment position="start"><SearchIcon sx={{ color: 'action.active', mr: 1, my: 0.5 }} /> </InputAdornment>} />
                 </FormControl>
-                </div>
+                </div> */}
 
                
          </div>

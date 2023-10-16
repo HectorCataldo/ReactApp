@@ -1,12 +1,11 @@
 import React, { useState, useEffect } from 'react';
 import { useFetch } from '../assets/useFetch';
 import '../CSS/index.scss';
-import moment from 'moment';
-import { LeftOutlined,RightOutlined,SearchOutlined,EyeOutlined,EditOutlined } from '@ant-design/icons';
 import _ from 'lodash';
 import  TextLinkExample  from './Navbar';
 import Sidebar from './sidebar'; 
 import PanelControl from "./Panel-Control";
+import { DataGrid } from '@mui/x-data-grid'; // Importa DataGrid de Material-UI
 
 
 
@@ -39,16 +38,36 @@ export const App = () => {
     );
   });
   
+  const columns = [
+    { field: 'documentNumber', headerName: 'RUT', width: 150 },
+    {
+      field: 'fullName',
+      headerName: 'Nombre Completo',
+      width: 200,
+      sortable: false,
+      valueGetter: (params) => `${params.row.firstName} ${params.row.lastName}`,
+      renderCell: (params) => (
+        <a
+          href={`/modify/${params.row.id}`}
+          style={{ textDecoration: 'none' }}
+        >
+          {params.value}
+        </a>
+      ),
+    },    
+    { field: 'birthDate', headerName: 'Fecha de nacimiento', width: 150 },
+    { field: 'fechaCreacion', headerName: 'Fecha de Creación', width: 150 },
+    { field: 'tipo_persona', headerName: 'Tipo Persona', width: 150 },
+    { field: 'state', headerName: 'Estado', width: 150 },
 
+  ];
+  
 // COMPAGINACION DE DATOS
 const indexOfLastClient = currentPage * clientsPerPage;
 const indexOfFirstClient = indexOfLastClient - clientsPerPage;
 const currentClients = filteredData.slice(indexOfFirstClient, indexOfLastClient);
 const startIndex = (currentPage - 1) * clientsPerPage;
 const endIndex = startIndex + clientsPerPage;
-const currentClientsPage = currentClients.slice(startIndex, endIndex);
-const pageNumbers = _.range(1, Math.ceil(filteredData.length / clientsPerPage) + 1);
-const paginate = (pageNumber) => { setCurrentPage(pageNumber);};
 
 while (currentClients.length < clientsPerPage) {
   currentClients.push({
@@ -56,6 +75,7 @@ while (currentClients.length < clientsPerPage) {
     firstName:'',
     lastName:'',
     birthDate:'',
+    
     state:'',
   });
 }
@@ -74,49 +94,17 @@ while (currentClients.length < clientsPerPage) {
        <h4 className='title'>Clientes</h4>
        </div>
       
-        
-        <div className='container'>
-        
-
-        
-          </div>
-
-        <div className='card'>
-          <table className='Tble'>
-            <thead>
-              <tr>
-                <th className='titles'>RUT</th>
-                <th className='titles'>Nombre completo</th>
-                <th className='titles'>Tipo</th>
-                <th className='titles'>Fecha de nacimiento</th>
-                <th className='titles'>Creado El</th>
-                <th className='titles'>Estado</th>
-                <th className='titles'></th>
-                
-              </tr>
-            </thead>
-            <tbody>
-              {currentClients.map((item) => (
-                <tr
-                  key={item.id}
-                  onClick={() => handleRowClick(item)}
-                  className={selectedClient && selectedClient.id === item.id ? 'selectedClient' : ''}
-                >
-                  <td className='containerCell'>{item.documentNumber}</td>
-                  <td className='containerCell'>{`${item.firstName} ${item.lastName}`}</td>
-                  <td className='containerCell'>{`${item.tipo_persona}`}</td>
-                  <td className='containerCell'>{moment(item.birthDate).format('DD/MM/YYYY')}</td>
-                  <td className='containerCell'>{`${item.fechaCreacion}`}</td> 
-                  <td className='statusC' data-state={item.state ? 'Activo' : 'Inactivo'}>{item.state ? 'Activo' : 'Inactivo'}</td>
-                </tr>
-              ))}
-            </tbody>
-          </table>
-          <div className='pagination'>
-          <button className='pagination-btn' onClick={() => paginate(currentPage - 1)} disabled={currentPage === 1}><LeftOutlined className='icons' /> Previous</button>
-          {pageNumbers.map((number) => (<button key={number} className={currentPage === number ? 'active' : 'inactive'} onClick={() => paginate(number)}>{number}</button>))}
-          <button className='pagination-btn' onClick={() => paginate(currentPage + 1)} disabled={currentPage === pageNumbers.length}>Next <RightOutlined className='icons' /></button>
-        </div>
+      
+       <div className='card'>
+         
+            <DataGrid
+              rows={currentClients}
+              columns={columns}
+              initialState={{pagination: { paginationModel: { page: 10, pageSize: 10 }, }, }}
+              pageSizeOptions={[10, 15]}
+              onRowClick={(params) => handleRowClick(params.row)}
+              checkboxSelection
+            />
         </div>
       </div>
 
