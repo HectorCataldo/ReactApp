@@ -1,17 +1,12 @@
 import React, { useState, useEffect } from 'react';
 import { useFetch } from '../assets/useFetch';
 import '../CSS/index.scss';
-import { Link } from 'react-router-dom';
-import { Registro } from './Create_register';
-import { Modify } from './Modify_register';
-import { View   } from './View_register'
 import moment from 'moment';
-import { PlusOutlined,LeftOutlined,RightOutlined,SearchOutlined,EyeOutlined,EditOutlined } from '@ant-design/icons';
+import { LeftOutlined,RightOutlined,SearchOutlined,EyeOutlined,EditOutlined } from '@ant-design/icons';
 import _ from 'lodash';
 import  TextLinkExample  from './Navbar';
 import Sidebar from './sidebar'; 
-
-
+import PanelControl from "./Panel-Control";
 
 
 
@@ -20,8 +15,7 @@ export const App = () => {
   const { data } = useFetch("http://localhost:8080/api/clients");
 
   // MODAL
-  const [modalShowC, setModalShowC] = useState(false);
-  const [modalShowM, setModalShowM] = useState(false);
+
   const [modalShowV, setModalShowV] = useState(false);
   const [selectedClient, setSelectedClient] = useState(null);
   const [searchTerm, setSearchTerm] = useState('');
@@ -37,14 +31,14 @@ export const App = () => {
   }
 
   // Filtrar y paginar los datos
-    const filteredData = data.filter((item) => {
-    const searchText = searchTerm.toLowerCase();
+   const filteredData = data.filter((item) => {
+    const searchText = searchTerm.toLowerCase(); // Convierte la búsqueda a minúsculas
     return (
       (item.documentNumber && item.documentNumber.toLowerCase().includes(searchText)) ||
       (item.firstName && item.firstName.toLowerCase().includes(searchText)) 
     );
   });
-
+  
 
 // COMPAGINACION DE DATOS
 const indexOfLastClient = currentPage * clientsPerPage;
@@ -54,9 +48,7 @@ const startIndex = (currentPage - 1) * clientsPerPage;
 const endIndex = startIndex + clientsPerPage;
 const currentClientsPage = currentClients.slice(startIndex, endIndex);
 const pageNumbers = _.range(1, Math.ceil(filteredData.length / clientsPerPage) + 1);
-const paginate = (pageNumber) => {
-  setCurrentPage(pageNumber);
-};
+const paginate = (pageNumber) => { setCurrentPage(pageNumber);};
 
 while (currentClients.length < clientsPerPage) {
   currentClients.push({
@@ -73,6 +65,9 @@ while (currentClients.length < clientsPerPage) {
     <>
     <TextLinkExample/>
     <Sidebar></Sidebar>
+    <PanelControl selectedClient={selectedClient}  modalShowV={modalShowV} setModalShowV={setModalShowV} setSearchTerm={setSearchTerm}
+/>
+
       <div className='App'>
        
        <div className='container-sm container-title'>
@@ -82,11 +77,8 @@ while (currentClients.length < clientsPerPage) {
         
         <div className='container'>
         
-        <div className="search-container"><SearchOutlined className="search-icon" />
-          <input placeholder="Buscar" className="inBuscar" value={searchTerm} onChange={(e) => setSearchTerm(e.target.value)}/>
 
-          </div>
-          <Link to="/registro"><button className='btn-crear' type='submit' ><PlusOutlined className='icons' /> Agregar Nuevo</button></Link>
+        
           </div>
 
         <div className='card'>
@@ -116,9 +108,6 @@ while (currentClients.length < clientsPerPage) {
                   <td className='containerCell'>{moment(item.birthDate).format('DD/MM/YYYY')}</td>
                   <td className='containerCell'>{`${item.fechaCreacion}`}</td> 
                   <td className='statusC' data-state={item.state ? 'Activo' : 'Inactivo'}>{item.state ? 'Activo' : 'Inactivo'}</td>
-
-                  <td> <button className={`btn-modificar       ${modalShowM ? 'selected' : ''}`} type='submit' onClick={() => setModalShowM(true)} disabled={!selectedClient}> <EditOutlined />  </button></td>
-                  <td> <button className={`btn-modificar       ${modalShowV ? 'selected' : ''}`} type='submit' onClick={() => setModalShowV(true)} disabled={!selectedClient}> <EyeOutlined /> </button></td>
                 </tr>
               ))}
             </tbody>
@@ -130,9 +119,7 @@ while (currentClients.length < clientsPerPage) {
         </div>
         </div>
       </div>
-      <Registro show={modalShowC} onHide={() => setModalShowC(false)} />
-      <Modify show={modalShowM} onHide={() => setModalShowM(false)} selectedClient={selectedClient} />
-      <View show={modalShowV} onHide={() => setModalShowV(false)} selectedClient={selectedClient} />
+
     </>
   );
 };

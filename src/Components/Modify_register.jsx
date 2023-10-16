@@ -14,8 +14,8 @@ import 'react-datepicker/dist/react-datepicker.css'
 import 'react-datepicker/dist/react-datepicker-cssmodules.css'
 import Swal from 'sweetalert2';
 import { Desctivate } from './Desactivate_register';
-import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
-import { faPencilAlt, faToggleOn, faToggleOff } from '@fortawesome/free-solid-svg-icons';
+import PanelControl from "./Panel-Control";
+
 
 export const Modify = (props) => {
 
@@ -144,19 +144,10 @@ export const Modify = (props) => {
       
     return(
     <>
-         <Modal
-      {...props}
-      size="xl"
-      aria-labelledby="contained-modal-title-vcenter"
-      centered
-    >
-      <Modal.Header closeButton>
-        <Modal.Title >
-         <h1 className="title-modal">MODIFICAR</h1>
-         <td> <button className={`btn-desactivar ${modalShowD ? 'selected' : ''}`} type='submit' onClick={() => setModalShowD(true)} disabled={!selectedClient}> <FontAwesomeIcon  icon={selectedClient && selectedClient.state ? faToggleOn : faToggleOff} /> </button> </td>
-        </Modal.Title>
-      </Modal.Header>
-      <Modal.Body>
+
+    
+
+
           <Formik
               validationSchema=""
               onSubmit={console.log}
@@ -380,12 +371,11 @@ export const Modify = (props) => {
                 </Form>
               )}
             </Formik>
-      </Modal.Body>
       <Modal.Footer>
         <Button className="btn_footer" type="button" onClick={handleSave} >Guardar</Button>
         <Button className="btn_footer" onClick={props.onHide}>Close</Button>
       </Modal.Footer>
-    </Modal>
+
     <Desctivate show={modalShowD} onHide={() => setModalShowD(false)} selectedClient={selectedClient} />
     </>
   );

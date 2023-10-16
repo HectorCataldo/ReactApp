@@ -15,7 +15,9 @@ const Sidebar = () => {
         </li>
 
         <div className="linea"></div>
-        <li> <Link to="/clientes"> <UserOutlined />Clientes</Link> </li>
+        <li> 
+          <Link to="/registro"> <UserOutlined />Clientes</Link> 
+          </li>
         <div className="linea"></div>
         <li> <Link to="/configuracion"> <CopyOutlined />Cotizaciones</Link> </li>
         <div className="linea"></div>

@@ -1,6 +1,5 @@
 import React, { useState, useEffect } from "react";
-import Button from "react-bootstrap/Button";
-import Modal from "react-bootstrap/Modal";
+
 import moment from "moment";
 import axios from "axios";
 import Form from 'react-bootstrap/Form';
@@ -17,10 +16,12 @@ import InputLabel from "@mui/material/InputLabel";
 import { AdapterDayjs } from '@mui/x-date-pickers/AdapterDayjs';
 import { LocalizationProvider } from '@mui/x-date-pickers/LocalizationProvider';
 import { DatePicker } from '@mui/x-date-pickers/DatePicker';
-import { CloseCircleOutlined,PlusCircleOutlined } from '@ant-design/icons';
 import Stack from '@mui/material/Stack';
 import Item from '@mui/material/Stack';
 import '../CSS/register-style.scss';
+import PanelControl from "./Panel-Control";
+
+
 
 
 export const Registro = (props) => {
@@ -209,11 +210,9 @@ export const Registro = (props) => {
     <>
     <TextLinkExample />
     <Sidebar />
-    <div className="Pane-Control">
-      <Button className="btn_create" type="Submit" onClick={handleSubmit}> <PlusCircleOutlined className="create-log" /> Crear</Button>
-      <Button className="btn_cancel"><CloseCircleOutlined className="cancel-log" /> Cancelar </Button>
-    </div>
-  
+    <PanelControl handleSubmit={handleSubmit} objetos={objetos} />
+
+
     <Formik
       onSubmit={(dataClient, { resetForm }) => {
         console.log(dataClient);
@@ -235,7 +234,7 @@ export const Registro = (props) => {
         <Form className="formulario" onSubmit={formikHandleSubmit}>
 
 
-                       
+                      {/* PANEL DE CONTROL */}
                    <Stack direction="row" className="Panel-User">
                             <div className="user-info-container">
                                  <h1 className="title-user"> {userName ? userName : 'Usuario'}</h1>  
@@ -281,31 +280,16 @@ export const Registro = (props) => {
                         <Stack md="4" className="Containers-Stack">
                           <Item md="12" className="Containers-Item">
                           <span className="title-stack">Datos Personales</span>
-
-                                <Item className="group-form">
-                                  <TextField
-                                    id="rut"
-                                    label="RUT"
-                                    type="text"
-                                    variant="filled"
-                                    placeholder="11.111.111-1"
-                                    value={dataClient.documentNumber}
-                                    onChange={(e) => setDataClient({ ...dataClient, documentNumber: e.target.value })}
-                                    error={touched.numberdoc && !!errors.numberdoc}
-                                    helperText={touched.numberdoc && errors.numberdoc}
-                                  />
-                                </Item>
-              
-                                <Item className="group-form">
+                          <Item className="group-form">
                                   <FormControl className="select-form">
-                                    <InputLabel htmlFor="tipo-persona">Tipo persona *</InputLabel>
+                                    <InputLabel htmlFor="tipo-persona">Tipo persona </InputLabel>
                                     <Select
                                       id="tipo-persona"
                                       variant="filled"
                                       value={selectedTipo}
                                       onChange={GendersFilter}
                                       onBlur={handleBlur}
-                                      label="Tipo persona *"
+                                      label="Tipo persona "
                                       error={touched.selectedTipo && !!errors.selectedTipo}
                                     >
                                       <MenuItem>Seleccione un tipo de persona</MenuItem>
@@ -317,10 +301,27 @@ export const Registro = (props) => {
                                     <div className="error">{errors.selectedTipo}</div>
                                   )}
                                 </Item>
+
+                                <Item className="group-form">
+                                  <TextField
+                                    id="rut"
+                                    className="text-field custom-text-field"
+                                    label="RUT"
+                                    type="text"
+                                    variant="filled"
+                                    placeholder="11.111.111-1"
+                                    value={dataClient.documentNumber}
+                                    onChange={(e) => setDataClient({ ...dataClient, documentNumber: e.target.value })}
+                                    error={touched.numberdoc && !!errors.numberdoc}
+                                    helperText={touched.numberdoc && errors.numberdoc}
+                                  />
+                                </Item>
+              
+                          
                                               
                                 <Item className="group-form">
                                   <TextField
-                                    label="Nombres *"
+                                    label="Nombres"
                                     type="text"
                                     variant="filled"
                                     name="name"
@@ -335,7 +336,7 @@ export const Registro = (props) => {
               
                                 <Item className="group-form">
                                   <TextField
-                                    label="Primer Apellido *"
+                                    label="Primer Apellido"
                                     type="text"
                                     variant="filled"
                                     name="lastName1"
@@ -382,9 +383,23 @@ export const Registro = (props) => {
                           <Item md="12" className="Containers-Item">                 
                             <span className="title-stack" >Datos de Contacto</span>
 
+                            <Item className="group-form">
+                                  <TextField
+                                    label="Correo "
+                                    type="email"
+                                    variant="filled"
+                                    name="email"
+                                    placeholder="Correo@example.com"
+                                    onChange={(e) => setDataClient({ ...dataClient, email: e.target.value })}
+                                    value={dataClient.email}
+                                    error={touched.email && !!errors.email}
+                                    helperText={touched.email && errors.email}
+                                  />
+                                </Item>
+
                                 <Item className="group-form">
                                   <TextField
-                                    label="Teléfono *"
+                                    label="Teléfono "
                                     type="text"
                                     variant="filled"
                                     name="phone"
@@ -396,23 +411,11 @@ export const Registro = (props) => {
                                   />
                                 </Item>
               
-                                <Item className="group-form">
-                                  <TextField
-                                    label="Correo *"
-                                    type="email"
-                                    variant="filled"
-                                    name="email"
-                                    placeholder="Correo@example.com"
-                                    onChange={(e) => setDataClient({ ...dataClient, email: e.target.value })}
-                                    value={dataClient.email}
-                                    error={touched.email && !!errors.email}
-                                    helperText={touched.email && errors.email}
-                                  />
-                                </Item>
+                         
               
                                 <Item md="6" className="group-form">
                                   <TextField
-                                    label="Dirección *"
+                                    label="Dirección "
                                     type="text"
                                     variant="filled"
                                     name="address"
@@ -425,28 +428,46 @@ export const Registro = (props) => {
               
                                 <Item className="group-form">
                                   <FormControl variant="filled" className="select-form">
-                                    <InputLabel htmlFor="profesion">Profesión *</InputLabel>
+                                    <InputLabel htmlFor="region">Región </InputLabel>
                                     <Select
-                                      id="profesion"
-                                      value={selectedProfession ? selectedProfession.id_profession : ''}
-                                      onChange={(e) => {
-                                        const selectedProfessionId = e.target.value;
-                                        const selectedProfessionObject = profession.find(item => item.id_profession === selectedProfessionId);
-              
-                                        setSelectedProfession(selectedProfessionObject || null);
-                                      }}
+                                      id="region"
+                                      value={seRegion}
+                                      onChange={RegionChange}
                                       onBlur={handleBlur}
-                                      label="Profesión *"
-                                    >
-                                      <MenuItem value="">
-                                      Selecciona una profesión
-                                      </MenuItem>
-                                      {profession &&
-                                        profession.map((item) => (
-                                          <MenuItem key={item.id_profession} value={item.id_profession}>
-                                            {item.profession_Name}
-                                          </MenuItem>
-                                        ))}
+                                      required
+                                      label="Región">
+                                        <MenuItem value = "">
+                                         Seleccione una región
+                                        </MenuItem>
+                                        {Array.isArray(regions?.regions) &&
+                                          regions.regions.map((region, index) =>(
+                                            <MenuItem key={index} value={region.name}>
+                                            {region.name}
+                                            </MenuItem>
+                                          ))}
+                                    </Select>
+                                  </FormControl>
+                                </Item>
+
+                                <Item className="group-form">
+                                  <FormControl variant="filled" className="select-form">
+                                    <InputLabel htmlFor="comuna">Comuna </InputLabel>
+                                    <Select
+                                      id="comuna"
+                                      value={seComuna}
+                                      onChange={(e) => setSeComuna(e.target.value)}
+                                      onBlur={handleBlur}
+                                      disabled ={!seRegion}
+                                      label="Comuna"
+                                      required>
+                                        <MenuItem value="">Seleccione una comuna</MenuItem>
+                                        {Array.isArray(fcomunas) &&
+                                          fcomunas.map((comuna, index) =>
+                                          (
+                                            <MenuItem key={index} value={comuna.name}>
+                                              {comuna.name}
+                                            </MenuItem>
+                                          ))}
                                     </Select>
                                   </FormControl>
                                 </Item>
@@ -457,16 +478,19 @@ export const Registro = (props) => {
                         <Stack md="4" className="Containers-Stack">
                           <Item md="12" className="Containers-Item">    
                             <span className="title-stack">Datos Adicionales</span>
+                              
+
+                           
 
                                 <Item className="group-form">
                                   <FormControl variant="filled" className="select-form">
-                                    <InputLabel htmlFor="gender">Género *</InputLabel>
+                                    <InputLabel htmlFor="gender">Género </InputLabel>
                                     <Select
                                       id="gender"
                                       value={selectedGender}
                                       onChange={(e) => setSelectedGender(e.target.value)}
                                       onBlur={handleBlur}
-                                      label="Género *"
+                                      label="Género"
                                       disabled= {disableGender}
                                       error={touched.selectedGender && !!errors.selectedGender}
                                     >
@@ -493,7 +517,7 @@ export const Registro = (props) => {
                                 {/* INFORMACION DE LOCACION */}
                                 <Item className="group-form">
                                   <FormControl variant="filled" className="select-form">
-                                    <InputLabel htmlFor="nacionalidad">Pais de origen *</InputLabel>
+                                    <InputLabel htmlFor="nacionalidad">Pais de origen </InputLabel>
                                     <Select
                                       id="nacionalidad"
                                       required
@@ -515,49 +539,33 @@ export const Registro = (props) => {
 
                                 <Item className="group-form">
                                   <FormControl variant="filled" className="select-form">
-                                    <InputLabel htmlFor="region">Región *</InputLabel>
+                                    <InputLabel htmlFor="profesion">Profesión </InputLabel>
                                     <Select
-                                      id="region"
-                                      value={seRegion}
-                                      onChange={RegionChange}
+                                      id="profesion"
+                                      value={selectedProfession ? selectedProfession.id_profession : ''}
+                                      onChange={(e) => {
+                                        const selectedProfessionId = e.target.value;
+                                        const selectedProfessionObject = profession.find(item => item.id_profession === selectedProfessionId);
+              
+                                        setSelectedProfession(selectedProfessionObject || null);
+                                      }}
                                       onBlur={handleBlur}
-                                      required
-                                      label="Región">
-                                        <MenuItem value = "">
-                                         Seleccione una región
-                                        </MenuItem>
-                                        {Array.isArray(regions?.regions) &&
-                                          regions.regions.map((region, index) =>(
-                                            <MenuItem key={index} value={region.name}>
-                                            {region.name}
-                                            </MenuItem>
-                                          ))}
+                                      label="Profesión "
+                                    >
+                                      <MenuItem value="">
+                                      Selecciona una profesión
+                                      </MenuItem>
+                                      {profession &&
+                                        profession.map((item) => (
+                                          <MenuItem key={item.id_profession} value={item.id_profession}>
+                                            {item.profession_Name}
+                                          </MenuItem>
+                                        ))}
                                     </Select>
                                   </FormControl>
                                 </Item>
 
-                                <Item className="group-form">
-                                  <FormControl variant="filled" className="select-form">
-                                    <InputLabel htmlFor="comuna">Comuna *</InputLabel>
-                                    <Select
-                                      id="comuna"
-                                      value={seComuna}
-                                      onChange={(e) => setSeComuna(e.target.value)}
-                                      onBlur={handleBlur}
-                                      disabled ={!seRegion}
-                                      label="Comuna"
-                                      required>
-                                        <MenuItem value="">Seleccione una comuna</MenuItem>
-                                        {Array.isArray(fcomunas) &&
-                                          fcomunas.map((comuna, index) =>
-                                          (
-                                            <MenuItem key={index} value={comuna.name}>
-                                              {comuna.name}
-                                            </MenuItem>
-                                          ))}
-                                    </Select>
-                                  </FormControl>
-                                </Item>
+                             
                           </Item>
                         </Stack>
 
