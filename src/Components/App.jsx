@@ -100,8 +100,8 @@ while (currentClients.length < clientsPerPage) {
             <DataGrid
               rows={currentClients}
               columns={columns}
-              initialState={{pagination: { paginationModel: { page: 10, pageSize: 10 }, }, }}
-              pageSizeOptions={[10, 15]}
+              initialState={{pagination: { paginationModel: { page: 1, pageSize: 10 }, }, }}
+              pageSizeOptions={[10, 20]}
               onRowClick={(params) => handleRowClick(params.row)}
               checkboxSelection
             />
