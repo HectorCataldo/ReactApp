@@ -3,12 +3,6 @@ import Button from "react-bootstrap/Button";
 import { Link, useLocation } from 'react-router-dom';
 import { CloseOutlined,SearchOutlined, SaveOutlined, ArrowLeftOutlined, EyeOutlined, EditOutlined, PlusOutlined } from '@ant-design/icons';
 import '../CSS/Panel-Control.scss';
-import SearchIcon from '@mui/icons-material/Search';
-import FormControl from "@mui/material/FormControl";
-import InputLabel from "@mui/material/InputLabel";
-import Input     from "@mui/material/Input";
-import InputAdornment from "@mui/material/InputAdornment";
-
 
 
 const PanelControl = (props) => {

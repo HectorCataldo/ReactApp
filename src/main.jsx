@@ -7,6 +7,7 @@ import { Registro } from './Components/Create_register';
 import { Modify } from './Components/Modify_register';
 import './CSS/index.scss';
 
+
 createRoot(document.getElementById('root')).render(
   <React.StrictMode>
     <Router>

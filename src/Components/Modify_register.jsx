@@ -83,10 +83,13 @@ export const Modify = (props) => {
     const {data: profession} = useFetch("http://localhost:8080/api/profession");
     const {data: country} = useFetch("https://restcountries.com/v3.1/all");
 
+
+
+    
     //Axios
     const handleSave = async () => {
       try {
-        if(
+        if (
           !dataClient.documentNumber ||
           !dataClient.firstName ||
           !dataClient.lastName ||
@@ -98,11 +101,18 @@ export const Modify = (props) => {
           !dataClient.email ||
           !dataClient.address ||
           !selectedProfession.id_profession
-        ){
+        ) {
           Swal.fire({
             icon: 'error',
             title: 'Error',
-            text: 'Todos los campos deben ser completados.',});
+            text: 'Todos los campos deben ser completados.',
+          });
+          return;
+        }
+    
+        // Agregar la verificación de selectedClient y su propiedad 'id' aquí
+        if (!selectedClient || !selectedClient.id) {
+          console.error("El objeto 'selectedClient' o su propiedad 'id' son undefined o null");
           return;
         }
         const response = await axios.put('http://localhost:8080/api/clients', {
@@ -110,33 +120,33 @@ export const Modify = (props) => {
           documentNumber: selectedClient.documentNumber,
           firstName: dataClient.firstName,
           lastName: dataClient.lastName,
-          secondLastName : dataClient.secondLastName,
+          secondLastName: dataClient.secondLastName,
           birthDate: selectedBirthDate,
           gender: selectedGender,
-          nationality: selectedNationality,          
+          nationality: selectedNationality,
           phoneNumber: dataClient.phoneNumber,
           email: dataClient.email,
           address: dataClient.address,
           profession: {
             id_profession: selectedProfession.id_profession,
-            profession_Name: selectedProfession.profession_Name
+            profession_Name: selectedProfession.profession_Name,
           },
           state: selectedClient.state,
-          tipo_persona:selectedTipo,
-          fechaCreacion:selectedcreateDate,
-        });    
+          tipo_persona: selectedTipo,
+          fechaCreacion: selectedcreateDate,
+        });
+    
         // Maneja la respuesta de la API aquí
         console.log('Respuesta de la API:', response.data);
         Swal.fire({
           icon: 'success',
           title: 'Modificado',
-          text: 'Cliente modificado!'});
+          text: 'Cliente modificado!',
+        });
         setTimeout(() => {
           window.location.reload();
         }, 4000);
-      }
-        
-        catch (error) {
+      } catch (error) {
         // Maneja los errores aquí
         console.error('Error al enviar la solicitud PUT:', error);
       }
