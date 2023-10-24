@@ -88,6 +88,8 @@ export const Registro = (props) => {
 
   }
 
+
+
   //Filtrado de Comunas por Región
   const RegionChange = (e) => {
     //Obtenemos Región
@@ -137,7 +139,6 @@ export const Registro = (props) => {
         });
         return;
       }
-
 
       const response = await axios.post("http://localhost:8080/api/clients", {
         id: objetos,

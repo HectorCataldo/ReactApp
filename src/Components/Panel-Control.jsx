@@ -3,13 +3,6 @@ import Button from "react-bootstrap/Button";
 import { Link, useLocation } from 'react-router-dom';
 import { CloseOutlined,SearchOutlined, SaveOutlined, ArrowLeftOutlined, EyeOutlined, EditOutlined, PlusOutlined } from '@ant-design/icons';
 import '../CSS/Panel-Control.scss';
-import SearchIcon from '@mui/icons-material/Search';
-import FormControl from "@mui/material/FormControl";
-import InputLabel from "@mui/material/InputLabel";
-import Input     from "@mui/material/Input";
-import InputAdornment from "@mui/material/InputAdornment";
-
-
 
 const PanelControl = (props) => {
   const location = useLocation();
@@ -35,20 +28,8 @@ const PanelControl = (props) => {
                 <Link to="/registro"> <Button className='btn-crear' type='submit'><PlusOutlined className='icons' /> Agregar Nuevo </Button></Link>
                 <Link to="/modify">   <Button className="btn-modificar" type='submit' disabled={!selectedClient}> <EditOutlined /> Modificar </Button></Link>
                 <button className={`btn-modificar ${modalShowV ? 'selected' : ''}`} type='submit' onClick={() => setModalShowV(true)} disabled={!selectedClient}> <EyeOutlined /> Ver </button>
-                </div>
-
-                {/* <div className="search-container">
-                <FormControl variant="standard">
-                <InputLabel htmlFor="input-with-icon-adornment">Buscar</InputLabel>
-                <Input className="inBuscar" value={searchTerm} onChange={(e) => setSearchTerm(e.target.value)} startAdornment={ <InputAdornment position="start"><SearchIcon sx={{ color: 'action.active', mr: 1, my: 0.5 }} /> </InputAdornment>} />
-                </FormControl>
-                </div> */}
-
-               
-         </div>
-      
-         
-         
+                </div>        
+         </div>    
         </> 
       )}
 
