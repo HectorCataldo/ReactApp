@@ -37,7 +37,7 @@ export const Registro = (props) => {
   const [objetos, setObjetos] = useState();
   const [selectedcreateDate] = useState(moment(new Date()));
   const [selectedGender, setSelectedGender] = useState("");
-  const [selectedTipo, setSelectedTipo] = useState("");
+  const [selectedTipo, setSelectedTipo] = useState("Natural");
   const [selectedNationality, setSelectedNationality] = useState("");
   const [selectedProfession, setSelectedProfession] = useState("");
   const [Currentdate, setCurrentDate]= useState(moment(new Date()));
