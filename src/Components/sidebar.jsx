@@ -16,12 +16,12 @@ const Sidebar = () => {
 
         <div className="linea"></div>
         <li> 
-          <Link to="/registro"> <UserOutlined />Clientes</Link> 
+          <Link to="/ApClients"> <UserOutlined />Clientes</Link> 
           </li>
         <div className="linea"></div>
         <li> <Link to="/configuracion"> <CopyOutlined />Cotizaciones</Link> </li>
         <div className="linea"></div>
-        <li><Link  to="/"> <FileTextOutlined />Pólizas</Link> </li>
+        <li><Link  to="/policylist"> <FileTextOutlined />Pólizas</Link> </li>
         <div className="linea"></div>
         <li> <Link to="/clientes"><FileExcelOutlined />Endosos</Link> </li>
         <div className="linea"></div>

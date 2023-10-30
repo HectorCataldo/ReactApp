@@ -15,7 +15,7 @@ import SearchIcon from '@mui/icons-material/Search';
 
 
 
-export const App = () => {
+export const Policylist = () => {
   const { data } = useFetch("http://localhost:8080/api/clients");
 
   // MODAL
@@ -62,7 +62,7 @@ export const App = () => {
   
 // COMPAGINACION DE DATOS
 const indexOfLastClient = currentPage * clientsPerPage;
-const indexOfFirstClient = indexOfLastClient - clientsPerPage  ;
+const indexOfFirstClient = indexOfLastClient - clientsPerPage + 1 ;
 const currentClients = filteredData.slice(indexOfFirstClient, indexOfLastClient);
 const startIndex = (currentPage - 1) * clientsPerPage;
 const endIndex = startIndex + clientsPerPage;
@@ -99,7 +99,7 @@ while (currentClients.length < clientsPerPage) {
 
       <div className='App'>
        <div className='container-sm container-title'>
-       <h4 className='title'>Clientes</h4>
+       <h4 className='title'>Polizas</h4>
 
        <div className="search-container">
                 <FormControl variant="standard">
