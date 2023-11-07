@@ -43,11 +43,28 @@
 }
 
 .card{
-  width: 52.8%;
-  height: 100%;
+  width: 1120px;
+  height: 800px;
   margin-top: 10px;
   
 }
+
+
+/* datagrid-override.css */
+.MuiDataGrid-root {
+  background-color: transparent;
+  width: 100%; 
+
+}
+
+.MuiDataGrid-cell {
+  width: 150px;
+}
+
+.MuiDataGrid-header {
+  width: 150px;
+}
+
 
 
 .titles{
@@ -83,10 +100,11 @@ td{
 .container-title{
 
   display: flex;
+  justify-content: space-between;
   width: 60%;
   height: 80%;
-  margin-top: 40px;
-  padding-left: 0px;
+  margin-top: 20px;
+  padding-left: 15px;
   text-align: left;
 }
 
