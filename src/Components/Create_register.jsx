@@ -22,11 +22,7 @@ import Item from '@mui/material/Stack';
 import '../CSS/register-style.scss';
 import PanelControl from "./Panel-Control";
 import * as Yup from "yup";
-import { FormHelperText } from "@mui/material";
-
-
-
-
+import { Box,FormHelperText } from "@mui/material";
 
 export const Registro = (props) => {
   const { data: country } = useFetch( "https://gist.githubusercontent.com/HectorCataldo/ceee7aa2b93e83d7d04f752e3adbe623/raw/81b6bc11b965720e6717975f665fe85869c71e81/paises.json" )
@@ -99,7 +95,8 @@ export const Registro = (props) => {
     }
     else if( tp === 'Juridica'){
       setDisableGender(true);
-      setSelectedGender("Compañía");
+      const genderObject = gender.find(item => item.id_gender === 0);
+      setSelectedGender(genderObject);
       setSelectedTipo('Juridica');
     }
     else if( tp != 'Juridica' || tp != 'Natural'){
@@ -248,23 +245,19 @@ export const Registro = (props) => {
   
     setUserName(userFullName);
   };
+
   //Validaciones
   //Validación de digito verificador:
   const validarRut = (rut) => {
-    const rutLimpio = rut.replace(/[^0-9kK]/g, ''); // Eliminar caracteres no numéricos y convertir 'k' a minúscula
-    if (rutLimpio.length > 9) return false; // El RUT debe tener 9 caracteres
-
+    const rutLimpio = rut.replace(/[^0-9kK]/g, ''); 
+    if (rutLimpio.length > 9) return false;
     let num = parseInt(rutLimpio.slice(0, -1), 10);
     const dv = rutLimpio.slice(-1).toLowerCase();
-
     let suma = 0;
     let multiplo = 2;
-
     for (let i = 1; num > 0; i++) {
-        multiplo = i === 7 ? 2 : multiplo; // Volver a 2 cuando lleguemos al 8vo dígito
-        console.log(i + ' ++$ ' + suma + ' += ' + '( '+ num +' %10) ' + '* ' + multiplo);
+        multiplo = i === 7 ? 2 : multiplo;
         suma += (num % 10) * multiplo;
-        console.log('++$ ' + suma)
         num = Math.floor(num / 10);
         multiplo++;
       }
@@ -273,8 +266,19 @@ export const Registro = (props) => {
     const dvCalculado = dvEsperado === 11 ? 0 : dvEsperado === 10 ? 'k' : dvEsperado.toString();
 
     return dv === dvCalculado;
-}
-  
+  }
+
+  const handleRutChange = (e, handleChange) => {
+    const rawRut = e.target.value.replace(/[.-]/g, '');
+    let formattedRut = '';
+    if (rawRut.length > 1) {
+      formattedRut += rawRut.substring(0, rawRut.length - 1).match(/.{1,3}/g).join('.');
+      const lastDigits = rawRut.substring(rawRut.length - 1);
+      formattedRut += `-${lastDigits}`;
+    } else {
+      formattedRut = rawRut;
+    }
+  };
   //Validaciones con YUP formatos:
   const validationSchema = Yup.object().shape({
     documentNumber: Yup.string().matches(/^(\d{1,2}(\.?\d{3}){2}[-][0-9kK]{1})$|^(\d{1,2}(-\d)?)$/, "Formato de número de documento inválido").
@@ -286,18 +290,33 @@ export const Registro = (props) => {
     lastName:Yup.string().trim().matches(/^(?!\s*$)[A-Za-záéíóúñÁÉÍÓÚÑ]+(?:\s[A-Za-záéíóúñÁÉÍÓÚÑ]+)*$/,'El apellido solo debe contener letras')
     .required('Por favor ingresa un apellido'),
     secondLastName: Yup.string().trim().notRequired().matches(/^(?!\s*$)[A-Za-záéíóúñÁÉÍÓÚÑ]+(?:\s[A-Za-záéíóúñÁÉÍÓÚÑ]+)*$/,'El apellido solo debe contener letras'),
-    birthDate:Yup.date().max(new Date(), 'La fecha no debe pasar a la actual').required('Ingrese una fecha de nacimiento'),
+    birthDate: Yup.date().required('La fecha de nacimiento es requerida').max(new Date(), 'La fecha de nacimiento no puede ser posterior a la fecha actual'),
     email: Yup.string().email('Ingrese un email válido').required('Ingrese un email'),
-    phoneNumber: Yup.string().min(9, 'El número debe contener 9 dígitos').matches(/^[0-9]+$/,'Ingrese un número de teléfono válido').required('Ingrese un número de teléfono'),
+    phoneNumber: Yup.string().min(9, 'El número debe contener al menos 9 dígitos').matches(/^[+0-9]+$/,'Ingrese un número de teléfono válido').required('Ingrese un número de teléfono'),
     address: Yup.string().required('Ingrese una dirección'),
-    region: Yup.string().required('Selecciona una región')
-  });
-  
-  
+    region: Yup.string().required('Seleccione una región'),
+    comuna: Yup.string().required('Seleccione una comuna'),
+    gender: Yup.string().required('Seleccione un género'),
+    country: Yup.string().required('Seleccione un país'),
+    profession: Yup.string().required('Seleccione una profesión'),
+    jdocument: Yup.string().matches(/^(\d{1,2}(\.?\d{3}){2}[-][0-9kK]{1})$|^(\d{1,2}(-\d)?)$/, "Formato de número de documento inválido").
+    test('validar-rut','Rut inválido', (value) =>{
+      return validarRut(value);
+    }).required("Por favor ingresa un número de documento"),
+    jrazonsocial: Yup.string().trim().required('Ingrese razón social'),
+    jfname: Yup.string().trim().matches(/^(?!\s*$)[A-Za-záéíóúñÁÉÍÓÚÑ]+(?:\s[A-Za-záéíóúñÁÉÍÓÚÑ0-9]+)*$/,'Escriba un nombre')
+    .notRequired(),
+    jemail: Yup.string().email('Ingrese un email válido').required('Ingrese un email'),
+    jphone: Yup.string().min(9, 'El número debe contener al menos 9 dígitos').matches(/^[+0-9]+$/,'Ingrese un número de teléfono válido').required('Ingrese un número de teléfono'),
+    jaddress: Yup.string().required('Ingrese una dirección'),
+    jregion: Yup.string().required('Seleccione una región'),
+    jcomuna: Yup.string().required('Seleccione una comuna'),
+    jgiro: Yup.string().required('Ingrese su GIRO'),
+    jnationality: Yup.string().required('Seleccione un país')
+  }); 
 
   return (
     <>
-
     <TextLinkExample />
     <Sidebar />
     <PanelControl handleSubmit={handleSubmit} objetos={objetos} />
@@ -315,17 +334,29 @@ export const Registro = (props) => {
         firstName: "",
         lastName: "",
         secondLastName: "",
-        birthDate: null,
         nationality: "",
         phoneNumber: "",
         email: "",
         address: "",
         region:"",
-        tipo_p:"",
+        comuna:"",
+        gender:"",
+        country: "",
+        profession: "",
+        jdocument:"",
+        jrazonsocial:"",
+        jfname:"",
+        jemail:"",
+        jphone:"",
+        jaddress:"",
+        jregion:"",
+        jcomuna:"",
+        jgiro:"",
+        jnationality:""
     }}
     validationSchema = {validationSchema}
     >
-      {({ errors, touched, handleSubmit: formikHandleSubmit, handleChange, handleBlur, values, setFieldValue}) => (
+      {({ errors, touched, handleSubmit: formikHandleSubmit, handleChange, handleBlur, values, setFieldValue, setValues}) => (
         <Form className="formulario" onSubmit={formikHandleSubmit}>
                       {/* PANEL DE CONTROL */}
                    <Stack direction="row" className="Panel-User">
@@ -361,9 +392,8 @@ export const Registro = (props) => {
                                           disabled
                                         />
                                       </Item>
-                          
-                              </Stack>           
-                   </Stack>  
+                              </Stack>
+                      </Stack>  
 
 
                        {/* PERSONA NATURAL */}
@@ -390,7 +420,7 @@ export const Registro = (props) => {
                                         >
                                           {/*<MenuItem>Seleccione un tipo de persona</MenuItem>*/}
                                           <MenuItem value="Natural">Natural</MenuItem>
-                                          <MenuItem value="Jurídica">Jurídica</MenuItem>
+                                          <MenuItem value="Juridica">Jurídica</MenuItem>
                                         </Select>
                                       </FormControl>
                                       {errors.selectedTipo && touched.selectedTipo && (
@@ -408,7 +438,10 @@ export const Registro = (props) => {
                                           variant="filled"
                                           placeholder="11.111.111-1"
                                           value={values.documentNumber}
-                                          onChange={handleChange}
+                                          onChange={(e)=>{
+                                            handleChange(e);
+                                            setClientData({...clientData, documentNumber: e.target.value});
+                                          }}
                                           onBlur={handleBlur}
                                           onKeyPress={(e) => {
                                             const pattern = /^[Kk0-9-.]+$/;
@@ -432,9 +465,10 @@ export const Registro = (props) => {
                                           name="firstName"
                                           value={values.firstName}
                                           required
-                                          onChange={handleChange/*(e) => {setDataClient({ ...dataClient, firstName: e.target.value });
-                                                            updateUserName(e.target.value,dataClient.lastName1,dataClient.secondLastName); 
-                                                  }*/}
+                                          onChange={(e) => {handleChange(e);setClientData({ ...clientData, firstName: e.target.value });
+                                                            updateUserName(e.target.value,clientData.lastName,clientData.secondLastName); 
+                                                  }}
+
                                           onBlur={handleBlur}
                                           onKeyPress={(e) => {
                                             const pattern = /^[A-Za-záéíóúñÁÉÍÓÚÑ ]+$/;
@@ -456,9 +490,9 @@ export const Registro = (props) => {
                                           required
                                           name="lastName"
                                           value={values.lastName}
-                                          onChange={handleChange/*(e) => {setDataClient((prevData)=>({...prevData , lastName: e.target.value }));
-                                                            updateUserName(dataClient.firstName,e.target.value,dataClient.secondLastName);
-                                                }*/}
+                                          onChange={(e) => {handleChange(e);setClientData((prevData)=>({...prevData , lastName: e.target.value }));
+                                                            updateUserName(clientData.firstName,e.target.value,clientData.secondLastName);
+                                                }}
                                           onBlur={handleBlur}
                                           onKeyPress={(e) => {
                                             const pattern = /^[A-Za-záéíóúñÁÉÍÓÚÑ ]+$/;
@@ -478,9 +512,9 @@ export const Registro = (props) => {
                                           type="text"
                                           variant="filled"
                                           name="secondLastName"
-                                          onChange={handleChange/*(e) => {setDataClient((prevData)=>({ ...prevData, secondLastName: e.target.value }));
-                                                            updateUserName(dataClient.firstName,dataClient.lastName,e.target.value);
-                                        }*/}
+                                          onChange={(e) => {handleChange(e);setClientData((prevData)=>({ ...prevData, secondLastName: e.target.value }));
+                                                            updateUserName(clientData.firstName,clientData.lastName,e.target.value);
+                                        }}
                                           value={values.secondLastName}
                                           onBlur={handleBlur}
                                           onKeyPress={(e) => {
@@ -498,23 +532,27 @@ export const Registro = (props) => {
                                         <LocalizationProvider dateAdapter={AdapterDayjs} error={touched.birthDate && !!errors.birthDate}>
                                           <DatePicker
                                             className="datepicker"
-                                            dateFormat="dd/MM/yyyy"
                                             name="birthDate"
                                             label="Fecha de Nacimiento"
                                             value={values.birthDate}
-                                            // selected={/*moment(selectedBirthDate).toDate()*/}
-                                            onChange={(value) => setFieldValue('birthDate', value)/*setSelectedBirthDate(date)*/}
-                                            onBlur={handleBlur}                                         
-                                            renderInput={(params)=>(
-                                              <TextField
-                                                {...params}
-                                                error={touched.birthDate && !!errors.birthDate}
-                                                helperText={touched.birthDate && errors.birthDate ? errors.birthDate: 'Ingresa una fecha de nacimiento'}
-                                              />
-                                            )}
-                                            />
-                                        </LocalizationProvider>                                        
-                                      </Item>    
+                                            onChange={(value) => {setFieldValue('birthDate', value); setSelectedBirthDate(value)}}
+                                            format="DD - MM - YYYY"
+                                            onBlur={()=>{
+                                              setIsTouched(true);
+                                              handleBlur}}
+                                            disableFuture
+                                            slotProps={
+                                              {
+                                                textField:{
+                                                  required: true,
+                                                  error: Boolean(errors.birthDate),
+                                                  helperText: errors.birthDate ? errors.birthDate: ''
+                                                }
+                                              }
+                                            }
+                                          />
+                                        </LocalizationProvider>
+                                      </Item>
                                 </Item>
                               </Stack>
 
@@ -532,7 +570,7 @@ export const Registro = (props) => {
                                           name="email"
                                           required
                                           placeholder="Correo@example.com"
-                                          onChange={handleChange/*(e) => setDataClient({ ...dataClient, email: e.target.value })*/}
+                                          onChange={(e) => {handleChange(e);setClientData({ ...clientData, email: e.target.value })}}
                                           value={values.email}
                                           onBlur={handleBlur}
                                           error={touched.email && !!errors.email}
@@ -547,8 +585,16 @@ export const Registro = (props) => {
                                           type="text"
                                           variant="filled"
                                           name="phoneNumber"
+                                          required
                                           placeholder="911111111"
-                                          onChange={handleChange/*(e) => setDataClient({ ...dataClient, phoneNumber: e.target.value })*/}
+                                          inputProps={{maxLength : 12}}
+                                          onKeyPress={(e) => {
+                                            const pattern = /^[+0-9]+$/;
+                                            if (!pattern.test(e.key)) {
+                                              e.preventDefault();
+                                            }
+                                          }}
+                                          onChange={(e) => {handleChange(e);setClientData({ ...clientData, phoneNumber: e.target.value })}}
                                           onBlur={handleBlur}
                                           value={values.phoneNumber}
                                           error={touched.phoneNumber && !!errors.phoneNumber}
@@ -562,8 +608,9 @@ export const Registro = (props) => {
                                           type="text"
                                           variant="filled"
                                           name="address"
+                                          required
                                           value={values.address}
-                                          onChange={handleChange/*(e) => setDataClient({ ...dataClient, address: e.target.value })*/}
+                                          onChange={(e) => {handleChange(e);setClientData({ ...clientData, address: e.target.value })}}
                                           onBlur={handleBlur}
                                           error={touched.address && !!errors.address}
                                           helperText={touched.address && errors.address}
@@ -571,18 +618,20 @@ export const Registro = (props) => {
                                       </Item>
 
                                       <Item className="group-form">
+                                        <Box mb={touched.region && errors.region ? 2.5 : 0}>
                                         <FormControl variant="filled" className="select-form" error={touched.region && !!errors.region}>
                                           <InputLabel htmlFor="region">Región </InputLabel>
                                           <Select
                                             id="region"
                                             name="region"
-                                            value={values.region/*seRegion*/}
-                                            onChange={(event) => setFieldValue("region", event.target.value)/*RegionChange*/}
+                                            value={values.region}
+                                            onChange={(e) => {
+                                              RegionChange(e);
+                                              const newRegionValue = e.target.value;                                               
+                                              setValues((prevValues) => ({ ...prevValues, region: newRegionValue }))
+                                            }}
                                             onBlur={handleBlur}
-                                            label="Región"
-                                            // error={touched.region && !!errors.region }
-                                            // helperText = {touched.region && errors.region }
-                                            >
+                                            label="Región"                                            >
                                               <MenuItem value = "">
                                               Seleccione una región
                                               </MenuItem>
@@ -633,11 +682,7 @@ export const Registro = (props) => {
                               {/* Contenedor 3 */}
                               <Stack md="4" className="Containers-Stack">
                                 <Item md="12" className="Containers-Item">    
-                                  <span className="title-stack">Datos Adicionales</span>
-                                    
-
-                                
-
+                                  <span className="title-stack">Datos Adicionales</span>                                  
                                       <Item className="group-form">
                                         <Box mb={touched.gender && errors.gender ? 2.5:0}>
                                         <FormControl variant="filled" className="select-form" error={touched.gender && !!errors.gender}>
@@ -809,7 +854,7 @@ export const Registro = (props) => {
                                                 
                                   <Item className="group-form">
                                     <TextField
-                                      label="Razón Social"
+                                      label="Razon Social"
                                       type="text"
                                       variant="filled"
                                       required
