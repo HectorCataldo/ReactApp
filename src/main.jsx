@@ -18,7 +18,7 @@ createRoot(document.getElementById('root')).render(
         <Route path="/" element={<Principal />} />
         <Route path="/ApClients" element={<App />} />
         <Route path="/registro" element={<Registro />} />
-        <Route path="/modify" element={<Modify />} />
+        <Route path="/modify/:id" element={<Modify />} />
         <Route path='/policylist' element={<Policylist/>}/>
         <Route path='/Policy' element={<Policy/>}/>
       </Routes>

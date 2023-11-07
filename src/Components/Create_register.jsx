@@ -297,6 +297,7 @@ export const Registro = (props) => {
 
   return (
     <>
+
     <TextLinkExample />
     <Sidebar />
     <PanelControl handleSubmit={handleSubmit} objetos={objetos} />
@@ -389,7 +390,7 @@ export const Registro = (props) => {
                                         >
                                           {/*<MenuItem>Seleccione un tipo de persona</MenuItem>*/}
                                           <MenuItem value="Natural">Natural</MenuItem>
-                                          <MenuItem value="Juridica">Jurídica</MenuItem>
+                                          <MenuItem value="Jurídica">Jurídica</MenuItem>
                                         </Select>
                                       </FormControl>
                                       {errors.selectedTipo && touched.selectedTipo && (
@@ -808,7 +809,7 @@ export const Registro = (props) => {
                                                 
                                   <Item className="group-form">
                                     <TextField
-                                      label="Razon Social"
+                                      label="Razón Social"
                                       type="text"
                                       variant="filled"
                                       required

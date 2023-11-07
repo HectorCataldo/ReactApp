@@ -20,7 +20,7 @@
   text-align: center;
   color:#000000;
   /*background-image:linear-gradient(rgba(0,0,0,0.5),rgba(0,0,0,0.5)), url("https://s1.1zoom.me/b4647/584/Cosmonauts_Surface_of_planets_525931_1920x1080.jpg");*/
-  background-color: #e6e7e9;
+  background-color: #ffffff;
   background-size: cover;
   background-attachment: fixed;
   background-repeat: no-repeat;
@@ -30,7 +30,7 @@
 
 /*APP.JSX*/
 
-.selectedClient { background-color: #f2f4f8; /*Color de fila seleccionada*/ color: #000000;}
+.selectedClient { background-color: #ffffff; /*Color de fila seleccionada*/ color: #000000;}
 
 
 .App {
@@ -38,23 +38,26 @@
   display: flex;
   flex-direction: column;
   align-items: center;
-  min-height: 100vh;
+  min-height: 140vh;
   text-align: center;
 }
 
-.card{
-  width: 1120px;
-  height: 800px;
-  margin-top: 10px;
-  
-}
 
+
+.dataGrid{
+  margin-left: 270px;
+  height: 700px;
+  margin-top: 10px;
+  color:#ffffff;
+  box-shadow: 1px 1px 1px 1px rgba(0, 0, 0, 0.2);
+}
 
 /* datagrid-override.css */
 .MuiDataGrid-root {
-  background-color: transparent;
-  width: 100%; 
-
+  background-color: #ffffff;
+  width: 85%; 
+  height: 100%;
+  
 }
 
 .MuiDataGrid-cell {
@@ -63,10 +66,16 @@
 
 .MuiDataGrid-header {
   width: 150px;
+  
 }
 
 
-
+.btn-search{
+  border-style: none;
+  width: 30px;
+  background-color:transparent;
+  position: flex;
+}
 .titles{
   text-align: left;
   padding-left: 10px;
@@ -100,18 +109,25 @@ td{
 .container-title{
 
   display: flex;
-  justify-content: space-between;
-  width: 60%;
-  height: 80%;
+  justify-content: flex-start;
+  width: 100%;
+  height: 70%;
   margin-top: 20px;
-  padding-left: 15px;
   text-align: left;
 }
 
-.container-title .title{
-  
+.container-title .title{ 
   text-align: left;
+  font-size: 23px;
+  margin-bottom: 0;
+  padding-top: 10px;
 }
+
+.search-container
+{
+  margin-left: 100px;
+}
+
 
 
 th, td {
@@ -200,7 +216,7 @@ td.statusC[data-state='Activo'] {
   left: 0;
   width: 100%;
   z-index: 1000; /* Un índice Z mayor que el Sidebar */
-  background-color: #f2f4f8;
+  background-color: #00304E;
   border-bottom: 1px solid rgb(224, 223, 223);
   height: 60px;
   padding: 0 20px;
@@ -211,6 +227,9 @@ td.statusC[data-state='Activo'] {
 
 .nav-bar .btn-admin-log{
   vertical-align: super;
+  border:none;
+  background-color:transparent;
+  color:#ffffff;
 }
 .nav-bar .admin-log{
   vertical-align: middle;
@@ -243,13 +262,17 @@ td.statusC[data-state='Activo'] {
   }
 
 
+  .Title{
+    text-decoration: none;
+    color:#ffffff;
+  }
 
 
 /* Sidebar */
 .sidebar {
   width: 250px;
   height: 100%;
-  background-color: #f2f4f8;
+  background-color: #F0F0F0;
   color: #fff;
   padding: 20px;
   position: fixed;
@@ -266,12 +289,12 @@ td.statusC[data-state='Activo'] {
 }
 
 .sidebar li {
-  margin-bottom: 10px;
+  
   cursor: pointer;
   text-decoration: none;
   display: flex;
   align-items: center; 
-  margin-bottom: 10px; 
+  
 }
 
 .sidebar li a{
@@ -279,6 +302,7 @@ td.statusC[data-state='Activo'] {
   color:#000000;
   font-weight: 600;
   padding-top: 10px;
+  padding-bottom: 10px;
 }
 
 
@@ -287,7 +311,9 @@ td.statusC[data-state='Activo'] {
   margin-right: 5px; 
 }
 
-
+.sidebar ul li:hover {
+  background-color: rgba(0, 0, 0, 0.1); /* Cambia el color de fondo en hover */
+}
 
 /* Contenido principal */
 .main-content {
@@ -312,6 +338,10 @@ td.statusC[data-state='Activo'] {
 }
 
 
+.linea{
+  height: 1px;
+  background-color: #dfdbdb;
+}
 
 // RESPONSIVE 
 

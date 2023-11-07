@@ -9,7 +9,7 @@ const PanelControl = (props) => {
   const isApClientsPage = location.pathname === "/ApClients";
   const isRegisterPage = location.pathname === "/registro";
   const isPolicyregisterpage = location.pathname === "/policylist"
-  const { selectedClient,  modalShowV, setModalShowV, handleSubmit,searchTerm,setSearchTerm,objetos } = props;
+  const {handleSubmit} = props;
 
   return (
     <div className="Panel-Control">
@@ -38,9 +38,6 @@ const PanelControl = (props) => {
          </div>    
         </> 
       )}
-
-    
-
      
     </div>
   );

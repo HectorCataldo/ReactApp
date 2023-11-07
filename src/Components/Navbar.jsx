@@ -9,13 +9,8 @@ function TextLinkExample() {
         <Navbar.Collapse className="justify-content-between">
           <div className="d-flex flex-column align-items-start">
             <Navbar.Brand href="#home">
-            <img
-              src="src\img\logo-kps.png"
-              width="30"
-              height="30"
-              className="logo d-inline-block align-top"
-              alt=""
-            />
+            {/* <img src="src\img\logo-kps.png"  width="30" height="30"  className="logo d-inline-block align-top"  alt="" /> */}
+            <a className='Title'>Xplorer Insurance</a>
           </Navbar.Brand>
           </div>
 
