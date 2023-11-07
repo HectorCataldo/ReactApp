@@ -1,4 +1,4 @@
-import React, { useState, useEffect } from "react";
+import React, { useState, useEffect, useMemo } from "react";
 
 import moment from "moment";
 import axios from "axios";
@@ -14,6 +14,7 @@ import MenuItem from "@mui/material/MenuItem";
 import FormControl from "@mui/material/FormControl";
 import InputLabel from "@mui/material/InputLabel";
 import { AdapterDayjs } from '@mui/x-date-pickers/AdapterDayjs';
+import AdapterDateFns from '@mui/lab/AdapterDateFns';
 import { LocalizationProvider } from '@mui/x-date-pickers/LocalizationProvider';
 import { DatePicker } from '@mui/x-date-pickers/DatePicker';
 import Stack from '@mui/material/Stack';
@@ -21,11 +22,7 @@ import Item from '@mui/material/Stack';
 import '../CSS/register-style.scss';
 import PanelControl from "./Panel-Control";
 import * as Yup from "yup";
-import { FormHelperText } from "@mui/material";
-
-
-
-
+import { Box,FormHelperText } from "@mui/material";
 
 export const Registro = (props) => {
   const { data: country } = useFetch( "https://gist.githubusercontent.com/HectorCataldo/ceee7aa2b93e83d7d04f752e3adbe623/raw/81b6bc11b965720e6717975f665fe85869c71e81/paises.json" )
@@ -37,7 +34,7 @@ export const Registro = (props) => {
   const [objetos, setObjetos] = useState();
   const [selectedcreateDate] = useState(moment(new Date()));
   const [selectedGender, setSelectedGender] = useState("");
-  const [selectedTipo, setSelectedTipo] = useState("");
+  const [selectedTipo, setSelectedTipo] = useState("Natural");
   const [selectedNationality, setSelectedNationality] = useState("");
   const [selectedProfession, setSelectedProfession] = useState("");
   const [Currentdate, setCurrentDate]= useState(moment(new Date()));
@@ -51,13 +48,34 @@ export const Registro = (props) => {
     email: "",
     address: "",
   });
-  const [disableGender, setDisableGender] = useState(true);
-
-  const emailRegex = /^[A-Z0-9._%+-]+@[A-Z0-9.-]+\.[A-Z]{2,4}$/i;
-  const caracRegex = /^[a-zA-Z]+$/;
-  const ndocRegex = /^[Kk0-9-]+$/;
-  const numberRegex = /^[0-9]+$/;
-
+  const [clientData, setClientData] = useState({
+    id: null,
+    documentNumber: null,
+    firstName: null,
+    lastName: null,
+    secondLastName: null,
+    fantasyName:null,
+    birthDate: null,
+    gender: {
+      id_gender: null,
+      gender: null,
+    },
+    nationality: null,
+    phoneNumber: null,
+    email: null,
+    address: null,
+    region: null,
+    comuna: null,
+    giro: null,
+    profession: {
+      id_profession: null,
+      profession_Name: null
+    },
+    tipo_persona: null,
+    fechaCreacion: null
+  })
+  const [disableGender, setDisableGender] = useState(false);
+  const [isTouched, setIsTouched] = useState(false);
 
   // COMUNAS Y REGIONES 
   const [seRegion, setSeRegion] = useState('');
@@ -77,7 +95,8 @@ export const Registro = (props) => {
     }
     else if( tp === 'Juridica'){
       setDisableGender(true);
-      setSelectedGender("Compañía");
+      const genderObject = gender.find(item => item.id_gender === 0);
+      setSelectedGender(genderObject);
       setSelectedTipo('Juridica');
     }
     else if( tp != 'Juridica' || tp != 'Natural'){
@@ -87,6 +106,8 @@ export const Registro = (props) => {
     }
 
   }
+
+
 
   //Filtrado de Comunas por Región
   const RegionChange = (e) => {
@@ -117,44 +138,59 @@ export const Registro = (props) => {
   const handleSubmit = async () => {
     try {
       if (
-        !dataClient.documentNumber ||
-        !dataClient.firstName ||
-        !dataClient.lastName ||
-        !dataClient.secondLastName ||
+        !clientData.documentNumber ||
+        !clientData.firstName ||
+        !clientData.lastName ||
+        !clientData.secondLastName ||
         !selectedBirthDate ||
         !selectedGender ||
-        !selectedNationality ||
-        !dataClient.phoneNumber ||
-        !dataClient.email ||
-        !dataClient.address ||
-        !selectedProfession.id_profession ||
-        !selectedTipo
+        !seComuna ||
+        !seRegion||
+        !clientData.nationality ||
+        !clientData.phoneNumber ||
+        !clientData.email ||
+        !clientData.address ||
+        !professionData ||
+        !selectedTipo,
+        console.log(clientData),
+        console.log(objetos),
+        console.log(selectedcreateDate),
+        console.log(selectedGender),
+        console.log(professionData)
+
       ) {
         Swal.fire({
           icon: "error",
           title: "Error",
-          text: "Por favor, complete todos los campos antes de enviar.",
+          text: "Por favor, complete todos los campos antes de enviar.",          
         });
         return;
       }
 
-
       const response = await axios.post("http://localhost:8080/api/clients", {
         id: objetos,
-        documentNumber: dataClient.documentNumber,
-        firstName: dataClient.firstName,
-        lastName: dataClient.lastName,
-        secondLastName: dataClient.secondLastName,
-        birthDate: selectedBirthDate,   
-        gender: selectedGender,
-        nationality: selectedNationality,
-        phoneNumber: dataClient.phoneNumber,
-        email: dataClient.email,
-        address: dataClient.address,
+        documentNumber: clientData.documentNumber,
+        firstName: clientData.firstName,
+        lastName: clientData.lastName,
+        secondLastName: clientData.secondLastName,
+        fantasyName: clientData.fantasyName,
+        birthDate: selectedBirthDate,
+        gender: {
+          id_gender:selectedGender.id_gender,
+          gender: selectedGender.gender
+        },
+        nationality: clientData.nationality,
+        phoneNumber: clientData.phoneNumber,
+        email: clientData.email,
+        address: clientData.address,
+        region: seRegion,
+        comuna: seComuna,
+        giro: clientData.giro,
         profession: professionData,
-        state: "True",
+        state: true,
         tipo_persona: selectedTipo,
         fechaCreacion: selectedcreateDate,
+        
       });
 
       console.log("Respuesta de la API:", response.data);
@@ -223,9 +259,7 @@ export const Registro = (props) => {
 
     for (let i = 1; num > 0; i++) {
         multiplo = i === 7 ? 2 : multiplo; // Volver a 2 cuando lleguemos al 8vo dígito
-        console.log(i + ' ++$ ' + suma + ' += ' + '( '+ num +' %10) ' + '* ' + multiplo);
         suma += (num % 10) * multiplo;
-        console.log('++$ ' + suma)
         num = Math.floor(num / 10);
         multiplo++;
       }
@@ -234,8 +268,20 @@ export const Registro = (props) => {
     const dvCalculado = dvEsperado === 11 ? 0 : dvEsperado === 10 ? 'k' : dvEsperado.toString();
 
     return dv === dvCalculado;
-}
-  
+  }
+
+  const handleRutChange = (e, handleChange) => {
+    const rawRut = e.target.value.replace(/[.-]/g, '');
+    let formattedRut = '';
+    if (rawRut.length > 1) {
+      formattedRut += rawRut.substring(0, rawRut.length - 1).match(/.{1,3}/g).join('.');
+      const lastDigits = rawRut.substring(rawRut.length - 1);
+      formattedRut += `-${lastDigits}`;
+    } else {
+      formattedRut = rawRut;
+    }
+  };
+
   //Validaciones con YUP formatos:
   const validationSchema = Yup.object().shape({
     documentNumber: Yup.string().matches(/^(\d{1,2}(\.?\d{3}){2}[-][0-9kK]{1})$|^(\d{1,2}(-\d)?)$/, "Formato de número de documento inválido").
@@ -247,14 +293,30 @@ export const Registro = (props) => {
     lastName:Yup.string().trim().matches(/^(?!\s*$)[A-Za-záéíóúñÁÉÍÓÚÑ]+(?:\s[A-Za-záéíóúñÁÉÍÓÚÑ]+)*$/,'El apellido solo debe contener letras')
     .required('Por favor ingresa un apellido'),
     secondLastName: Yup.string().trim().notRequired().matches(/^(?!\s*$)[A-Za-záéíóúñÁÉÍÓÚÑ]+(?:\s[A-Za-záéíóúñÁÉÍÓÚÑ]+)*$/,'El apellido solo debe contener letras'),
-    birthDate:Yup.date().max(new Date(), 'La fecha no debe pasar a la actual').required('Ingrese una fecha de nacimiento'),
+    birthDate: Yup.date().required('La fecha de nacimiento es requerida').max(new Date(), 'La fecha de nacimiento no puede ser posterior a la fecha actual'),
     email: Yup.string().email('Ingrese un email válido').required('Ingrese un email'),
-    phoneNumber: Yup.string().min(9, 'El número debe contener 9 dígitos').matches(/^[0-9]+$/,'Ingrese un número de teléfono válido').required('Ingrese un número de teléfono'),
+    phoneNumber: Yup.string().min(9, 'El número debe contener al menos 9 dígitos').matches(/^[+0-9]+$/,'Ingrese un número de teléfono válido').required('Ingrese un número de teléfono'),
     address: Yup.string().required('Ingrese una dirección'),
-    region: Yup.string().required('Selecciona una región')
-  });
-  
-  
+    region: Yup.string().required('Seleccione una región'),
+    comuna: Yup.string().required('Seleccione una comuna'),
+    gender: Yup.string().required('Seleccione un género'),
+    country: Yup.string().required('Seleccione un país'),
+    profession: Yup.string().required('Seleccione una profesión'),
+    jdocument: Yup.string().matches(/^(\d{1,2}(\.?\d{3}){2}[-][0-9kK]{1})$|^(\d{1,2}(-\d)?)$/, "Formato de número de documento inválido").
+    test('validar-rut','Rut inválido', (value) =>{
+      return validarRut(value);
+    }).required("Por favor ingresa un número de documento"),
+    jrazonsocial: Yup.string().trim().required('Ingrese razón social'),
+    jfname: Yup.string().trim().matches(/^(?!\s*$)[A-Za-záéíóúñÁÉÍÓÚÑ]+(?:\s[A-Za-záéíóúñÁÉÍÓÚÑ0-9]+)*$/,'Escriba un nombre')
+    .notRequired(),
+    jemail: Yup.string().email('Ingrese un email válido').required('Ingrese un email'),
+    jphone: Yup.string().min(9, 'El número debe contener al menos 9 dígitos').matches(/^[+0-9]+$/,'Ingrese un número de teléfono válido').required('Ingrese un número de teléfono'),
+    jaddress: Yup.string().required('Ingrese una dirección'),
+    jregion: Yup.string().required('Seleccione una región'),
+    jcomuna: Yup.string().required('Seleccione una comuna'),
+    jgiro: Yup.string().required('Ingrese su GIRO'),
+    jnationality: Yup.string().required('Seleccione un país')
+  }); 
 
   return (
     <>
@@ -264,8 +326,8 @@ export const Registro = (props) => {
 
 
     <Formik
-      onSubmit={(dataClient, { resetForm }) => {
-        console.log(dataClient);
+      onSubmit={(response, { resetForm }) => {
+        response();
         console.log("Formulario enviado");
         resetForm();
       }}
@@ -275,29 +337,38 @@ export const Registro = (props) => {
         firstName: "",
         lastName: "",
         secondLastName: "",
-        birthDate: null,
         nationality: "",
         phoneNumber: "",
         email: "",
         address: "",
         region:"",
-        tipo_p:"",
+        comuna:"",
+        gender:"",
+        country: "",
+        profession: "",
+        jdocument:"",
+        jrazonsocial:"",
+        jfname:"",
+        jemail:"",
+        jphone:"",
+        jaddress:"",
+        jregion:"",
+        jcomuna:"",
+        jgiro:"",
+        jnationality:""
     }}
     validationSchema = {validationSchema}
     >
-      {({ errors, touched, handleSubmit: formikHandleSubmit, handleChange, handleBlur, values, setFieldValue}) => (
+      {({ errors, touched, handleSubmit: formikHandleSubmit, handleChange, handleBlur, values, setFieldValue, setValues}) => (
         <Form className="formulario" onSubmit={formikHandleSubmit}>
                       {/* PANEL DE CONTROL */}
-
-
                    <Stack direction="row" className="Panel-User">
                             <div className="user-info-container">
                                  <h1 className="title-user"> {userName ? userName : 'Usuario'}</h1>  
                                  <h1 className="title-newuser">Cliente nuevo</h1>
                             </div>
                               <Stack direction="row">
-                              <Item className="group-user">
-                                    
+                              <Item className="group-user">                                    
                                     <TextField
                                       id="id filled-disabled"
                                       label="ID Cliente" 
@@ -308,9 +379,8 @@ export const Registro = (props) => {
                                       }}
                                       disabled
                                       variant="filled"/> 
-                                    </Item>
-
-                                    <Item className="group-user">
+                              </Item>
+                              <Item className="group-user">
                                         <TextField
                                           id="fechacreacion"
                                           label="Fecha Creacion"
@@ -324,30 +394,7 @@ export const Registro = (props) => {
                                           }}
                                           disabled
                                         />
-                                      </Item>
-                                      
-                                  <Item className="group-user">
-                                  <FormControl className="select-form">
-                                    <InputLabel htmlFor="tipo-persona">Tipo persona </InputLabel>
-                                    <Select
-                                      id="tipo-persona"
-                                      variant="filled"
-                                      value={selectedTipo}
-                                      onChange={GendersFilter}
-                                      onBlur={handleBlur}
-                                      label="Tipo persona"
-                                      required
-                                      error={touched.selectedTipo && !!errors.selectedTipo}
-                                    >
-                                      <MenuItem>Seleccione un tipo de persona</MenuItem>
-                                      <MenuItem value="Natural">Natural</MenuItem>
-                                      <MenuItem value="Juridica">Júridica</MenuItem>
-                                    </Select>
-                                  </FormControl>
-                                  {errors.selectedTipo && touched.selectedTipo && (
-                                    <div className="error">{errors.selectedTipo}</div>
-                                  )}
-                                </Item>
+                              </Item>
                               </Stack>           
                    </Stack>  
 
@@ -394,7 +441,10 @@ export const Registro = (props) => {
                                           variant="filled"
                                           placeholder="11.111.111-1"
                                           value={values.documentNumber}
-                                          onChange={handleChange}
+                                          onChange={(e)=>{
+                                            handleChange(e);
+                                            setClientData({...clientData, documentNumber: e.target.value});
+                                          }}
                                           onBlur={handleBlur}
                                           onKeyPress={(e) => {
                                             const pattern = /^[Kk0-9-.]+$/;
@@ -418,9 +468,9 @@ export const Registro = (props) => {
                                           name="firstName"
                                           value={values.firstName}
                                           required
-                                          onChange={handleChange/*(e) => {setDataClient({ ...dataClient, firstName: e.target.value });
-                                                            updateUserName(e.target.value,dataClient.lastName1,dataClient.secondLastName); 
-                                                  }*/}
+                                          onChange={(e) => {handleChange(e);setClientData({ ...clientData, firstName: e.target.value });
+                                                            updateUserName(e.target.value,clientData.lastName,clientData.secondLastName); 
+                                                  }}
                                           onBlur={handleBlur}
                                           onKeyPress={(e) => {
                                             const pattern = /^[A-Za-záéíóúñÁÉÍÓÚÑ ]+$/;
@@ -442,9 +492,9 @@ export const Registro = (props) => {
                                           required
                                           name="lastName"
                                           value={values.lastName}
-                                          onChange={handleChange/*(e) => {setDataClient((prevData)=>({...prevData , lastName: e.target.value }));
-                                                            updateUserName(dataClient.firstName,e.target.value,dataClient.secondLastName);
-                                                }*/}
+                                          onChange={(e) => {handleChange(e);setClientData((prevData)=>({...prevData , lastName: e.target.value }));
+                                                            updateUserName(clientData.firstName,e.target.value,clientData.secondLastName);
+                                                }}
                                           onBlur={handleBlur}
                                           onKeyPress={(e) => {
                                             const pattern = /^[A-Za-záéíóúñÁÉÍÓÚÑ ]+$/;
@@ -464,9 +514,9 @@ export const Registro = (props) => {
                                           type="text"
                                           variant="filled"
                                           name="secondLastName"
-                                          onChange={handleChange/*(e) => {setDataClient((prevData)=>({ ...prevData, secondLastName: e.target.value }));
-                                                            updateUserName(dataClient.firstName,dataClient.lastName,e.target.value);
-                                        }*/}
+                                          onChange={(e) => {handleChange(e);setClientData((prevData)=>({ ...prevData, secondLastName: e.target.value }));
+                                                            updateUserName(clientData.firstName,clientData.lastName,e.target.value);
+                                        }}
                                           value={values.secondLastName}
                                           onBlur={handleBlur}
                                           onKeyPress={(e) => {
@@ -481,26 +531,30 @@ export const Registro = (props) => {
                                         />
                                       </Item>
                                       <Item className="group-form">
-                                        <LocalizationProvider dateAdapter={AdapterDayjs}>
+                                        <LocalizationProvider dateAdapter={AdapterDayjs} error={touched.birthDate && !!errors.birthDate}>
                                           <DatePicker
                                             className="datepicker"
-                                            dateFormat="dd/MM/yyyy"
                                             name="birthDate"
                                             label="Fecha de Nacimiento"
                                             value={values.birthDate}
-                                            // selected={/*moment(selectedBirthDate).toDate()*/}
-                                            onChange={(value) => setFieldValue('birthDate', value)/*setSelectedBirthDate(date)*/}
-                                            onBlur={handleBlur}                                         
-                                            renderInput={(params)=>(
-                                              <TextField
-                                                {...params}
-                                                error={touched.birthDate && !!errors.birthDate}
-                                                helperText={touched.birthDate && errors.birthDate ? errors.birthDate: 'Ingresa una fecha de nacimiento'}
-                                              />
-                                            )}
-                                            />
-                                        </LocalizationProvider>                                        
-                                      </Item>    
+                                            onChange={(value) => {setFieldValue('birthDate', value); setSelectedBirthDate(value)}}
+                                            format="DD - MM - YYYY"
+                                            onBlur={()=>{
+                                              setIsTouched(true);
+                                              handleBlur}}
+                                            disableFuture
+                                            slotProps={
+                                              {
+                                                textField:{
+                                                  required: true,
+                                                  error: Boolean(errors.birthDate),
+                                                  helperText: errors.birthDate ? errors.birthDate: ''
+                                                }
+                                              }
+                                            }
+                                          />
+                                        </LocalizationProvider>
+                                      </Item>
                                 </Item>
                               </Stack>
 
@@ -516,8 +570,9 @@ export const Registro = (props) => {
                                           type="email"
                                           variant="filled"
                                           name="email"
+                                          required
                                           placeholder="Correo@example.com"
-                                          onChange={handleChange/*(e) => setDataClient({ ...dataClient, email: e.target.value })*/}
+                                          onChange={(e) => {handleChange(e);setClientData({ ...clientData, email: e.target.value })}}
                                           value={values.email}
                                           onBlur={handleBlur}
                                           error={touched.email && !!errors.email}
@@ -532,8 +587,16 @@ export const Registro = (props) => {
                                           type="text"
                                           variant="filled"
                                           name="phoneNumber"
+                                          required
                                           placeholder="911111111"
-                                          onChange={handleChange/*(e) => setDataClient({ ...dataClient, phoneNumber: e.target.value })*/}
+                                          inputProps={{maxLength : 12}}
+                                          onKeyPress={(e) => {
+                                            const pattern = /^[+0-9]+$/;
+                                            if (!pattern.test(e.key)) {
+                                              e.preventDefault();
+                                            }
+                                          }}
+                                          onChange={(e) => {handleChange(e);setClientData({ ...clientData, phoneNumber: e.target.value })}}
                                           onBlur={handleBlur}
                                           value={values.phoneNumber}
                                           error={touched.phoneNumber && !!errors.phoneNumber}
@@ -541,16 +604,15 @@ export const Registro = (props) => {
                                         />
                                       </Item>
 
-                              
-
                                       <Item md="6" className="group-form">
                                         <TextField
                                           label="Dirección "
                                           type="text"
                                           variant="filled"
                                           name="address"
+                                          required
                                           value={values.address}
-                                          onChange={handleChange/*(e) => setDataClient({ ...dataClient, address: e.target.value })*/}
+                                          onChange={(e) => {handleChange(e);setClientData({ ...clientData, address: e.target.value })}}
                                           onBlur={handleBlur}
                                           error={touched.address && !!errors.address}
                                           helperText={touched.address && errors.address}
@@ -558,17 +620,20 @@ export const Registro = (props) => {
                                       </Item>
 
                                       <Item className="group-form">
+                                        <Box mb={touched.region && errors.region ? 2.5 : 0}>
                                         <FormControl variant="filled" className="select-form" error={touched.region && !!errors.region}>
                                           <InputLabel htmlFor="region">Región </InputLabel>
                                           <Select
                                             id="region"
                                             name="region"
-                                            value={values.region/*seRegion*/}
-                                            onChange={(event) => setFieldValue("region", event.target.value)/*RegionChange*/}
+                                            value={values.region}
+                                            onChange={(e) => {
+                                              RegionChange(e);
+                                              const newRegionValue = e.target.value;                                               
+                                              setValues((prevValues) => ({ ...prevValues, region: newRegionValue }))
+                                            }}
                                             onBlur={handleBlur}
                                             label="Región"
-                                            // error={touched.region && !!errors.region }
-                                            // helperText = {touched.region && errors.region }
                                             >
                                               <MenuItem value = "">
                                               Seleccione una región
@@ -582,15 +647,22 @@ export const Registro = (props) => {
                                           </Select>
                                           {touched.region && errors.region && <FormHelperText>{errors.region}</FormHelperText>}
                                         </FormControl>
+                                        </Box>
                                       </Item>
 
                                       <Item className="group-form">
-                                        <FormControl variant="filled" className="select-form">
+                                        <Box mb={touched.comuna && errors.comuna ? 2.5:0}>
+                                        <FormControl variant="filled" className="select-form" error={touched.comuna && !!errors.comuna}>
                                           <InputLabel htmlFor="comuna">Comuna </InputLabel>
                                           <Select
                                             id="comuna"
-                                            value={seComuna}
-                                            onChange={(e) => setSeComuna(e.target.value)}
+                                            name="comuna"
+                                            value={values.comuna}
+                                            onChange={(e) =>{
+                                                const comunaSelect = e.target.value;
+                                                setValues((prevValues)=> ({...prevValues, comuna: comunaSelect}));
+                                                setSeComuna(comunaSelect);
+                                              }}
                                             onBlur={handleBlur}
                                             disabled ={!seRegion}
                                             label="Comuna"
@@ -604,9 +676,10 @@ export const Registro = (props) => {
                                                   </MenuItem>
                                                 ))}
                                           </Select>
+                                          {seRegion && touched.comuna && errors.comuna && <FormHelperText>{errors.comuna}</FormHelperText>}
                                         </FormControl>
+                                        </Box>
                                       </Item>
-
                                 </Item>
                               </Stack>
                               {/* Contenedor 3 */}
@@ -618,12 +691,20 @@ export const Registro = (props) => {
                                 
 
                                       <Item className="group-form">
-                                        <FormControl variant="filled" className="select-form">
+                                        <Box mb={touched.gender && errors.gender ? 2.5:0}>
+                                        <FormControl variant="filled" className="select-form" error={touched.gender && !!errors.gender}>
                                           <InputLabel htmlFor="gender">Género </InputLabel>
                                           <Select
                                             id="gender"
-                                            value={selectedGender}
-                                            onChange={(e) => setSelectedGender(e.target.value)}
+                                            name="gender"
+                                            value={values.gender}
+                                            onChange={(e) => {
+                                              const genderSelected = e.target.value;
+                                              setValues((prevValues)=>({...prevValues, gender: genderSelected}));
+                                              const id_gender = e.target.value;
+                                              const genderObjerc = gender.find(item => item.id_gender === id_gender);
+                                              setSelectedGender(genderObjerc || null);
+                                            }}
                                             onBlur={handleBlur}
                                             label="Género"
                                             disabled= {disableGender}
@@ -632,32 +713,36 @@ export const Registro = (props) => {
                                             <MenuItem value="">Selecciona un género</MenuItem>
                                             {selectedTipo !== 'Natural' && (
                                               gender && gender.slice(0, 1).map((item) => (
-                                                <MenuItem key={item.id_gender} value={item.gender}>
+                                                <MenuItem key={item.id_gender} value={item.id_gender}>
                                                   {item.gender}
                                                 </MenuItem>
                                               ))
                                             )}
                                             {gender && gender.slice(-2).map((item)=>(
-                                              <MenuItem key={item.id_gender} value={item.gender}>
-                                                {item.id_gender + "."} {item.gender}
+                                              <MenuItem key={item.id_gender} value={item.id_gender}>
+                                                {item.gender}
                                               </MenuItem> 
                                             ))}
                                           </Select>
+                                          {touched.gender && errors.gender && <FormHelperText>{errors.gender}</FormHelperText>}
                                         </FormControl>
-                                        {errors.selectedGender && touched.selectedGender && (
-                                          <div className="error">{errors.selectedGender}</div>
-                                        )}
+                                        </Box>
                                       </Item>
 
                                       {/* INFORMACION DE LOCACION */}
                                       <Item className="group-form">
-                                        <FormControl variant="filled" className="select-form">
+                                      <Box mb={touched.country && errors.country ? 2.5:0}>
+                                        <FormControl variant="filled" className="select-form" error={touched.country && !!errors.country}>
                                           <InputLabel htmlFor="nacionalidad">Pais de origen </InputLabel>
                                           <Select
                                             id="nacionalidad"
                                             required
-                                            value={selectedNationality}
-                                            onChange={(e) => setSelectedNationality(e.target.value)}
+                                            name="country"
+                                            value={values.country}
+                                            onChange={(e) => {
+                                              setValues((prevValues)=>({...prevValues, country: e.target.value}));
+                                              setClientData({...clientData, nationality: e.target.value})
+                                            }}
                                             onBlur={handleBlur}
                                             label="Nacionalidad"
                                           >
@@ -668,20 +753,25 @@ export const Registro = (props) => {
                                                   {pais}
                                                 </MenuItem>
                                               ))}                                     
-                                          </Select>
+                                          </Select>                                          
+                                            {touched.country && errors.country && <FormHelperText>{errors.country}</FormHelperText>}                                                                                   
                                         </FormControl>
+                                        </Box>                                       
                                       </Item>
+                                      
 
                                       <Item className="group-form">
-                                        <FormControl variant="filled" className="select-form">
+                                      <Box mb={1}>
+                                        <FormControl variant="filled" className="select-form" error={touched.profession && !!errors.profession}>
                                           <InputLabel htmlFor="profesion">Profesión </InputLabel>
                                           <Select
                                             id="profesion"
-                                            value={selectedProfession ? selectedProfession.id_profession : ''}
+                                            name="profession"
+                                            value={values.profession/*selectedProfession ? selectedProfession.id_profession : ''*/}
                                             onChange={(e) => {
+                                              setValues((prevValues)=>({...prevValues, profession: e.target.value}));                                              
                                               const selectedProfessionId = e.target.value;
                                               const selectedProfessionObject = profession.find(item => item.id_profession === selectedProfessionId);
-
                                               setSelectedProfession(selectedProfessionObject || null);
                                             }}
                                             onBlur={handleBlur}
@@ -697,7 +787,9 @@ export const Registro = (props) => {
                                                 </MenuItem>
                                               ))}
                                           </Select>
+                                            {touched.profession && errors.profession && <FormHelperText>{errors.profession}</FormHelperText>}
                                         </FormControl>
+                                        </Box>
                                       </Item>
 
                                   
@@ -705,7 +797,7 @@ export const Registro = (props) => {
                               </Stack>
 
                           </Stack>  
-                                                          )}  
+                                                          )} 
                         
                         {/* PERSONA JURIDICA */}
 
@@ -731,7 +823,7 @@ export const Registro = (props) => {
                                       >
                                         <MenuItem>Seleccione un tipo de persona</MenuItem>
                                         <MenuItem value="Natural">Natural</MenuItem>
-                                        <MenuItem value="Juridica">Júridica</MenuItem>
+                                        <MenuItem value="Juridica">Jurídica</MenuItem>
                                       </Select>
                                     </FormControl>
                                     {errors.selectedTipo && touched.selectedTipo && (
@@ -741,16 +833,29 @@ export const Registro = (props) => {
 
                                   <Item className="group-form">
                                     <TextField
-                                      id="rut"
+                                      id="jdocument"
                                       className="text-field custom-text-field"
                                       label="RUT"
+                                      required
+                                      name="jdocument"
                                       type="text"
                                       variant="filled"
                                       placeholder="11.111.111-1"
-                                      value={dataClient.documentNumber}
-                                      onChange={(e) => setDataClient({ ...dataClient, documentNumber: e.target.value })}
-                                      error={touched.numberdoc && !!errors.numberdoc}
-                                      helperText={touched.numberdoc && errors.numberdoc}
+                                      value={values.jdocument}
+                                      onChange={(e)=> {
+                                        handleChange(e);
+                                        setClientData({...clientData, documentNumber: e.target.value});  
+                                      }}
+                                      onBlur={handleBlur}
+                                      onKeyPress={(e) => {
+                                        const pattern = /^[Kk0-9-.]+$/;
+                                        if (!pattern.test(e.key)) {
+                                          e.preventDefault();
+                                        }
+                                      }}
+                                      inputProps={{ maxLength: 12 }}                                      
+                                      error={touched.jdocument && !!errors.jdocument}
+                                      helperText={touched.jdocument && errors.jdocument}
                                     />
                                   </Item>
                                                 
@@ -759,13 +864,17 @@ export const Registro = (props) => {
                                       label="Razon Social"
                                       type="text"
                                       variant="filled"
-                                      name="razonsocial"
-                                      value={dataClient.name}
-                                      onChange={(e) => {setDataClient({ ...dataClient, firstName: e.target.value });
-                                                        updateUserName(e.target.value,dataClient.lastName1); 
+                                      required
+                                      name="jrazonsocial"
+                                      value={values.jrazonsocial}
+                                      onChange={(e) => {
+                                        handleChange(e);
+                                        setClientData({ ...clientData, firstName: e.target.value });
+                                        updateUserName(e.target.value,clientData.fantasyName); 
                                               }}
-                                      error={touched.name && !!errors.name}
-                                      helperText={touched.name && errors.name}
+                                      onBlur={handleBlur}
+                                      error={touched.jrazonsocial && !!errors.jrazonsocial}
+                                      helperText={touched.jrazonsocial && errors.jrazonsocial}
                                     />
                                   </Item>
 
@@ -774,13 +883,16 @@ export const Registro = (props) => {
                                       label="Nombre de Fantasía"
                                       type="text"
                                       variant="filled"
-                                      name="name"
-                                      value={dataClient.name}
-                                      onChange={(e) => {setDataClient({ ...dataClient, firstName: e.target.value });
-                                                        updateUserName(e.target.value,dataClient.lastName1); 
-                                              }}
-                                      error={touched.name && !!errors.name}
-                                      helperText={touched.name && errors.name}
+                                      name="jfname"
+                                      value={values.jfname}
+                                      onChange={(e) => {
+                                        handleChange(e);
+                                        setClientData({ ...clientData, fantasyName: e.target.value });
+                                        updateUserName(clientData.firstName, e.target.value)
+                                      }}
+                                      onBlur={handleBlur}
+                                      error={touched.jfname && !!errors.jfname}
+                                      helperText={touched.jfname && errors.jfname}
                                     />
                                   </Item>
 
@@ -796,13 +908,17 @@ export const Registro = (props) => {
                                     <TextField
                                       label="Correo "
                                       type="email"
+                                      required
                                       variant="filled"
-                                      name="email"
+                                      name="jemail"
                                       placeholder="Correo@example.com"
-                                      onChange={(e) => setDataClient({ ...dataClient, email: e.target.value })}
-                                      value={dataClient.email}
-                                      error={touched.email && !!errors.email}
-                                      helperText={touched.email && errors.email}
+                                      value={values.jemail}
+                                      onChange={(e) => {
+                                        handleChange(e);
+                                        setClientData({ ...clientData, email: e.target.value })}}
+                                      onBlur={handleBlur}
+                                      error={touched.jemail && !!errors.jemail}
+                                      helperText={touched.jemail && errors.jemail}
                                     />
                                   </Item>
 
@@ -811,12 +927,23 @@ export const Registro = (props) => {
                                       label="Teléfono "
                                       type="text"
                                       variant="filled"
-                                      name="phone"
+                                      name="jphone"
+                                      required
                                       placeholder="911111111"
-                                      onChange={(e) => setDataClient({ ...dataClient, phoneNumber: e.target.value })}
-                                      value={dataClient.phoneNumber}
-                                      error={touched.phone && !!errors.phone}
-                                      helperText={touched.phone && errors.phone}
+                                      value={values.jphone}
+                                      inputProps={{maxLength : 12}}
+                                          onKeyPress={(e) => {
+                                            const pattern = /^[+0-9]+$/;
+                                            if (!pattern.test(e.key)) {
+                                              e.preventDefault();
+                                            }
+                                          }}
+                                      onChange={(e) => {
+                                        handleChange(e);
+                                        setClientData({ ...clientData, phoneNumber: e.target.value })}}
+                                      onBlur={handleBlur}
+                                      error={touched.jphone && !!errors.jphone}
+                                      helperText={touched.jphone && errors.jphone}
                                     />
                                   </Item>
 
@@ -827,21 +954,31 @@ export const Registro = (props) => {
                                       label="Dirección "
                                       type="text"
                                       variant="filled"
-                                      name="address"
-                                      value={dataClient.address}
-                                      onChange={(e) => setDataClient({ ...dataClient, address: e.target.value })}
-                                      error={touched.address && !!errors.address}
-                                      helperText={touched.address && errors.address}
+                                      required
+                                      name="jaddress"
+                                      value={values.jaddress}
+                                      onChange={(e)=>{
+                                        handleChange(e);
+                                        setClientData({...clientData, address: e.target.value});
+                                      }}
+                                      onBlur={handleBlur}
+                                      error={touched.jaddress && !!errors.jaddress}
+                                      helperText={touched.jaddress && errors.jaddress}
                                     />
                                   </Item>
 
                                   <Item className="group-form">
-                                    <FormControl variant="filled" className="select-form">
+                                    <Box mb={touched.region && errors.region ? 2.5 : 0}>
+                                    <FormControl variant="filled" className="select-form" error={touched.jregion && !!errors.jregion}>
                                       <InputLabel htmlFor="region">Región </InputLabel>
                                       <Select
                                         id="region"
-                                        value={seRegion}
-                                        onChange={RegionChange}
+                                        value={values.jregion}
+                                        name="jregion"
+                                        onChange={(e)=>{
+                                          setValues((prevValues)=>({...prevValues, jregion:e.target.value}));
+                                          RegionChange(e);
+                                        }}
                                         onBlur={handleBlur}
                                         required
                                         label="Región">
@@ -855,16 +992,22 @@ export const Registro = (props) => {
                                               </MenuItem>
                                             ))}
                                       </Select>
+                                      {touched.jregion && errors.jregion && <FormHelperText>{errors.jregion}</FormHelperText>}
                                     </FormControl>
+                                    </Box>
                                   </Item>
 
                                   <Item className="group-form">
-                                    <FormControl variant="filled" className="select-form">
+                                  <Box mb={touched.jcomuna && errors.jcomuna ? 2.5 : 0}>
+                                    <FormControl variant="filled" className="select-form" error={touched.jcomuna && !!errors.jcomuna}>
                                       <InputLabel htmlFor="comuna">Comuna </InputLabel>
                                       <Select
                                         id="comuna"
-                                        value={seComuna}
-                                        onChange={(e) => setSeComuna(e.target.value)}
+                                        name="jcomuna"
+                                        value={values.jcomuna}
+                                        onChange={(e) => {
+                                          setValues((prevValues)=>({...prevValues, jcomuna: e.target.value}))
+                                          setSeComuna(e.target.value)}}
                                         onBlur={handleBlur}
                                         disabled ={!seRegion}
                                         label="Comuna"
@@ -878,7 +1021,9 @@ export const Registro = (props) => {
                                               </MenuItem>
                                             ))}
                                       </Select>
+                                      {touched.jcomuna && errors.jcomuna && <FormHelperText>{errors.jcomuna}</FormHelperText>}
                                     </FormControl>
+                                    </Box>
                                   </Item>
                                   
                      
@@ -895,50 +1040,53 @@ export const Registro = (props) => {
                                     <TextField
                                       label="GIRO"
                                       type="text"
+                                      required
                                       variant="filled"
-                                      name="secondLastName"
-                                      onChange={(e) => {setDataClient((prevData)=>({ ...prevData, secondLastName: e.target.value }));
-                                                        updateUserName(dataClient.firstName,dataClient.lastName,e.target.value);
+                                      name="jgiro"
+                                      value={values.jgiro}
+                                      onChange={(e) => {
+                                        handleChange(e);
+                                        setClientData({...clientData, giro: e.target.value})
                                     }}
-                                      value={dataClient.secondLastName}
+                                      onBlur={handleBlur}
+                                      error={touched.jgiro && !!errors.jgiro}
+                                      helperText={touched.jgiro &&  errors.jgiro}
                                     />
                                   </Item>
 
                                   <Item className="group-form">
-                                    <FormControl variant="filled" className="select-form">
-                                      <InputLabel htmlFor="nacionalidad">Pais de origen </InputLabel>
-                                      <Select
-                                        id="nacionalidad"
-                                        required
-                                        value={selectedNationality}
-                                        onChange={(e) => setSelectedNationality(e.target.value)}
-                                        onBlur={handleBlur}
-                                        label="Nacionalidad"
-                                      >
-                                        <MenuItem value = "">Seleccione un País</MenuItem>
-                                        {Array.isArray(country?.paises) &&
-                                          country.paises.map((pais, index) =>
-                                          (<MenuItem key={index} value={pais}>
-                                              {pais}
-                                            </MenuItem>
-                                          ))}                                     
-                                      </Select>
-                                    </FormControl>
+                                    <Box mb={touched.jnationality && errors.jnationality ? 2.5 : 0}>
+                                      <FormControl variant="filled" className="select-form" error={touched.jnationality && !!errors.jnationality}>
+                                        <InputLabel htmlFor="nacionalidad">País de origen </InputLabel>
+                                        <Select
+                                          id="jnationality"
+                                          required
+                                          name="jnationality"
+                                          value={values.jnationality}
+                                          onChange={(e) => {
+                                            handleChange(e);
+                                            setClientData({...clientData, nationality: e.target.value})}}
+                                          onBlur={handleBlur}
+                                          label="País de origen"
+                                        >
+                                          <MenuItem value = "">Seleccione un País</MenuItem>
+                                          {Array.isArray(country?.paises) &&
+                                            country.paises.map((pais, index) =>
+                                            (<MenuItem key={index} value={pais}>
+                                                {pais}
+                                              </MenuItem>
+                                            ))}                                     
+                                        </Select>
+                                      </FormControl>
+                                    </Box>
                                   </Item>   
-                                
-
                                 </Item>
                               </Stack>
-                          </Stack> 
-
-
-                                                          )}                 
+                          </Stack>
+                        )}                 
         </Form>
       )}
     </Formik>
-
   </>
-
-
   );
 };
