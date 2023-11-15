@@ -22,7 +22,7 @@ import PanelControl from "./Panel-Control";
 import * as Yup from "yup";
 import { Box,FormHelperText } from "@mui/material";
 
-export const Policy = (props) => {
+export const Modifypolicy = (props) => {
   //  APIS
 
   const [objetos, setObjetos] = useState();
@@ -57,22 +57,13 @@ export const Policy = (props) => {
     policyid: null,
     policynumber: null,
     clientname: null,
-    product: null,
-    startpolicy:null,
-    endpolicy: null,
     datepolicy: null,
-    datetipe:null,
-    agents:null,
-    office:null,
-    channelsale:null,
-    status:null,
-    substatus:null,
-    dateemision:null,
-    dateconst:null,
-    paymentmethod:null,
-    Ppagos:null,
     primanual: null,
     primam: null,
+    startpolicy:null,
+    endpolicy: null,
+    datetipe:null,
+    Ppagos:null,
     fechaCreacion: null
   })
 
@@ -85,7 +76,6 @@ export const Policy = (props) => {
         !datapolicy.policyid ||
         !datapolicy.policynumber ||
         !datapolicy.clientname ||
-        !datapolicy.product ||
         !datapolicy.datepolicy ||
         !datapolicy.primanual ||
         !datapolicy.primam ||
@@ -112,7 +102,6 @@ export const Policy = (props) => {
         policyid: datapolicy.policyid,
         policynumber: datapolicy.policynumber,
         clientname: datapolicy.clientname,
-        product:datapolicy.product,
         startpolicy: selectedstartpolicy,
         endpolicy: selectedendpolicy,       
         datepolicy: datapolicy.datepolicy,

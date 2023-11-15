@@ -14,7 +14,6 @@ import MenuItem from "@mui/material/MenuItem";
 import FormControl from "@mui/material/FormControl";
 import InputLabel from "@mui/material/InputLabel";
 import { AdapterDayjs } from '@mui/x-date-pickers/AdapterDayjs';
-import AdapterDateFns from '@mui/lab/AdapterDateFns';
 import { LocalizationProvider } from '@mui/x-date-pickers/LocalizationProvider';
 import { DatePicker } from '@mui/x-date-pickers/DatePicker';
 import Stack from '@mui/material/Stack';
@@ -41,7 +40,7 @@ export const Registro = (props) => {
     id: null,
     documentNumber: null,
     firstName: null,
-    lastName: null,
+    lastName: null, 
     secondLastName: null,
     fantasyName:null,
     birthDate: null,

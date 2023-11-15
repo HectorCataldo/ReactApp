@@ -20,11 +20,19 @@ export const App = () => {
   const [selectedClient, setSelectedClient] = useState();
   const [searchTerm, setSearchTerm] = useState('');
   const [currentPage, setCurrentPage] = useState(1);
-  const [clientsPerPage] = useState(20);
+  const [clientsPerPage,setClientsPerPage] = useState(25);
   const [searchValue, setSearchValue] = useState('');
   const [isModifyOpen, setIsModifyOpen] = useState(false);
 
 
+  useEffect(() => {
+    // Actualizar clientsPerPage basado en la longitud de los datos
+    if (data) {
+      const additionalClients = data.length - clientsPerPage; // Calcula la cantidad de clientes adicionales
+      const newClientsPerPage = clientsPerPage + additionalClients; // Incrementa clientsPerPage
+      setClientsPerPage(newClientsPerPage); // Actualiza clientsPerPage
+    }
+  }, [data]);
   
   const pag = useEffect(() => {
     setCurrentPage(1);
@@ -68,29 +76,77 @@ export const App = () => {
         else { return ( <input type="checkbox" checked={params.row.isSelected} onChange={() => {}}/> ); }},
     },
     { field: 'documentNumber', headerName: 'RUT', width: 200 },
+
+
     { field: 'fullName', headerName: 'Nombre Completo', width: 200, sortable: false,
-      valueGetter: (params) => `${params.row.firstName} ${params.row.lastName}`,
+    valueGetter: (params) => {
+
+      if (params.row.tipo_persona === 'juridico') 
+
+      { return `${params.row.jrazonsocial}  ${params.row.jfaname || ''}`;}
+
+      else 
+
+      { return `${params.row.firstName } ${params.row.lastName || '' }`;}
+    },
       renderCell: (params) => ( <a href={`/modify/${params.row.id}`} style={{ textDecoration: 'none' }}> {params.value} </a>),
     },
+
+
     {
       field: 'birthDate',
       headerName: 'Fecha de nacimiento',
       width: 200,
       valueFormatter: (params) => {
-    
+        
         const date = new Date(params.value);
-        const day = date.getDate();
-        const month = date.getMonth() + 1; 
-        const year = date.getFullYear();
-  
-        const formattedDate = `${day.toString().padStart(2, '0')}/${month.toString().padStart(2, '0')}/${year}`;
-        return formattedDate;
+        if(params.value){
+          const day = date.getDate();
+          const month = date.getMonth() + 1; 
+          const year = date.getFullYear();
+    
+          const formattedDate = `${day.toString().padStart(2, '0')}/${month.toString().padStart(2, '0')}/${year}`;
+          return formattedDate;
+        }
+        else
+        {
+          return '';
+        }
+        
       },
 
     },
-    { field: 'fechaCreacion', headerName: 'Fecha de Creación', width: 200 },
+    { field: 'fechaCreacion', headerName: 'Fecha de Creación', width: 200 
+      ,    valueFormatter: (params) => {
+        
+        const date = new Date(params.value);
+        if(params.value){
+        const day = date.getDate();
+        const month = date.getMonth() + 1; 
+        const year = date.getFullYear();
+
+        const formattedDate = `${day.toString().padStart(2, '0')}/${month.toString().padStart(2, '0')}/${year}`;
+        return formattedDate;
+        }
+        else{
+          return '';
+        }
+      },
+    },
     { field: 'tipo_persona', headerName: 'Tipo Persona', width: 200 },
-    { field: 'state', headerName: 'Estado', width: 200 ,valueFormatter:(params)=>{return params.value? 'Activo':'Inactivo';}, },
+    {
+      field: 'state',
+      headerName: 'Estado',
+      width: 200,
+      valueFormatter: (params) => {
+        const stateValue = params.value;
+        if (stateValue) {
+          return stateValue ? 'Activo' : 'Inactivo';
+        } else {
+          return ''; // Devuelve una cadena vacía si el valor es NaN o nulo
+        }
+      },
+    },
   ];
 
     const handleSearchChange = (event) => {

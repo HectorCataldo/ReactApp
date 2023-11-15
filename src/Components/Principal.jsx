@@ -13,6 +13,9 @@ export const Principal = () => {
         <Link to="/ApClients">
             <button>Clientes</button>
         </Link>
+        <Link to="/Login">
+        <button>iniciar sesion</button>
+        </Link>
     </div>
     </>
   );
