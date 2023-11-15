@@ -35,19 +35,8 @@ export const Registro = (props) => {
   const [selectedcreateDate] = useState(moment(new Date()));
   const [selectedGender, setSelectedGender] = useState("");
   const [selectedTipo, setSelectedTipo] = useState("Natural");
-  const [selectedNationality, setSelectedNationality] = useState("");
   const [selectedProfession, setSelectedProfession] = useState("");
   const [Currentdate, setCurrentDate]= useState(moment(new Date()));
-  const [dataClient, setDataClient] = useState({
-    id: "",
-    documentNumber: "",
-    firstName: "",
-    lastName: "",
-    secondLastName: "",
-    phoneNumber: "",
-    email: "",
-    address: "",
-  });
   const [clientData, setClientData] = useState({
     id: null,
     documentNumber: null,
@@ -151,13 +140,7 @@ export const Registro = (props) => {
         !clientData.email ||
         !clientData.address ||
         !professionData ||
-        !selectedTipo,
-        console.log(clientData),
-        console.log(objetos),
-        console.log(selectedcreateDate),
-        console.log(selectedGender),
-        console.log(professionData)
-
+        !selectedTipo
       ) {
         Swal.fire({
           icon: "error",
@@ -189,8 +172,7 @@ export const Registro = (props) => {
         profession: professionData,
         state: true,
         tipo_persona: selectedTipo,
-        fechaCreacion: selectedcreateDate,
-        
+        fechaCreacion: selectedcreateDate,        
       });
 
       console.log("Respuesta de la API:", response.data);
@@ -267,18 +249,7 @@ export const Registro = (props) => {
 
     return dv === dvCalculado;
   }
-
-  const handleRutChange = (e, handleChange) => {
-    const rawRut = e.target.value.replace(/[.-]/g, '');
-    let formattedRut = '';
-    if (rawRut.length > 1) {
-      formattedRut += rawRut.substring(0, rawRut.length - 1).match(/.{1,3}/g).join('.');
-      const lastDigits = rawRut.substring(rawRut.length - 1);
-      formattedRut += `-${lastDigits}`;
-    } else {
-      formattedRut = rawRut;
-    }
-  };
+    
   //Validaciones con YUP formatos:
   const validationSchema = Yup.object().shape({
     documentNumber: Yup.string().matches(/^(\d{1,2}(\.?\d{3}){2}[-][0-9kK]{1})$|^(\d{1,2}(-\d)?)$/, "Formato de número de documento inválido").
@@ -398,7 +369,6 @@ export const Registro = (props) => {
 
                        {/* PERSONA NATURAL */}
                        {selectedTipo === "Natural" && (
-
                           <Stack direction="row" spacing={30} className="Containers-stacks2">
 
                               {/* Contenedor 1 */}
@@ -760,7 +730,7 @@ export const Registro = (props) => {
                                           <Select
                                             id="profesion"
                                             name="profession"
-                                            value={values.profession/*selectedProfession ? selectedProfession.id_profession : ''*/}
+                                            value={values.profession}
                                             onChange={(e) => {
                                               setValues((prevValues)=>({...prevValues, profession: e.target.value}));                                              
                                               const selectedProfessionId = e.target.value;
@@ -783,14 +753,12 @@ export const Registro = (props) => {
                                             {touched.profession && errors.profession && <FormHelperText>{errors.profession}</FormHelperText>}
                                         </FormControl>
                                         </Box>
-                                      </Item>
-
-                                  
+                                      </Item>                                  
                                 </Item>
                               </Stack>
 
                           </Stack>  
-                                                          )} 
+                        )} 
                         
                         {/* PERSONA JURIDICA */}
 

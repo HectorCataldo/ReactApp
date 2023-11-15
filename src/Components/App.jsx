@@ -17,7 +17,7 @@ import Modify from './Modify_register';
 export const App = () => {
   const { data } = useFetch("http://localhost:8080/api/clients");
 
-  const [selectedClient, setSelectedClient] = useState(null);
+  const [selectedClient, setSelectedClient] = useState();
   const [searchTerm, setSearchTerm] = useState('');
   const [currentPage, setCurrentPage] = useState(1);
   const [clientsPerPage] = useState(20);
@@ -149,7 +149,7 @@ export const App = () => {
               console.log("Usuario seleccionado:", params.row);
              }}  
           />
-          {isModifyOpen && selectedClient && <Modify selectedClient={selectedClient} />}
+          {isModifyOpen && <Modify selectedClient={selectedClient}/>}
         </Box>
       </div>
     </>
