@@ -22,30 +22,11 @@ const AppRouter = () => {
           <Route path="/modify/:id" element={<Modify/>} />
           <Route path='/policylist' element={<Policylist/>}/>
           <Route path='/Policy' element={<Policy/>}/>
+          <Route path='/Login' element={<Login/>}></Route>
         </Routes>
       </Router>
     </React.StrictMode>
   );
 };
 
-<<<<<<< Updated upstream
 createRoot(document.getElementById('root')).render(<AppRouter />);
-=======
-
-createRoot(document.getElementById('root')).render(
-  <React.StrictMode>
-    <Router>
-      <Routes>               
-        <Route path="/" element={<Principal />} />
-        <Route path="/ApClients" element={<App />} />
-        <Route path="/registro" element={<Registro />} />
-        <Route path="/modify/:id" element={<Modify />} />
-        <Route path='/policylist' element={<Policylist/>}/>
-        <Route path='/Policy' element={<Policy/>}/>
-        <Route path="/Modifypolicy/:id" element={<Modifypolicy/>}/>
-        <Route path='/Login' element={<Login/>}/>
-      </Routes>
-    </Router>
-  </React.StrictMode>
-);
->>>>>>> Stashed changes
