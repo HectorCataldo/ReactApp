@@ -4,7 +4,7 @@ import { BrowserRouter as Router, Routes, Route } from 'react-router-dom';
 import { Principal } from '../src/Components/Principal';
 import { App } from './Components/App';
 import { Registro } from './Components/Create_register';
-import { Modify } from './Components/Modify_register'; // Asegúrate de importar correctamente el componente Modify
+import { Modify } from './Components/Modify_register';
 import { Policylist } from './Components/Policy_list';
 import { Policy } from './Components/Create_policy';
 import { Modifypolicy } from './Components/Modify_policy';
@@ -23,6 +23,7 @@ const AppRouter = () => {
           <Route path='/policylist' element={<Policylist/>}/>
           <Route path='/Policy' element={<Policy/>}/>
           <Route path='/Login' element={<Login/>}></Route>
+          <Route path='/modifypolicy/:id' element={<Modifypolicy/>}></Route>
         </Routes>
       </Router>
     </React.StrictMode>

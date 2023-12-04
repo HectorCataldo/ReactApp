@@ -15,7 +15,7 @@ import SearchIcon from '@mui/icons-material/Search';
 import Modify from './Modify_register';
 
 export const App = () => {
-  const { data } = useFetch("http://localhost:8080/api/clients");
+  const { data:client } = useFetch("https://si-client-bkn.kps/api/v1/client/");
 
   const [selectedClient, setSelectedClient] = useState();
   const [searchTerm, setSearchTerm] = useState('');
@@ -27,12 +27,12 @@ export const App = () => {
 
   useEffect(() => {
     // Actualizar clientsPerPage basado en la longitud de los datos
-    if (data) {
-      const additionalClients = data.length - clientsPerPage; // Calcula la cantidad de clientes adicionales
+    if (client) {
+      const additionalClients = client.length - clientsPerPage; // Calcula la cantidad de clientes adicionales
       const newClientsPerPage = clientsPerPage + additionalClients; // Incrementa clientsPerPage
       setClientsPerPage(newClientsPerPage); // Actualiza clientsPerPage
     }
-  }, [data]);
+  }, [client]);
   
   const pag = useEffect(() => {
     setCurrentPage(1);
@@ -44,110 +44,68 @@ export const App = () => {
 
   const isRowEmpty = (row) => {
     return (
-      !row.documentNumber &&
-      !row.firstName &&
-      !row.lastName &&
-      !row.birthDate &&
-      !row.state
+      !row.manId &&
+      !row.sname &&
+      !row.gname &&
+      !row.egn
     );
   };
 
-  if (!data) {
-    return <div>Cargando...</div>;
-  }
+    if (!client) {
+      return <div>Cargando...</div>;
+    }
 
-    const filteredData = data.filter((item) => {
-    const searchText = searchTerm.toLowerCase();
-    return (
-      (item.documentNumber && item.documentNumber.toLowerCase().includes(searchText)) ||
-      (item.firstName && item.firstName.toLowerCase().includes(searchText)) ||
-      (item.lastName && item.lastName.toLowerCase().includes(searchText))
-    );
+    const filteredData = client.data.filter((item) => {
+      const searchText = searchTerm.toLowerCase();
+      return (
+        (String(item.manId) && String(item.manId).toLowerCase().includes(searchText)) ||
+        (item.name && item.name.toLowerCase().includes(searchText)) 
+        // (item.lastName && item.lastName.toLowerCase().includes(searchText))
+      );
     });
 
     const selectedV = 'prueba de datos'
     const indexOfLastClient = currentPage * clientsPerPage;
     const indexOfFirstClient = indexOfLastClient - clientsPerPage;
-    const currentClients = filteredData.slice(indexOfFirstClient, indexOfLastClient);
+    const currentClients = filteredData.map(
+      (item) =>{
+        if(!item){
+          return console.log("NO EXISTEN ITEMS PARA DEPLOYAR");
+        }
+        return{
+          ...item,
+          id: item.manId,      
+          manId: item.manId,
+          manComp: item.manComp,
+          egn: item.egn,
+          name: item.name,
+          gname: item.gname,
+          sname: item.sname,
+          fname: item.fname,
+          sexo: item.sexo
+        }
+      },
+      // console.log(item)
+      )
+      .filter(Boolean)
+      // .slice(indexOfFirstClient, indexOfLastClient);
+    console.log("filteredData: "+filteredData);
+
+    console.log("Current_clients: "+currentClients);
   
-    const columns = [
-    { width: 20, sortable: false, renderCell: (params) => {
-        if   (isRowEmpty(params.row)) { return null; } 
-        else { return ( <input type="checkbox" checked={params.row.isSelected} onChange={() => {}}/> ); }},
-    },
-    { field: 'documentNumber', headerName: 'RUT', width: 200 },
-
-
-    { field: 'fullName', headerName: 'Nombre Completo', width: 200, sortable: false,
-    valueGetter: (params) => {
-
-      if (params.row.tipo_persona === 'juridico') 
-
-      { return `${params.row.jrazonsocial}  ${params.row.jfaname || ''}`;}
-
-      else 
-
-      { return `${params.row.firstName } ${params.row.lastName || '' }`;}
-    },
-      renderCell: (params) => ( <a href={`/modify/${params.row.id}`} style={{ textDecoration: 'none' }}> {params.value} </a>),
-    },
-
-
-    {
-      field: 'birthDate',
-      headerName: 'Fecha de nacimiento',
-      width: 200,
-      valueFormatter: (params) => {
-        
-        const date = new Date(params.value);
-        if(params.value){
-          const day = date.getDate();
-          const month = date.getMonth() + 1; 
-          const year = date.getFullYear();
-    
-          const formattedDate = `${day.toString().padStart(2, '0')}/${month.toString().padStart(2, '0')}/${year}`;
-          return formattedDate;
-        }
-        else
-        {
-          return '';
-        }
-        
+    const columns = 
+    [
+      { field: 'manId', headerName: 'ID', width: 200 },
+      { field: 'manComp', headerName: 'Tipo de Persona', width: 200 },
+      { field: 'egn', headerName: 'Número de Documento', width: 200 },
+      { field: 'name', headerName: 'Nombre Completo', width: 200, sortable: false,
+        renderCell:(params) => ( <a href={`/modify/${params.row.id}`} style={{ textDecoration: 'none' }}> {params.value} </a>),
       },
-
-    },
-    { field: 'fechaCreacion', headerName: 'Fecha de Creación', width: 200 
-      ,    valueFormatter: (params) => {
-        
-        const date = new Date(params.value);
-        if(params.value){
-        const day = date.getDate();
-        const month = date.getMonth() + 1; 
-        const year = date.getFullYear();
-
-        const formattedDate = `${day.toString().padStart(2, '0')}/${month.toString().padStart(2, '0')}/${year}`;
-        return formattedDate;
-        }
-        else{
-          return '';
-        }
-      },
-    },
-    { field: 'tipo_persona', headerName: 'Tipo Persona', width: 200 },
-    {
-      field: 'state',
-      headerName: 'Estado',
-      width: 200,
-      valueFormatter: (params) => {
-        const stateValue = params.value;
-        if (stateValue) {
-          return stateValue ? 'Activo' : 'Inactivo';
-        } else {
-          return ''; // Devuelve una cadena vacía si el valor es NaN o nulo
-        }
-      },
-    },
-  ];
+      { field: 'gname', headerName: 'Nombre', width: 200 },
+      { field: 'sname', headerName: 'Apellido', width: 200 },
+      { field: 'fname', headerName: 'Family Name', width: 200 },
+      { field: 'sexo', headerName: 'Sexo', width: 200 }
+    ];
 
     const handleSearchChange = (event) => {
       setSearchValue(event.target.value);
@@ -155,20 +113,7 @@ export const App = () => {
 
      const handleSearch = () => {
       setSearchTerm(searchValue);
-    };
-
-  let uniqueIdCounter = 0;
-
-  while (currentClients.length < clientsPerPage) {
-    currentClients.push({
-      id: `fake-${uniqueIdCounter++}`,
-      documentNumber: '',
-      firstName: '',
-      lastName: '',
-      birthDate: '',
-      state: '',
-    });
-  }
+    };  
 
   return (
     <>
@@ -199,7 +144,7 @@ export const App = () => {
             className='dataGrid'
             initialState={{ pagination: { paginationModel: { page: 0, pageSize: 15 }, }}}
             rows={currentClients}
-            columns={columns}  
+            columns={columns}
             onRowClick={(params) => {
               setSelectedClient(params.row); 
               console.log("Usuario seleccionado:", params.row);

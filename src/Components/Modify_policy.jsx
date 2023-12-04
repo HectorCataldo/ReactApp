@@ -1,5 +1,4 @@
 import React, { useState, useEffect, useMemo } from "react";
-import moment from "moment";
 import axios from "axios";
 import Form from 'react-bootstrap/Form';
 import Swal from "sweetalert2";
@@ -21,74 +20,96 @@ import '../CSS/policy-style.scss';
 import PanelControl from "./Panel-Control";
 import * as Yup from "yup";
 import { Box,FormHelperText } from "@mui/material";
+import { useParams } from "react-router-dom";
+import dayjs from "dayjs";
+import utc from 'dayjs/plugin/utc';
+import timezone from 'dayjs/plugin/timezone';
+dayjs.extend(utc);
+dayjs.extend(timezone);
 
 export const Modifypolicy = (props) => {
   //  APIS
+  const {id} = useParams();
+  const {data:policy} = useFetch(`https://si-client-bkn.kps/api/v1/policy/${id}`)
+  
+  // 
+  const [loading, setLoading] = useState(true);
+  const [editar, setEditar] = useState(false);
 
-  const [objetos, setObjetos] = useState();
-  const [selectedcreateDate] = useState(moment(new Date()));
-/// selected 
-
-    const [selectedstartpolicy, setSelectedstartpolicy] = useState(new Date());
-    const [selectedendpolicy, setSelectedendpolicy]     = useState(new Date());
-    const [selectedDatetipe, setSelectedDatetipe] = useState("");
-    const [selectedPpagos, setSelectedPpagos] = useState("");
-    const [selectedpaymentmethod,setPaymentmethod] = useState("");
-    const [selectedchannelsale,setSelectedChannelsale]= useState("");
-
-  //TEXT FIELD DE poliza
-  const [policydata, setpolicydata] = useState({
-    policyid: "",
-    policynumber: "",
-    clientname: "",
-    datetipe:"",
-    paymentmethod:"",
-    datepolicy: "",
-    primanual: "",
-    primam:"",
-    fechaCreacion:"",
-    agents:"",
-    office:"",
-    channelsale:"",
-
-
-  });
+  //TEXT FIELD DE poliza  
   const [datapolicy, setdatapolicy] = useState({
     policyid: null,
     policynumber: null,
     clientname: null,
-    datepolicy: null,
-    primanual: null,
-    primam: null,
-    startpolicy:null,
-    endpolicy: null,
-    datetipe:null,
-    Ppagos:null,
-    fechaCreacion: null
+    product: null,
+    insrBegin: null,
+    insrEnd: null,
+    insrDuration: null,
+    durDimension: null,
+    agent:null,
+    office:null,
+    salesChannel: null,
+    state:null,
+    subestado:null,
+    dateGiven:null,
+    paymentWay: null,
+    num_instalments: null,
+    payment_anual: null,
+    payment_mensual:null
   })
 
-  const [isTouched, setIsTouched] = useState(false);
+  //UseEffect que nos ayuda a desplegar lógica cuando allá datos en la API.
+  useEffect(()=>{
+    if(policy){
+      const filterPolicy = policy.data;
+      setdatapolicy({
+        ...datapolicy,
+        policyid: filterPolicy.policyId,
+        policynumber: filterPolicy.policyNo,
+        clientname: filterPolicy.client.people.name,
+        product: filterPolicy.insrType.name,
+        insrBegin: filterPolicy.insrBegin,
+        insrEnd: filterPolicy.insrEnd,
+        insrDuration: filterPolicy.insrDuration,
+        durDimension: filterPolicy.durDimension,
+        agent:filterPolicy.agent.people.name,
+        office:filterPolicy.office.people.name,
+        salesChannel: '',
+        state: filterPolicy.policyState.name,
+        subestado:'',
+        dateGiven:filterPolicy.dateGiven,
+        paymentWay: '',
+        num_instalments: '',
+        payment_anual: '',
+        payment_mensual:''
+      }),
+      setLoading(false);
+    }
+  },[policy])
+  console.log(datapolicy)
 
-
+   
   const handleSubmit = async () => {
     try {
       if (
         !datapolicy.policyid ||
         !datapolicy.policynumber ||
         !datapolicy.clientname ||
-        !datapolicy.datepolicy ||
-        !datapolicy.primanual ||
-        !datapolicy.primam ||
-        !datapolicy.fechaCreacion||
-        !selectedstartpolicy||
-        !selectedendpolicy||
-        !selectedDatetipe||
-        !selectedpaymentmethod||
-        !selectedPpagos||
-        console.log(datapolicy),
-        console.log(objetos)
-
-
+        !datapolicy.product ||
+        !datapolicy.insrBegin ||
+        !datapolicy.insrEnd ||
+        !datapolicy.insrDuration||
+        !datapolicy.durDimension ||
+        !datapolicy.agent ||
+        !datapolicy.office ||
+        !datapolicy.salesChannel ||
+        !datapolicy.state ||
+        !datapolicy.subestado ||
+        !datapolicy.dateGiven ||
+        !datapolicy.paymentWay ||
+        !datapolicy.num_instalments ||
+        !datapolicy.payment_anual ||
+        !datapolicy.payment_mensual
       ) {
         Swal.fire({
           icon: "error",
@@ -98,21 +119,8 @@ export const Modifypolicy = (props) => {
         return;
       }
 
-      const response = await axios.post("http://localhost:8080/api/clients", {
-        policyid: datapolicy.policyid,
-        policynumber: datapolicy.policynumber,
-        clientname: datapolicy.clientname,
-        startpolicy: selectedstartpolicy,
-        endpolicy: selectedendpolicy,       
-        datepolicy: datapolicy.datepolicy,
-        datetipe: selectedDatetipe,
-        primaanual: datapolicy.primanual,
-        paymentmethod: selectedpaymentmethod,
-        Ppagos: selectedPpagos,
-        primam: datapolicy.primam,
-        fechaCreacion: selectedcreateDate,
-        
-      });
+      // const response = await axios.post(, {
+      // });
 
       console.log("Respuesta de la API:", response.data);
       Swal.fire({
@@ -128,83 +136,74 @@ export const Modifypolicy = (props) => {
       console.error("Error Al enviar la solicitud POST", error);
     }
   };
-
-
-  useEffect(() => {
-    const interval = setInterval(() => {
-      setCurrentDate(new Date());
-    }, 1000);
-
-    return () => {
-      clearInterval(interval);
-    };
-  }, []);
+  const handleEdit = ()=>{
+    if(editar){
+      setEditar(false);
+    }
+    else{
+      setEditar(true);
+    }
+    console.log(clientData)
+  }
+  const[er,setEr] = useState(false);
 
 
 
   //Validaciones con YUP formatos:
+  // if (editar) {    
+  // }
   const validationSchema = Yup.object().shape({
-
     policyid: Yup.string().min(2, 'El número debe contener al menos 12 dígitos').matches(/^[+0-9]+$/,'Ingrese un id de póliza válido').required('Ingrese un id de póliza'),
     policynumber: Yup.string().matches(/^(POL-)?[+0-9]+$/, 'Ingrese un número de póliza válido').min(8, 'El número debe contener al menos 12 caracteres').required('Ingrese un número de póliza'),
-    clientname:Yup.string().trim().matches(/^(?!\s*$)[A-Za-záéíóúñÁÉÍÓÚÑ]+(?:\s[A-Za-záéíóúñÁÉÍÓÚÑ]+)*$/,'El nombre solo debe contener letras').required('Por favor ingresa un nombre'),
-    startpolicy: Yup.date().required('La fecha de inicio de vigencia es requerida').max(new Date(), 'La fecha de inicio de vigencia no puede ser posterior a la fecha actual'),
-    endpolicy: Yup.date().required('La fecha de termino de vigencia es requerida').max(new Date(), 'La fecha de termino de vigencia no puede ser posterior a la fecha actual'),
-    datepolicy: Yup.string().min(1, 'El número debe contener al menos 1 dígito').matches(/^[+0-9]+$/,'Ingrese un número').required('Ingrese un número de duracion de póliza'),
-    datetipe: Yup.string().required('Seleccione un sistema de tiempo'),
-    paymentmethod:Yup.string().trim().matches(/^(?!\s*$)[A-Za-záéíóúñÁÉÍÓÚÑ]+(?:\s[A-Za-záéíóúñÁÉÍÓÚÑ]+)*$/,'El metodo de pago solo debe contener letras').required('Por favor ingresa un metodo de pago'),
-    primanual: Yup.string().min(6, 'El número debe contener al menos 6 dígitos').matches(/^[+0-9]+$/,'Ingrese un número de teléfono válido').required('Ingrese un valor de prima anual'), 
-    primam:Yup.string().min(5, 'El número debe contener al menos 5 dígitos').matches(/^[+0-9]+$/,'Ingrese un valor valido').required('Ingrese un valor de prima mensual'),
-    agents:Yup.string().trim().matches(/^(?!\s*$)[A-Za-záéíóúñÁÉÍÓÚÑ]+(?:\s[A-Za-záéíóúñÁÉÍÓÚÑ]+)*$/,'El nombre solo debe contener letras').required('Por favor ingresa un nombre'),
-    office:Yup.string().trim().matches(/^(?!\s*$)[A-Za-záéíóúñÁÉÍÓÚÑ]+(?:\s[A-Za-záéíóúñÁÉÍÓÚÑ]+)*$/,'El nombre solo debe contener letras').required('Por favor ingresa un nombre de la oficina'),
-    product:Yup.string().trim().matches(/^(?!\s*$)[A-Za-záéíóúñÁÉÍÓÚÑ]+(?:\s[A-Za-záéíóúñÁÉÍÓÚÑ]+)*$/,'El producto solo debe contener letras').required('Por favor ingresa un producto'),
-    status:Yup.string().trim().matches(/^(?!\s*$)[A-Za-záéíóúñÁÉÍÓÚÑ]+(?:\s[A-Za-záéíóúñÁÉÍÓÚÑ]+)*$/,'El Estado solo debe contener letras').required('Por favor ingresa un estado'),
-    substatus:Yup.string().trim().matches(/^(?!\s*$)[A-Za-záéíóúñÁÉÍÓÚÑ]+(?:\s[A-Za-záéíóúñÁÉÍÓÚÑ]+)*$/,'El subestado solo debe contener letras').required('Por favor ingresa un subestado'),
-    dateemision: Yup.date().required('La fecha de emision es requerida').max(new Date(), 'La fecha de emision no puede ser posterior a la fecha actual'),
-    dateconst: Yup.date().required('La fecha de contratacion es requerida').max(new Date(), 'La fecha de contratacion no puede ser posterior a la fecha actual'),
-    channelsale:Yup.string().trim().matches(/^(?!\s*$)[A-Za-záéíóúñÁÉÍÓÚÑ]+(?:\s[A-Za-záéíóúñÁÉÍÓÚÑ]+)*$/,'El subestado solo debe contener letras').required('Por favor ingresa un canal de vent'),
-
-  }); 
+    clientname:Yup.string().trim().matches(/^(?!\s*$)[A-Za-záéíóúñÁÉÍÓÚÑ 0-9]+(?:\s[A-Za-záéíóúñÁÉÍÓÚÑ]+)*$/,'El formato es incorrecto').required('Por favor ingresa un nombre'),
+    insrBegin: Yup.date().required('La fecha de inicio de vigencia es requerida').min(new Date(), 'La fecha de inicio de vigencia no puede ser anterior a la fecha actual'),
+    insrEnd: Yup.date().required('La fecha de termino de vigencia es requerida').min(new Date(), 'La fecha de termino de vigencia no puede ser anterior a la fecha actual'),
+    insrDuration: Yup.string().min(1, 'El número debe contener al menos 1 dígito').matches(/^[+0-9]+$/,'Solo se admiten números').required('Ingrese un número de duracion de póliza'),
+    durDimension: Yup.string().required('Seleccione un sistema de tiempo'),
+    paymentWay:Yup.string().required('Seleccione un método de pago'),
+    num_instalments: Yup.string().required('Seleccione perioricidad de pagos'),
+    payment_anual: Yup.string().min(6, 'El número debe contener al menos 6 dígitos').matches(/^[+0-9]+$/,'Ingrese un número de teléfono válido').required('Ingrese un valor de prima anual'), 
+    payment_mensual:Yup.string().min(5, 'El número debe contener al menos 5 dígitos').matches(/^[+0-9]+$/,'Ingrese un valor valido').required('Ingrese un valor de prima mensual'),
+    agent:Yup.string().trim().matches(/^(?!\s*$)[A-Za-záéíóúñÁÉÍÓÚÑ -()+0-9]+(?:\s[A-Za-záéíóúñÁÉÍÓÚÑ]+)*$/,'Formato de agente incorrecto').required('Por favor ingresa un agente'),
+    office:Yup.string().trim().matches(/^(?!\s*$)[A-Za-záéíóúñÁÉÍÓÚÑ -()+0-9]+(?:\s[A-Za-záéíóúñÁÉÍÓÚÑ]+)*$/,'Formato de la oficina es incorrecto').required('Por favor ingresa una oficina'),
+    product:Yup.string().trim().matches(/^(?!\s*$)[A-Za-záéíóúñÁÉÍÓÚÑ -]*$/,'Formato de producto incorrecto').required('Por favor ingresa un producto'),
+    state:Yup.string().trim().matches(/^(?!\s*$)[A-Za-záéíóúñÁÉÍÓÚÑ]+(?:\s[A-Za-záéíóúñÁÉÍÓÚÑ]+)*$/,'Formato de estado incorrecto').required('Por favor ingresa un estado'),
+    subestado:Yup.string().trim().matches(/^(?!\s*$)[A-Za-záéíóúñÁÉÍÓÚÑ]+(?:\s[A-Za-záéíóúñÁÉÍÓÚÑ]+)*$/,'Formato de subestado incorrecto').required('Por favor ingresa un subestado'),
+    dateGiven: Yup.date().required('La fecha de emision es requerida').min(new Date(), 'La fecha de emision no puede ser anterior a la fecha actual'),
+    salesChannel:Yup.string().required('Por favor ingresa un canal de venta'),
+  });
 
   return (
     <>
     <TextLinkExample />
     <Sidebar />
-    <PanelControl handleSubmit={handleSubmit} objetos={objetos} />
-
-
+    <PanelControl handleSubmit={handleSubmit} handleEdit={handleEdit} />
     <Formik
+      enableReinitialize={true}
       onSubmit={(response, { resetForm }) => {
         response();
         console.log("Formulario enviado");
         resetForm();
       }}
       initialValues={{
-        id: "",
-        documentNumber: "",
-        primaanual:"",
-        firstName: "",
-        lastName: "",
-        secondLastName: "",
-        nationality: "",
-        phoneNumber: "",
-        email: "",
-        address: "",
-        region:"",
-        comuna:"",
-        gender:"",
-        country: "",
-        profession: "",
-        jdocument:"",
-        jrazonsocial:"",
-        jfname:"",
-        jemail:"",
-        jphone:"",
-        jaddress:"",
-        jregion:"",
-        jcomuna:"",
-        jgiro:"",
-        jnationality:""
+        policyid: loading? 'Cargando...' : datapolicy.policyid,
+        policynumber: loading? 'Cargando...' : datapolicy.policynumber,
+        clientname: loading? 'Cargando...' : datapolicy.clientname,
+        product: loading? 'Cargando...' : datapolicy.product,
+        insrBegin: loading? 'Cargando...' : datapolicy.insrBegin,
+        insrEnd: loading? 'Cargando...' : datapolicy.insrEnd,
+        insrDuration: loading? 'Cargando...' : datapolicy.insrDuration,
+        durDimension: loading? 'Cargando...' : datapolicy.durDimension,
+        agent: loading? 'Cargando...' : datapolicy.agent,
+        office: loading? 'Cargando...' : datapolicy.office,
+        salesChannel: loading? 'Cargando...' : '',
+        state: loading? 'Cargando...' : datapolicy.state,
+        subestado: loading? 'Cargando...' : '',
+        dateGiven: loading? 'Cargando...' : datapolicy.dateGiven,
+        paymentWay: loading? 'Cargando...' : '',
+        num_instalments: loading? 'Cargando...' : '',
+        payment_anual: loading? 'Cargando...' : '',
+        payment_mensual: loading? 'Cargando...' : ''
     }}
     validationSchema = {validationSchema}
     >
@@ -219,16 +218,15 @@ export const Modifypolicy = (props) => {
                               <Item className="group-user">
                                         <TextField
                                           id="fechacreacion"
-                                          label="Fecha Creacion"
+                                          label="Fecha Emisión"
                                           type="text"
                                           variant="filled"
-                                          fullWidth
+                                          fullWidth                                          
                                           handleBlur={handleBlur}
-                                          value={moment(selectedcreateDate).format("DD/MM/YYYY")}
+                                          value={dayjs(values.dateGiven).utc().format("DD/MM/YYYY")}
                                           InputProps={{
                                             readOnly: true,
                                           }}
-                                          disabled
                                         />
                                       </Item>
                               </Stack>
@@ -249,24 +247,27 @@ export const Modifypolicy = (props) => {
                                           label="Id de Póliza"
                                           name="policyid"
                                           type="text"
-                                          variant="filled"
+                                          variant="filled"                                          
                                           placeholder="100000000181"
                                           value={values.policyid}
                                           onChange={(e)=>{
                                             handleChange(e);
                                             setdatapolicy({...datapolicy, policyid: e.target.value});
                                           }}
-                                          onBlur={handleBlur}
-                                          onKeyPress={(e) => {
-                                            const pattern = /^[0-9-.]+$/;
-                                            if (!pattern.test(e.key)) {
-                                              e.preventDefault();
-                                            }
+                                          InputProps={{
+                                            readOnly:true,
                                           }}
+                                          onBlur={handleBlur}
+                                          // onKeyPress={(e) => {
+                                          //   const pattern = /^[0-9-.]+$/;
+                                          //   if (!pattern.test(e.key)) {
+                                          //     e.preventDefault();
+                                          //   }
+                                          // }}
                                           required
-                                          inputProps={{ maxLength: 12 }}
-                                          error={touched.policyid && !!errors.policyid}
-                                          helperText={touched.policyid && errors.policyid}
+                                          // inputProps={{ maxLength: 12 }}
+                                          // error={touched.policyid && !!errors.policyid}
+                                          // helperText={touched.policyid && errors.policyid}
                                         />
                                       </Item>
              
@@ -275,6 +276,9 @@ export const Modifypolicy = (props) => {
                                           id="policynumber"
                                           label="N° de Póliza"
                                           type="text"
+                                          InputProps={{
+                                            readOnly:true,
+                                          }}
                                           variant="filled"
                                           name="policynumber"
                                           placeholder="POL-0001"
@@ -284,11 +288,9 @@ export const Modifypolicy = (props) => {
                                             handleChange(e);
                                             setdatapolicy({...datapolicy, policynumber: e.target.value});
                                           }}
-
                                           onBlur={handleBlur}
-                                       
-                                          error={touched.policynumber && !!errors.policynumber}
-                                          helperText={touched.policynumber && errors.policynumber}
+                                          // error={touched.policynumber && !!errors.policynumber}
+                                          // helperText={touched.policynumber && errors.policynumber}
                                         />
                                       </Item>
 
@@ -300,6 +302,10 @@ export const Modifypolicy = (props) => {
                                           type="text"
                                           variant="filled"
                                           required
+                                          // disabled={!editar}
+                                          InputProps={{
+                                            readOnly: !editar,
+                                          }}
                                           name="clientname"
                                           value={values.clientname}
                                           onChange={(e)=>{
@@ -308,13 +314,13 @@ export const Modifypolicy = (props) => {
                                           }}
                                           onBlur={handleBlur}
                                           onKeyPress={(e) => {
-                                            const pattern = /^[A-Za-záéíóúñÁÉÍÓÚÑ ]+$/;
+                                            const pattern = /^[A-Za-záéíóúñÁÉÍÓÚÑ +0-9 ()]+$/;
                                             if (!pattern.test(e.key)) {
                                               e.preventDefault();
                                             }
                                           }}
-                                          error={touched.clientname && !!errors.clientname}
-                                          helperText={touched.clientname && errors.clientname}
+                                          error={editar && touched.clientname && !!errors.clientname}
+                                          helperText={editar && touched.clientname && errors.clientname}
                                         />
                                       </Item>
 
@@ -325,10 +331,16 @@ export const Modifypolicy = (props) => {
                                           type="text"
                                           variant="filled"
                                           name="product"
+                                          InputProps={{
+                                            readOnly: !editar,
+                                          }}
                                           placeholder="Salud"
                                           required
                                           value={values.product}
-                                          onChange={(e) => {handleChange(e);setdatapolicy({ ...datapolicy, product: e.target.value })}}
+                                          onChange={(e) => {
+                                            handleChange(e);
+                                            setdatapolicy({ ...datapolicy, product: e.target.value })
+                                          }}
                                           onKeyPress={(e) => {
                                             const pattern = /^[A-Za-záéíóúñÁÉÍÓÚÑ ]+$/;
                                             if (!pattern.test(e.key)) {
@@ -336,105 +348,128 @@ export const Modifypolicy = (props) => {
                                             }
                                           }}
                                           onBlur={handleBlur}
-                                          error={touched.product && !!errors.product}
-                                          helperText={touched.product && errors.product}
+                                          error={editar && touched.product && !!errors.product}
+                                          helperText={editar && touched.product && errors.product}
                                         />
                                       </Item>
 
                                       <Item className="group-form">
-                                        <LocalizationProvider dateAdapter={AdapterDayjs} error={touched.startpolicy && !!errors.startpolicy}>
+                                        <Box mb={editar && errors.insrBegin ? 2.5:0}>                                        
+                                        <LocalizationProvider dateAdapter={AdapterDayjs} error={editar && touched.insrBegin && !!errors.insrBegin}>
                                           <DatePicker
+                                            readOnly={!editar}
                                             className="datepicker"
-                                            name="startpolicy"
+                                            name="insrBegin"
                                             label="Inicio de vigencia"
-                                            value={values.startpolicy}
-                                            onChange={(value) => {setFieldValue('startpolicy', value); setSelectedBirthDate(value)}}
+                                            value={dayjs(values.insrBegin).utc()}
+                                            onChange={(value) => {
+                                              setFieldValue('insrBegin', value); 
+                                              setdatapolicy({...datapolicy, insrBegin: dayjs(value).format("YYYY-MM-DD")})
+                                            }}
                                             format="DD - MM - YYYY"
-                                            onBlur={()=>{
-                                              setIsTouched(true);
-                                              handleBlur}}
-                                            disableFuture
+                                            onBlur={handleBlur}
+                                            disablePast
                                             slotProps={
                                               {
                                                 textField:{
                                                   required: true,
-                                                  error: Boolean(errors.startpolicy),
-                                                  helperText: errors.startpolicy ? errors.startpolicy: ''
+                                                  variant:'filled',
+                                                  error: editar && Boolean(errors.insrBegin),
+                                                  helperText: editar && errors.insrBegin ? errors.insrBegin: ''
                                                 }
                                               }
                                             }
                                           />
                                         </LocalizationProvider>
+                                        </Box>
                                       </Item>
 
                                       <Item className="group-form">
-                                        <LocalizationProvider dateAdapter={AdapterDayjs} error={touched.endpolicy && !!errors.endpolicy}>
-                                          <DatePicker
-                                            className="datepicker"
-                                            name="endpolicy"
-                                            label="Termino de vigencia"
-                                            value={values.endpolicy}
-                                            onChange={(value) => {setFieldValue('endpolicy', value); setSelectedBirthDate(value)}}
-                                            format="DD - MM - YYYY"
-                                            onBlur={()=>{
-                                              setIsTouched(true);
-                                              handleBlur}}
-                                            disableFuture
-                                            slotProps={
-                                              {
-                                                textField:{
-                                                  required: true,
-                                                  error: Boolean(errors.endpolicy),
-                                                  helperText: errors.endpolicy ? errors.endpolicy: ''
+                                          <Box mb={editar && errors.insrEnd ? 2.5:0}>
+                                            <LocalizationProvider dateAdapter={AdapterDayjs} error={editar && touched.insrEnd && !!errors.insrEnd}>
+                                              <DatePicker
+                                                readOnly = {!editar}
+                                                className="datepicker"
+                                                name="insrEnd"
+                                                label="Termino de vigencia"
+                                                value={dayjs(values.insrEnd).utc()}
+                                                onChange={(value) => {
+                                                  setFieldValue('insrEnd', value);
+                                                  setdatapolicy({...datapolicy, insrEnd: dayjs(value).format("YYYY-MM-DD")})
+                                                }}
+                                                format="DD - MM - YYYY"
+                                                onBlur={()=>{
+                                                  setIsTouched(true);
+                                                  handleBlur}}
+                                                disablePast
+                                                slotProps={
+                                                  {
+                                                    textField:{
+                                                      variant:'filled',
+                                                      required: true,
+                                                      error: editar && Boolean(errors.insrEnd),
+                                                      helperText: editar && errors.insrEnd ? errors.insrEnd: ''
+                                                    }
+                                                  }
                                                 }
-                                              }
-                                            }
-                                          />
-                                        </LocalizationProvider>
+                                              />
+                                            </LocalizationProvider>
+                                          </Box>
                                       </Item>
                                       <Item direction="row" className="group-form">
                                         <TextField
-                                          id="datepolicy"
-                                          label="Duracion de poliza"
+                                          id="duracion"
+                                          label="Duración"
                                           type="text"
                                           variant="filled"
-                                          name="datepolicy"
+                                          name="insrDuration"
                                           placeholder="123"
+                                          InputProps={{
+                                            readOnly: !editar ,
+                                          }}
                                           inputProps={{maxLength : 3}}
                                           onKeyPress={(e) => {
-                                            const pattern = /^[+1-9]+$/;
+                                            const pattern = /^[1-9]+$/;
                                             if (!pattern.test(e.key)) {
                                               e.preventDefault();
                                             }
                                           }}
-                                          onChange={(e) => {handleChange(e);setdatapolicy({ ...datapolicy, datepolicy: e.target.value })}}
+                                          onChange={(e) => {
+                                            handleChange(e);
+                                            setdatapolicy({ ...datapolicy, insrDuration: e.target.value })
+                                          }}
                                           onBlur={handleBlur}
-                                          value={values.datepolicy}
-                                          error={touched.datepolicy && !!errors.datepolicy}
-                                          helperText={touched.datepolicy && errors.datepolicy}
+                                          value={values.insrDuration}
+                                          error={ editar && touched.insrDuration && !!errors.insrDuration}
+                                          helperText={ editar && touched.insrDuration && errors.insrDuration}
                                           />
 
 
-                                        <FormControl className="select-form">
-                                        <InputLabel htmlFor="datetipe"> </InputLabel>
+                                        <FormControl className="select-form" error={ editar && touched.durDimension && !!errors.durDimension}>
+                                        <InputLabel htmlFor="durDimension"></InputLabel>
                                         <Select
-                                          id="datetipe"
+                                          id="duracion"
                                           variant="filled"
-                                          value={values.datetipe}
-                                          onChange={selectedDatetipe}
+                                          name="durDimension"
+                                          value={values.durDimension}
+                                          onChange={(e) =>{
+                                            setValues((prevValues)=>({...prevValues, durDimension: e.target.value}));
+                                            setdatapolicy({...datapolicy, durDimension: e.target.value});
+                                          }}
+                                          inputProps={{
+                                            readOnly: !editar,
+                                          }}
                                           onBlur={handleBlur}
-                                          label=""
-                                          error={touched.datetipe && !!errors.datetipe}
+                                          label="Tipo de duración"
+                                          error={editar && touched.durDimension && !!errors.durDimension}
                                           required>
                                           
-                                          <MenuItem value="dia">Día</MenuItem>
-                                          <MenuItem value="mes">Mes</MenuItem>
-                                          <MenuItem value="anio">Año</MenuItem>
+                                          <MenuItem value="d">Días</MenuItem>
+                                          <MenuItem value="m">Mes</MenuItem>
+                                          <MenuItem value="a">Año</MenuItem>
                                         </Select>
+                                        {editar && touched.durDimension && errors.durDimension && <FormHelperText>{errors.durDimension}</FormHelperText>}
                                       </FormControl>
-                                      {errors.datetipe && touched.datetipe && (
-                                        <div className="error">{errors.datetipe}</div>
-                                      )}
                                       </Item>
                                 </Item>
                               </Stack>
@@ -448,27 +483,30 @@ export const Modifypolicy = (props) => {
 
                                   <Item className="group-form">
                                         <TextField
-                                          id="agents"
+                                          id="agent"
                                           label="Agente"
                                           placeholder="Rodrigo Briones"
                                           type="text"
                                           variant="filled"
                                           required
-                                          name="agents"
-                                          value={values.agents}
+                                          name="agent"
+                                          InputProps={{
+                                            readOnly:!editar,
+                                          }}
+                                          value={values.agent}
                                           onChange={(e)=>{
                                             handleChange(e);
-                                            setdatapolicy({...datapolicy, agents: e.target.value});
+                                            setdatapolicy({...datapolicy, agent: e.target.value});
                                           }}
                                           onBlur={handleBlur}
                                           onKeyPress={(e) => {
-                                            const pattern = /^[A-Za-záéíóúñÁÉÍÓÚÑ ]+$/;
+                                            const pattern = /^[A-Za-záéíóúñÁÉÍÓÚÑ -()+0-9]+$/;
                                             if (!pattern.test(e.key)) {
                                               e.preventDefault();
                                             }
                                           }}
-                                          error={touched.agents && !!errors.agents}
-                                          helperText={touched.agents && errors.agents}
+                                          error={editar && touched.agent && !!errors.agent}
+                                          helperText={editar && touched.agent && errors.agent}
                                         />
                                       </Item>
 
@@ -479,62 +517,78 @@ export const Modifypolicy = (props) => {
                                           label="Oficina"
                                           type="text"
                                           variant="filled"
+                                          InputProps={{
+                                            readOnly:!editar,
+                                          }}
                                           name="office"
                                           required
-                                          placeholder="Casa Matriz"
-                                          inputProps={{maxLength : 12}}
-                                          // onKeyPress={(e) => {
-                                          //   const pattern = /^[A-Za-záéíóúñÁÉÍÓÚÑ ]+$/;
-                                          //   if (!pattern.test(e.key)) {
-                                          //     e.preventDefault();
-                                          //   }
-                                          // }}
-                                          onChange={(e) => {handleChange(e);setdatapolicy({ ...datapolicy, office: e.target.value })}}
-                                          onBlur={handleBlur}
+                                          placeholder="Casa Matriz"                                          
+                                          onKeyPress={(e) => {
+                                            const pattern = /^[A-Za-záéíóúñÁÉÍÓÚÑ +0-9 () -]+$/;
+                                            if (!pattern.test(e.key)) {
+                                              e.preventDefault();
+                                            }
+                                          }}
                                           value={values.office}
-                                          error={touched.office && !!errors.office}
-                                          helperText={touched.office && errors.office}
+                                          onChange={(e) => {
+                                            handleChange(e);
+                                            setdatapolicy({ ...datapolicy, office: e.target.value })
+                                          }}
+                                          onBlur={handleBlur}
+                                          error={editar && touched.office && !!errors.office}
+                                          helperText={editar && touched.office && errors.office}
                                         />
                                       </Item>
 
                                      
                                
                                       <Item className="group-form">
-                                      <FormControl className="select-form">
-                                        <InputLabel htmlFor="channelsale">Canal de venta </InputLabel>
+                                      <Box mb={editar && touched.salesChannel && errors.salesChannel ? 2.5 :0}>
+                                      <FormControl className="select-form" error= {editar && touched.salesChannel && !!errors.salesChannel}>
+                                        <InputLabel htmlFor="salesChannel">Canal de venta </InputLabel>
                                         <Select
-                                          id="channelsale"
+                                          id="salesChannel"
                                           variant="filled"
-                                          value={values.channelsale}
-                                          onChange={selectedchannelsale}
+                                          name="salesChannel"
+                                          value={values.salesChannel}
+                                          inputProps={{
+                                            readOnly:!editar,
+                                          }}
+                                          onChange={(e)=>{
+                                            setValues((prevValues)=>({...prevValues, salesChannel: e.target.value}));
+                                            setdatapolicy({...datapolicy, salesChannel: e.target.value})
+                                          }}
                                           onBlur={handleBlur}
                                           label="Canal de venta"
-                                          error={touched.channelsale && !!errors.channelsale}
                                           required
                                         >
                                           <MenuItem value="Presencial">Presencial</MenuItem>
                                           <MenuItem value="Telefonico">Telefonico</MenuItem>
                                           <MenuItem value="Correo electronico">Correo Electronico</MenuItem>
                                         </Select>
+                                        {editar && touched.salesChannel && errors.salesChannel &&<FormHelperText>{errors.salesChannel}</FormHelperText>}
                                       </FormControl>
-                                      {errors.channelsale && touched.channelsale && (
-                                        <div className="error">{errors.channelsale}</div>
-                                      )}
-
+                                      </Box>
                                     </Item>
 
                           
                                       <Item md="6" className="group-form">
                                         <TextField
                                           label="Estado"
-                                          id="status"
+                                          id="state"
                                           type="text"
                                           variant="filled"
-                                          name="status"
+                                          name="state"
                                           placeholder="Activo"
+                                          InputProps={{
+                                            readOnly:!editar,
+                                          }}
                                           required
-                                          value={values.status}
-                                          onChange={(e) => {handleChange(e);setdatapolicy({ ...datapolicy, status: e.target.value })}}
+                                          value={values.state}
+                                          onChange={(e) => {
+                                            handleChange(e);
+                                            setdatapolicy({ ...datapolicy, state: e.target.value })
+                                          }}
                                           onKeyPress={(e) => {
                                             const pattern = /^[A-Za-záéíóúñÁÉÍÓÚÑ ]+$/;
                                             if (!pattern.test(e.key)) {
@@ -542,22 +596,28 @@ export const Modifypolicy = (props) => {
                                             }
                                           }}
                                           onBlur={handleBlur}
-                                          error={touched.status && !!errors.status}
-                                          helperText={touched.status && errors.status}
+                                          error={editar && touched.state && !!errors.state}
+                                          helperText={editar && touched.state && errors.state}
                                         />
                                       </Item>
 
                                       <Item md="6" className="group-form">
                                         <TextField
                                           label="Sub Estado"
-                                          id="substatus"
+                                          id="subestado"
                                           type="text"
                                           variant="filled"
-                                          name="substatus"
+                                          name="subestado"
                                           placeholder="Pendiente"
+                                          InputProps={{
+                                            readOnly:!editar,
+                                          }}
                                           required
-                                          value={values.substatus}
-                                          onChange={(e) => {handleChange(e);setdatapolicy({ ...datapolicy, substatus: e.target.value })}}
+                                          value={values.subestado}
+                                          onChange={(e) => {
+                                            handleChange(e);
+                                            setdatapolicy({ ...datapolicy, subestado: e.target.value })
+                                          }}
                                           onBlur={handleBlur}
                                           onKeyPress={(e) => {
                                             const pattern = /^[A-Za-záéíóúñÁÉÍÓÚÑ ]+$/;
@@ -565,62 +625,43 @@ export const Modifypolicy = (props) => {
                                               e.preventDefault();
                                             }
                                           }}
-                                          error={touched.substatus && !!errors.substatus}
-                                          helperText={touched.substatus && errors.substatus}
+                                          error={editar && touched.subestado && !!errors.subestado}
+                                          helperText={editar && touched.subestado && errors.subestado}
                                         />
                                       </Item>
                                       <Item className="group-form">
-                                        <LocalizationProvider dateAdapter={AdapterDayjs} error={touched.dateemision && !!errors.dateemision}>
-                                          <DatePicker
-                                            className="datepicker"
-                                            name="dateemision"
-                                            label="Fecha de emision"
-                                            value={values.dateemision}
-                                            onChange={(value) => {setFieldValue('dateemision', value); setSelectedBirthDate(value)}}
-                                            format="DD - MM - YYYY"
-                                            onBlur={()=>{
-                                              setIsTouched(true);
-                                              handleBlur}}
-                                            disableFuture
-                                            slotProps={
-                                              {
-                                                textField:{
-                                                  required: true,
-                                                  error: Boolean(errors.dateemision),
-                                                  helperText: errors.dateemision ? errors.dateemision: ''
+                                        <Box mb={editar && errors.dateGiven ? 2.5:0} error={editar && er && errors.dateGiven}>
+                                          <LocalizationProvider dateAdapter={AdapterDayjs} >
+                                            <DatePicker
+                                              readOnly={!editar}
+                                              className="datepicker"
+                                              name="dateGiven"
+                                              label="Fecha de emision"
+                                              value={dayjs(values.dateGiven).utc()}
+                                              onChange={(value) => {
+                                                setFieldValue('dateGiven', value); 
+                                                setdatapolicy({...datapolicy, dateGiven: dayjs(value).format("YYYY-MM-DD")});                                                
+                                              }}
+                                              format="DD - MM - YYYY"
+                                              onBlur={()=>{
+                                                handleBlur;
+                                                setEr(true);
+                                              }}
+                                              disablePast
+                                              slotProps={
+                                                {
+                                                  textField:{
+                                                    variant:'filled',
+                                                    required: true,
+                                                    error: editar && er && Boolean(errors.dateGiven),
+                                                    helperText: editar && er  && errors.dateGiven//? errors.dateGiven: ''
+                                                  }
                                                 }
                                               }
-                                            }
-                                          />
-                                        </LocalizationProvider>
-                                      </Item>
-
-                                      <Item className="group-form">
-                                        <LocalizationProvider dateAdapter={AdapterDayjs} error={touched.dateconst && !!errors.dateconst}>
-                                          <DatePicker
-                                            className="datepicker"
-                                            name="dateconst"
-                                            label="Fecha de Contratación"
-                                            
-                                            value={values.dateconst}
-                                            onChange={(value) => {setFieldValue('dateconst', value); setSelectedBirthDate(value)}}
-                                            format="DD - MM - YYYY"
-                                            onBlur={()=>{
-                                              setIsTouched(true);
-                                              handleBlur}}
-                                            disableFuture
-                                            slotProps={
-                                              {
-                                                textField:{
-                                                  required: true,
-                                                  error: Boolean(errors.dateconst),
-                                                  helperText: errors.dateconst ? errors.dateconst: ''
-                                                }
-                                              }
-                                            }
-                                          />
-                                        </LocalizationProvider>
-                                      </Item>
+                                            />
+                                          </LocalizationProvider>
+                                        </Box>
+                                      </Item>                                      
                                 </Item>
                               </Stack>
                               
@@ -632,58 +673,78 @@ export const Modifypolicy = (props) => {
 
 
                                    <Item className="group-form">
-                                      <FormControl className="select-form">
-                                        <InputLabel htmlFor="paymentmethod">Metodo de Pago </InputLabel>
+                                    <Box mb={editar && touched.paymentWay && errors.paymentWay ? 2.5:0}>
+                                      <FormControl className="select-form" error={editar && touched.paymentWay && !!errors.paymentWay}>
+                                        <InputLabel htmlFor="paymentWay">Metodo de Pago </InputLabel>
                                         <Select
-                                          id="paymentmethod"
+                                          id="paymentWay"
                                           variant="filled"
-                                          value={values.paymentmethod}
-                                          onChange={selectedpaymentmethod}
+                                          name="paymentWay"
+                                          value={values.paymentWay}
+                                          onChange={(e)=>{
+                                            setValues((prevValues)=>({...prevValues, paymentWay: e.target.value}));
+                                            setdatapolicy({...datapolicy, paymentWay: e.target.value});
+                                          }}
+                                          inputProps={{
+                                            readOnly:!editar,
+                                          }}
                                           onBlur={handleBlur}
                                           label="Metodo de pago "
-                                          error={touched.paymentmethod && !!errors.paymentmethod}
                                           required
                                         >
                                           <MenuItem value="PAC">PAC</MenuItem>
                                           <MenuItem value="PAT">PAT</MenuItem>
                                         </Select>
+                                        {editar && touched.paymentWay && errors.paymentWay && <FormHelperText>{errors.paymentWay}</FormHelperText>}
                                       </FormControl>
-                                      {errors.paymentmethod && touched.paymentmethod && (
-                                        <div className="error">{errors.paymentmethod}</div>
-                                      )}
+                                      </Box>                                      
                                     </Item>
 
                                       <Item className="group-form">
-                                        
-                                        <FormControl variant="filled" className="select-form" error={touched.Ppagos && !!errors.Ppagos}>
-                                          <InputLabel htmlFor="Ppagos">Periocidad de Pagos </InputLabel>
+                                        <Box mb={editar && touched.num_instalments && errors.num_instalments ? 2.5:0}>
+                                        <FormControl variant="filled" className="select-form" error={editar && touched.num_instalments && !!errors.num_instalments}>
+                                          <InputLabel htmlFor="num_instalments">Periodicidad de Pagos</InputLabel>
                                           <Select
-                                            id="Ppagos"
-                                            name="Ppagos"
-                                            value={values.Ppagos}
-                                            onChange={selectedPpagos}
+                                            labelId="demo-simple-select-label"
+                                            label="Periodicidad de Pagos"
+                                            id="num_instalments"
+                                            name="num_instalments"
+                                            value={values.num_instalments}
+                                            onChange={(e)=>{
+                                              setValues((prevValues)=> ({...prevValues, num_instalments: e.target.value}));
+                                              setdatapolicy({...datapolicy, num_instalments: e.target.value});
+                                            }}
+                                            inputProps={{
+                                              readOnly:!editar,
+                                            }}
                                             onBlur={handleBlur}
-                                            label="Ppagos" >
+                                            >
                                               <MenuItem value = "Anual">   Anual </MenuItem>
                                               <MenuItem value = "Mensual"> Mensual </MenuItem>
                                               
                                           </Select>
-                                          {touched.region && errors.Ppagos && <FormHelperText>{errors.Ppagos}</FormHelperText>}
+                                          {editar && touched.num_instalments && errors.num_instalments && <FormHelperText>{errors.num_instalments}</FormHelperText>}
                                         </FormControl>
-                                       
+                                        </Box>
                                       </Item>
 
                                       <Item md="6" className="group-form">
                                         <TextField
                                           label="Prima Anual"
-                                          id="primanual"
+                                          id="payment_anual"
                                           type="text"
                                           variant="filled"
-                                          name="primanual"
+                                          name="payment_anual"
                                           placeholder="$60.000"
                                           required
-                                          value={values.primanual}
-                                          onChange={(e) => {handleChange(e);setdatapolicy({ ...datapolicy, primanual: e.target.value })}}
+                                          value={values.payment_anual}
+                                          InputProps={{
+                                            readOnly:!editar,
+                                          }}
+                                          onChange={(e) => {
+                                            handleChange(e);
+                                            setdatapolicy({ ...datapolicy, payment_anual: e.target.value })
+                                          }}
                                           onBlur={handleBlur}
                                           onKeyPress={(e) => {
                                             const pattern = /^[0-9.]+$/;
@@ -691,22 +752,28 @@ export const Modifypolicy = (props) => {
                                               e.preventDefault();
                                             }
                                           }}
-                                          error={touched.primanual && !!errors.primanual}
-                                          helperText={touched.primanual && errors.primanual}
+                                          error={editar && touched.payment_anual && !!errors.payment_anual}
+                                          helperText={editar && touched.payment_anual && errors.payment_anual}
                                         />
                                       </Item>
 
                                       <Item md="6" className="group-form">
                                         <TextField
                                           label="Prima Mensual"
-                                          id="primam"
+                                          id="payment_mensual"
                                           type="text"
                                           variant="filled"
-                                          name="primam"
+                                          name="payment_mensual"
                                           placeholder="$60.000"
+                                          InputProps={{
+                                            readOnly:!editar,
+                                          }}
                                           required
-                                          value={values.primam}
-                                          onChange={(e) => {handleChange(e);setdatapolicy({ ...datapolicy, primam: e.target.value })}}
+                                          value={values.payment_mensual}
+                                          onChange={(e) => {
+                                            handleChange(e);
+                                            setdatapolicy({ ...datapolicy, payment_mensual: e.target.value })
+                                          }}
                                           onBlur={handleBlur}
                                           onKeyPress={(e) => {
                                             const pattern = /^[0-9.]+$/;
@@ -714,18 +781,13 @@ export const Modifypolicy = (props) => {
                                               e.preventDefault();
                                             }
                                           }}
-                                          error={touched.primam && !!errors.primam}
-                                          helperText={touched.primam && errors.primam}
+                                          error={editar && touched.payment_mensual && !!errors.payment_mensual}
+                                          helperText={editar && touched.payment_mensual && errors.payment_mensual}
                                         />
                                       </Item>
-
-                           
                                 </Item>
                               </Stack>
-                          </Stack>  
-                                                          
-                        
-             
+                          </Stack>
         </Form>
       )}
     </Formik>

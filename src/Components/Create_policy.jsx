@@ -3,7 +3,6 @@ import moment from "moment";
 import axios from "axios";
 import Form from 'react-bootstrap/Form';
 import Swal from "sweetalert2";
-import { useFetch } from "../assets/useFetch";
 import TextLinkExample from "./Navbar";
 import Sidebar from "./sidebar";
 import { Formik } from "formik";
@@ -21,84 +20,43 @@ import '../CSS/policy-style.scss';
 import PanelControl from "./Panel-Control";
 import * as Yup from "yup";
 import { Box,FormHelperText } from "@mui/material";
+import dayjs from "dayjs";
+import utc from 'dayjs/plugin/utc';
+import timezone from 'dayjs/plugin/timezone';
+dayjs.extend(utc);
+dayjs.extend(timezone);
 
 export const Policy = (props) => {
-  //  APIS
+/// selected     
+    const[er,setEr] = useState(false);
 
-  const [objetos, setObjetos] = useState();
-  const [selectedcreateDate] = useState(moment(new Date()));
-/// selected 
-
-    const [selectedstartpolicy, setSelectedstartpolicy] = useState(new Date());
-    const [selectedendpolicy, setSelectedendpolicy]     = useState(new Date());
-    const [selectedDatetipe, setSelectedDatetipe] = useState("");
-    const [selectedPpagos, setSelectedPpagos] = useState("");
-    const [selectedpaymentmethod,setPaymentmethod] = useState("");
-    const [selectedchannelsale,setSelectedChannelsale]= useState("");
-
-  //TEXT FIELD DE poliza
-  const [policydata, setpolicydata] = useState({
-    policyid: "",
-    policynumber: "",
-    clientname: "",
-    datetipe:"",
-    paymentmethod:"",
-    datepolicy: "",
-    primanual: "",
-    primam:"",
-    fechaCreacion:"",
-    agents:"",
-    office:"",
-    channelsale:"",
-
-
-  });
+  //TEXT FIELD DE poliza  
   const [datapolicy, setdatapolicy] = useState({
     policyid: null,
     policynumber: null,
     clientname: null,
     product: null,
-    startpolicy:null,
-    endpolicy: null,
-    datepolicy: null,
-    datetipe:null,
-    agents:null,
+    insrBegin: null,
+    insrEnd: null,
+    insrDuration: null,
+    durDimension: null,
+    agent:null,
     office:null,
-    channelsale:null,
-    status:null,
-    substatus:null,
-    dateemision:null,
-    dateconst:null,
-    paymentmethod:null,
-    Ppagos:null,
-    primanual: null,
-    primam: null,
-    fechaCreacion: null
-  })
-
-  const [isTouched, setIsTouched] = useState(false);
+    salesChannel: null,
+    state:null,
+    subestado:null,
+    dateGiven:null,
+    paymentWay: null,
+    num_instalments: null,
+    payment_anual: null,
+    payment_mensual:null
+  });
 
 
   const handleSubmit = async () => {
     try {
       if (
-        !datapolicy.policyid ||
-        !datapolicy.policynumber ||
-        !datapolicy.clientname ||
-        !datapolicy.product ||
-        !datapolicy.datepolicy ||
-        !datapolicy.primanual ||
-        !datapolicy.primam ||
-        !datapolicy.fechaCreacion||
-        !selectedstartpolicy||
-        !selectedendpolicy||
-        !selectedDatetipe||
-        !selectedpaymentmethod||
-        !selectedPpagos||
-        console.log(datapolicy),
-        console.log(objetos)
-
-
+        !datapolicy
       ) {
         Swal.fire({
           icon: "error",
@@ -108,22 +66,8 @@ export const Policy = (props) => {
         return;
       }
 
-      const response = await axios.post("http://localhost:8080/api/clients", {
-        policyid: datapolicy.policyid,
-        policynumber: datapolicy.policynumber,
-        clientname: datapolicy.clientname,
-        product:datapolicy.product,
-        startpolicy: selectedstartpolicy,
-        endpolicy: selectedendpolicy,       
-        datepolicy: datapolicy.datepolicy,
-        datetipe: selectedDatetipe,
-        primaanual: datapolicy.primanual,
-        paymentmethod: selectedpaymentmethod,
-        Ppagos: selectedPpagos,
-        primam: datapolicy.primam,
-        fechaCreacion: selectedcreateDate,
-        
-      });
+      // const response = await axios.post(, {        
+      // });
 
       console.log("Respuesta de la API:", response.data);
       Swal.fire({
@@ -140,48 +84,33 @@ export const Policy = (props) => {
     }
   };
 
-
-  useEffect(() => {
-    const interval = setInterval(() => {
-      setCurrentDate(new Date());
-    }, 1000);
-
-    return () => {
-      clearInterval(interval);
-    };
-  }, []);
-
-
-
   //Validaciones con YUP formatos:
   const validationSchema = Yup.object().shape({
-
     policyid: Yup.string().min(2, 'El número debe contener al menos 12 dígitos').matches(/^[+0-9]+$/,'Ingrese un id de póliza válido').required('Ingrese un id de póliza'),
     policynumber: Yup.string().matches(/^(POL-)?[+0-9]+$/, 'Ingrese un número de póliza válido').min(8, 'El número debe contener al menos 12 caracteres').required('Ingrese un número de póliza'),
-    clientname:Yup.string().trim().matches(/^(?!\s*$)[A-Za-záéíóúñÁÉÍÓÚÑ]+(?:\s[A-Za-záéíóúñÁÉÍÓÚÑ]+)*$/,'El nombre solo debe contener letras').required('Por favor ingresa un nombre'),
-    startpolicy: Yup.date().required('La fecha de inicio de vigencia es requerida').max(new Date(), 'La fecha de inicio de vigencia no puede ser posterior a la fecha actual'),
-    endpolicy: Yup.date().required('La fecha de termino de vigencia es requerida').max(new Date(), 'La fecha de termino de vigencia no puede ser posterior a la fecha actual'),
-    datepolicy: Yup.string().min(1, 'El número debe contener al menos 1 dígito').matches(/^[+0-9]+$/,'Ingrese un número').required('Ingrese un número de duracion de póliza'),
-    datetipe: Yup.string().required('Seleccione un sistema de tiempo'),
-    paymentmethod:Yup.string().trim().matches(/^(?!\s*$)[A-Za-záéíóúñÁÉÍÓÚÑ]+(?:\s[A-Za-záéíóúñÁÉÍÓÚÑ]+)*$/,'El metodo de pago solo debe contener letras').required('Por favor ingresa un metodo de pago'),
-    primanual: Yup.string().min(6, 'El número debe contener al menos 6 dígitos').matches(/^[+0-9]+$/,'Ingrese un número de teléfono válido').required('Ingrese un valor de prima anual'), 
-    primam:Yup.string().min(5, 'El número debe contener al menos 5 dígitos').matches(/^[+0-9]+$/,'Ingrese un valor valido').required('Ingrese un valor de prima mensual'),
-    agents:Yup.string().trim().matches(/^(?!\s*$)[A-Za-záéíóúñÁÉÍÓÚÑ]+(?:\s[A-Za-záéíóúñÁÉÍÓÚÑ]+)*$/,'El nombre solo debe contener letras').required('Por favor ingresa un nombre'),
-    office:Yup.string().trim().matches(/^(?!\s*$)[A-Za-záéíóúñÁÉÍÓÚÑ]+(?:\s[A-Za-záéíóúñÁÉÍÓÚÑ]+)*$/,'El nombre solo debe contener letras').required('Por favor ingresa un nombre de la oficina'),
-    product:Yup.string().trim().matches(/^(?!\s*$)[A-Za-záéíóúñÁÉÍÓÚÑ]+(?:\s[A-Za-záéíóúñÁÉÍÓÚÑ]+)*$/,'El producto solo debe contener letras').required('Por favor ingresa un producto'),
-    status:Yup.string().trim().matches(/^(?!\s*$)[A-Za-záéíóúñÁÉÍÓÚÑ]+(?:\s[A-Za-záéíóúñÁÉÍÓÚÑ]+)*$/,'El Estado solo debe contener letras').required('Por favor ingresa un estado'),
-    substatus:Yup.string().trim().matches(/^(?!\s*$)[A-Za-záéíóúñÁÉÍÓÚÑ]+(?:\s[A-Za-záéíóúñÁÉÍÓÚÑ]+)*$/,'El subestado solo debe contener letras').required('Por favor ingresa un subestado'),
-    dateemision: Yup.date().required('La fecha de emision es requerida').max(new Date(), 'La fecha de emision no puede ser posterior a la fecha actual'),
-    dateconst: Yup.date().required('La fecha de contratacion es requerida').max(new Date(), 'La fecha de contratacion no puede ser posterior a la fecha actual'),
-    channelsale:Yup.string().trim().matches(/^(?!\s*$)[A-Za-záéíóúñÁÉÍÓÚÑ]+(?:\s[A-Za-záéíóúñÁÉÍÓÚÑ]+)*$/,'El subestado solo debe contener letras').required('Por favor ingresa un canal de vent'),
-
-  }); 
+    clientname:Yup.string().trim().matches(/^(?!\s*$)[A-Za-záéíóúñÁÉÍÓÚÑ 0-9]+(?:\s[A-Za-záéíóúñÁÉÍÓÚÑ]+)*$/,'El formato es incorrecto').required('Por favor ingresa un nombre'),
+    insrBegin: Yup.date().required('La fecha de inicio de vigencia es requerida').min(new Date(), 'La fecha de inicio de vigencia no puede ser anterior a la fecha actual'),
+    insrEnd: Yup.date().required('La fecha de termino de vigencia es requerida').min(new Date(), 'La fecha de termino de vigencia no puede ser anterior a la fecha actual'),
+    insrDuration: Yup.string().min(1, 'El número debe contener al menos 1 dígito').matches(/^[+0-9]+$/,'Solo se admiten números').required('Ingrese un número de duracion de póliza'),
+    durDimension: Yup.string().required('Seleccione un sistema de tiempo'),
+    paymentWay:Yup.string().required('Seleccione un método de pago'),
+    num_instalments: Yup.string().required('Seleccione perioricidad de pagos'),
+    payment_anual: Yup.string().min(6, 'El número debe contener al menos 6 dígitos').matches(/^[+0-9]+$/,'Ingrese un número de teléfono válido').required('Ingrese un valor de prima anual'), 
+    payment_mensual:Yup.string().min(5, 'El número debe contener al menos 5 dígitos').matches(/^[+0-9]+$/,'Ingrese un valor valido').required('Ingrese un valor de prima mensual'),
+    agent:Yup.string().trim().matches(/^(?!\s*$)[A-Za-záéíóúñÁÉÍÓÚÑ -()+0-9]+(?:\s[A-Za-záéíóúñÁÉÍÓÚÑ]+)*$/,'Formato de agente incorrecto').required('Por favor ingresa un agente'),
+    office:Yup.string().trim().matches(/^(?!\s*$)[A-Za-záéíóúñÁÉÍÓÚÑ -()+0-9]+(?:\s[A-Za-záéíóúñÁÉÍÓÚÑ]+)*$/,'Formato de la oficina es incorrecto').required('Por favor ingresa una oficina'),
+    product:Yup.string().trim().matches(/^(?!\s*$)[A-Za-záéíóúñÁÉÍÓÚÑ -]*$/,'Formato de producto incorrecto').required('Por favor ingresa un producto'),
+    state:Yup.string().trim().matches(/^(?!\s*$)[A-Za-záéíóúñÁÉÍÓÚÑ]+(?:\s[A-Za-záéíóúñÁÉÍÓÚÑ]+)*$/,'Formato de estado incorrecto').required('Por favor ingresa un estado'),
+    subestado:Yup.string().trim().matches(/^(?!\s*$)[A-Za-záéíóúñÁÉÍÓÚÑ]+(?:\s[A-Za-záéíóúñÁÉÍÓÚÑ]+)*$/,'Formato de subestado incorrecto').required('Por favor ingresa un subestado'),
+    dateGiven: Yup.date().required('La fecha de emision es requerida').min(new Date(), 'La fecha de emision no puede ser anterior a la fecha actual'),
+    salesChannel:Yup.string().required('Por favor ingresa un canal de venta'),
+  });
 
   return (
     <>
     <TextLinkExample />
     <Sidebar />
-    <PanelControl handleSubmit={handleSubmit} objetos={objetos} />
+    <PanelControl handleSubmit={handleSubmit} />
 
 
     <Formik
@@ -191,31 +120,24 @@ export const Policy = (props) => {
         resetForm();
       }}
       initialValues={{
-        id: "",
-        documentNumber: "",
-        primaanual:"",
-        firstName: "",
-        lastName: "",
-        secondLastName: "",
-        nationality: "",
-        phoneNumber: "",
-        email: "",
-        address: "",
-        region:"",
-        comuna:"",
-        gender:"",
-        country: "",
-        profession: "",
-        jdocument:"",
-        jrazonsocial:"",
-        jfname:"",
-        jemail:"",
-        jphone:"",
-        jaddress:"",
-        jregion:"",
-        jcomuna:"",
-        jgiro:"",
-        jnationality:""
+        policyid: '',
+        policynumber: '',
+        clientname: '',
+        product: '',
+        // insrBegin: null,
+        // insrEnd: null,
+        insrDuration: '',
+        durDimension: '',
+        agent: '',
+        office: '',
+        salesChannel: '',
+        state: '',
+        subestado:'',
+        // dateGiven: dayjs(new Date()).format("DD/MM/YYYY"),
+        paymentWay:'',
+        num_instalments:'',
+        payment_anual:'', 
+        payment_mensual:''
     }}
     validationSchema = {validationSchema}
     >
@@ -229,13 +151,13 @@ export const Policy = (props) => {
                               <Stack direction="row">
                               <Item className="group-user">
                                         <TextField
-                                          id="fechacreacion"
-                                          label="Fecha Creacion"
+                                          id="dateGiven"
+                                          label="Fecha Emisión"
                                           type="text"
                                           variant="filled"
                                           fullWidth
                                           handleBlur={handleBlur}
-                                          value={moment(selectedcreateDate).format("DD/MM/YYYY")}
+                                          value={dayjs().format("DD/MM/YYYY")}
                                           InputProps={{
                                             readOnly: true,
                                           }}
@@ -275,7 +197,7 @@ export const Policy = (props) => {
                                             }
                                           }}
                                           required
-                                          inputProps={{ maxLength: 12 }}
+                                          // inputProps={{ maxLength: 12 }}
                                           error={touched.policyid && !!errors.policyid}
                                           helperText={touched.policyid && errors.policyid}
                                         />
@@ -295,9 +217,7 @@ export const Policy = (props) => {
                                             handleChange(e);
                                             setdatapolicy({...datapolicy, policynumber: e.target.value});
                                           }}
-
-                                          onBlur={handleBlur}
-                                       
+                                          onBlur={handleBlur}                                       
                                           error={touched.policynumber && !!errors.policynumber}
                                           helperText={touched.policynumber && errors.policynumber}
                                         />
@@ -319,7 +239,7 @@ export const Policy = (props) => {
                                           }}
                                           onBlur={handleBlur}
                                           onKeyPress={(e) => {
-                                            const pattern = /^[A-Za-záéíóúñÁÉÍÓÚÑ ]+$/;
+                                            const pattern = /^[A-Za-záéíóúñÁÉÍÓÚÑ +0-9 ()]+$/;
                                             if (!pattern.test(e.key)) {
                                               e.preventDefault();
                                             }
@@ -339,9 +259,12 @@ export const Policy = (props) => {
                                           placeholder="Salud"
                                           required
                                           value={values.product}
-                                          onChange={(e) => {handleChange(e);setdatapolicy({ ...datapolicy, product: e.target.value })}}
+                                          onChange={(e) => {
+                                            handleChange(e);
+                                            setdatapolicy({ ...datapolicy, product: e.target.value })
+                                          }}
                                           onKeyPress={(e) => {
-                                            const pattern = /^[A-Za-záéíóúñÁÉÍÓÚÑ ]+$/;
+                                            const pattern = /^[A-Za-záéíóúñÁÉÍÓÚÑ () 0-9 +]+$/;
                                             if (!pattern.test(e.key)) {
                                               e.preventDefault();
                                             }
@@ -353,100 +276,114 @@ export const Policy = (props) => {
                                       </Item>
 
                                       <Item className="group-form">
-                                        <LocalizationProvider dateAdapter={AdapterDayjs} error={touched.startpolicy && !!errors.startpolicy}>
-                                          <DatePicker
-                                            className="datepicker"
-                                            name="startpolicy"
-                                            label="Inicio de vigencia"
-                                            value={values.startpolicy}
-                                            onChange={(value) => {setFieldValue('startpolicy', value); setSelectedBirthDate(value)}}
-                                            format="DD - MM - YYYY"
-                                            onBlur={()=>{
-                                              setIsTouched(true);
-                                              handleBlur}}
-                                            disableFuture
-                                            slotProps={
-                                              {
-                                                textField:{
-                                                  required: true,
-                                                  error: Boolean(errors.startpolicy),
-                                                  helperText: errors.startpolicy ? errors.startpolicy: ''
+                                        <Box mb={errors.insrBegin ? 2.5:0}>
+                                          <LocalizationProvider dateAdapter={AdapterDayjs} error={!!errors.insrBegin}>
+                                            <DatePicker
+                                              className="datepicker"
+                                              name="insrBegin"
+                                              label="Inicio de vigencia"
+                                              value={values.insrBegin}
+                                              onChange={(value) => {
+                                                setFieldValue('insrBegin', value); 
+                                                setdatapolicy({...datapolicy, insrBegin: value});
+                                              }}
+                                              format="DD - MM - YYYY"
+                                              onBlur={()=>{
+                                                handleBlur;
+                                                setEr(true);
+                                              }}
+                                              disablePast
+                                              slotProps={
+                                                {
+                                                  textField:{
+                                                    required: true,
+                                                    variant:"filled",
+                                                    error: Boolean(errors.insrBegin),
+                                                    helperText: errors.insrBegin ? errors.insrBegin: ''
+                                                  }
                                                 }
                                               }
-                                            }
-                                          />
-                                        </LocalizationProvider>
+                                            />
+                                          </LocalizationProvider>
+                                        </Box>
                                       </Item>
 
                                       <Item className="group-form">
-                                        <LocalizationProvider dateAdapter={AdapterDayjs} error={touched.endpolicy && !!errors.endpolicy}>
-                                          <DatePicker
-                                            className="datepicker"
-                                            name="endpolicy"
-                                            label="Termino de vigencia"
-                                            value={values.endpolicy}
-                                            onChange={(value) => {setFieldValue('endpolicy', value); setSelectedBirthDate(value)}}
-                                            format="DD - MM - YYYY"
-                                            onBlur={()=>{
-                                              setIsTouched(true);
-                                              handleBlur}}
-                                            disableFuture
-                                            slotProps={
-                                              {
-                                                textField:{
-                                                  required: true,
-                                                  error: Boolean(errors.endpolicy),
-                                                  helperText: errors.endpolicy ? errors.endpolicy: ''
+                                        <Box mb={errors.insrEnd ? 2.5:0}>
+                                          <LocalizationProvider dateAdapter={AdapterDayjs} error={touched.insrEnd && !!errors.insrEnd}>
+                                            <DatePicker
+                                              className="datepicker"
+                                              name="insrEnd"
+                                              label="Termino de vigencia"
+                                              value={values.insrEnd}
+                                              onChange={(value) => {
+                                                setFieldValue('insrEnd', value);
+                                                setdatapolicy({...datapolicy, insrEnd: value});
+                                              }}
+                                              format="DD - MM - YYYY"
+                                              onBlur={()=>{
+                                                handleBlur}
+                                              }
+                                              disablePast
+                                              slotProps={
+                                                {
+                                                  textField:{
+                                                    required: true,
+                                                    variant:'filled',
+                                                    error: Boolean(errors.insrEnd),
+                                                    helperText: errors.insrEnd ? errors.insrEnd: ''
+                                                  }
                                                 }
                                               }
-                                            }
-                                          />
-                                        </LocalizationProvider>
+                                            />
+                                          </LocalizationProvider>
+                                        </Box>
                                       </Item>
+                                      <Box mb={(touched.insrDuration && !!errors.insrDuration) || (touched.durDimension && errors.durDimension) ? 2.5:0}>
                                       <Item direction="row" className="group-form">
                                         <TextField
-                                          id="datepolicy"
+                                          id="insrDuration"
                                           label="Duracion de poliza"
                                           type="text"
                                           variant="filled"
-                                          name="datepolicy"
+                                          name="insrDuration"
                                           placeholder="123"
                                           inputProps={{maxLength : 3}}
                                           onKeyPress={(e) => {
-                                            const pattern = /^[+1-9]+$/;
+                                            const pattern = /^[1-9]+$/;
                                             if (!pattern.test(e.key)) {
                                               e.preventDefault();
                                             }
                                           }}
-                                          onChange={(e) => {handleChange(e);setdatapolicy({ ...datapolicy, datepolicy: e.target.value })}}
+                                          onChange={(e) => {
+                                            handleChange(e);
+                                            setdatapolicy({ ...datapolicy, insrDuration: e.target.value })}}
                                           onBlur={handleBlur}
-                                          value={values.datepolicy}
-                                          error={touched.datepolicy && !!errors.datepolicy}
-                                          helperText={touched.datepolicy && errors.datepolicy}
+                                          value={values.insrDuration}
+                                          error={touched.insrDuration && !!errors.insrDuration}
+                                          helperText={touched.insrDuration && errors.insrDuration}
                                           />
-
-
-                                        <FormControl className="select-form">
-                                        <InputLabel htmlFor="datetipe"> </InputLabel>
-                                        <Select
-                                          id="datetipe"
-                                          variant="filled"
-                                          value={values.datetipe}
-                                          onChange={selectedDatetipe}
-                                          onBlur={handleBlur}
-                                          label=""
-                                          error={touched.datetipe && !!errors.datetipe}
-                                          required>
-                                          
-                                          <MenuItem value="dia">Día</MenuItem>
-                                          <MenuItem value="mes">Mes</MenuItem>
-                                          <MenuItem value="anio">Año</MenuItem>
-                                        </Select>
-                                      </FormControl>
-                                      {errors.datetipe && touched.datetipe && (
-                                        <div className="error">{errors.datetipe}</div>
-                                      )}
+                                        <FormControl className="select-form" error={touched.durDimension && !!errors.durDimension}>
+                                        <InputLabel htmlFor="durDimension"> </InputLabel>
+                                          <Select
+                                            id="durDimension"
+                                            variant="filled"
+                                            value={values.durDimension}
+                                            // onChange={}
+                                            onBlur={handleBlur}
+                                            label=""
+                                            error={touched.durDimension && !!errors.durDimension}
+                                            required
+                                            >                                          
+                                            <MenuItem value="dia">Día</MenuItem>
+                                            <MenuItem value="mes">Mes</MenuItem>
+                                            <MenuItem value="anio">Año</MenuItem>
+                                          </Select>
+                                        </FormControl>
+                                        {errors.durDimension && touched.durDimension && <FormHelperText>{errors.durDimension}</FormHelperText>}
                                       </Item>
+                                      </Box>
+                                      
                                 </Item>
                               </Stack>
 
@@ -459,17 +396,17 @@ export const Policy = (props) => {
 
                                   <Item className="group-form">
                                         <TextField
-                                          id="agents"
+                                          id="agent"
                                           label="Agente"
                                           placeholder="Rodrigo Briones"
                                           type="text"
                                           variant="filled"
                                           required
-                                          name="agents"
-                                          value={values.agents}
+                                          name="agent"
+                                          value={values.agent}
                                           onChange={(e)=>{
                                             handleChange(e);
-                                            setdatapolicy({...datapolicy, agents: e.target.value});
+                                            setdatapolicy({...datapolicy, agent: e.target.value});
                                           }}
                                           onBlur={handleBlur}
                                           onKeyPress={(e) => {
@@ -478,8 +415,8 @@ export const Policy = (props) => {
                                               e.preventDefault();
                                             }
                                           }}
-                                          error={touched.agents && !!errors.agents}
-                                          helperText={touched.agents && errors.agents}
+                                          error={touched.agent && !!errors.agent}
+                                          helperText={touched.agent && errors.agent}
                                         />
                                       </Item>
 
@@ -494,13 +431,15 @@ export const Policy = (props) => {
                                           required
                                           placeholder="Casa Matriz"
                                           inputProps={{maxLength : 12}}
-                                          // onKeyPress={(e) => {
-                                          //   const pattern = /^[A-Za-záéíóúñÁÉÍÓÚÑ ]+$/;
-                                          //   if (!pattern.test(e.key)) {
-                                          //     e.preventDefault();
-                                          //   }
-                                          // }}
-                                          onChange={(e) => {handleChange(e);setdatapolicy({ ...datapolicy, office: e.target.value })}}
+                                          onKeyPress={(e) => {
+                                            const pattern = /^[A-Za-záéíóúñÁÉÍÓÚÑ 0-9 ()]+$/;
+                                            if (!pattern.test(e.key)) {
+                                              e.preventDefault();
+                                            }
+                                          }}
+                                          onChange={(e) => {
+                                            handleChange(e);
+                                            setdatapolicy({ ...datapolicy, office: e.target.value })}}
                                           onBlur={handleBlur}
                                           value={values.office}
                                           error={touched.office && !!errors.office}
@@ -511,16 +450,20 @@ export const Policy = (props) => {
                                      
                                
                                       <Item className="group-form">
+                                      <Box mb={touched.salesChannel && !!errors.salesChannel ? 2.5:0}></Box>
                                       <FormControl className="select-form">
-                                        <InputLabel htmlFor="channelsale">Canal de venta </InputLabel>
+                                        <InputLabel htmlFor="salesChannel">Canal de venta </InputLabel>
                                         <Select
-                                          id="channelsale"
+                                          id="salesChannel"
                                           variant="filled"
-                                          value={values.channelsale}
-                                          onChange={selectedchannelsale}
+                                          value={values.salesChannel}
+                                          onChange={(e)=>{
+                                            setValues((prevValues)=>({...prevValues, salesChannel: e.target.value}));
+                                            setdatapolicy({...datapolicy, salesChannel: e.target.value});
+                                          }}
                                           onBlur={handleBlur}
                                           label="Canal de venta"
-                                          error={touched.channelsale && !!errors.channelsale}
+                                          error={touched.salesChannel && !!errors.salesChannel}
                                           required
                                         >
                                           <MenuItem value="Presencial">Presencial</MenuItem>
@@ -528,9 +471,7 @@ export const Policy = (props) => {
                                           <MenuItem value="Correo electronico">Correo Electronico</MenuItem>
                                         </Select>
                                       </FormControl>
-                                      {errors.channelsale && touched.channelsale && (
-                                        <div className="error">{errors.channelsale}</div>
-                                      )}
+                                      {errors.salesChannel && touched.salesChannel && <FormHelperText>{errors.salesChannel}</FormHelperText>}
 
                                     </Item>
 
@@ -538,100 +479,81 @@ export const Policy = (props) => {
                                       <Item md="6" className="group-form">
                                         <TextField
                                           label="Estado"
-                                          id="status"
+                                          id="state"
                                           type="text"
                                           variant="filled"
-                                          name="status"
+                                          name="state"
                                           placeholder="Activo"
                                           required
-                                          value={values.status}
-                                          onChange={(e) => {handleChange(e);setdatapolicy({ ...datapolicy, status: e.target.value })}}
+                                          value={values.state}
+                                          onChange={(e) => {
+                                            handleChange(e);
+                                            setdatapolicy({ ...datapolicy, state: e.target.value });
+                                          }}
                                           onKeyPress={(e) => {
-                                            const pattern = /^[A-Za-záéíóúñÁÉÍÓÚÑ ]+$/;
+                                            const pattern = /^[A-Za-záéíóúñÁÉÍÓÚÑ 0-9 ()]+$/;
                                             if (!pattern.test(e.key)) {
                                               e.preventDefault();
                                             }
                                           }}
                                           onBlur={handleBlur}
-                                          error={touched.status && !!errors.status}
-                                          helperText={touched.status && errors.status}
+                                          error={touched.state && !!errors.state}
+                                          helperText={touched.state && errors.state}
                                         />
                                       </Item>
 
                                       <Item md="6" className="group-form">
                                         <TextField
                                           label="Sub Estado"
-                                          id="substatus"
+                                          id="subestado"
                                           type="text"
                                           variant="filled"
-                                          name="substatus"
+                                          name="subestado"
                                           placeholder="Pendiente"
                                           required
-                                          value={values.substatus}
-                                          onChange={(e) => {handleChange(e);setdatapolicy({ ...datapolicy, substatus: e.target.value })}}
+                                          value={values.subestado}
+                                          onChange={(e) => {handleChange(e);setdatapolicy({ ...datapolicy, subestado: e.target.value })}}
                                           onBlur={handleBlur}
                                           onKeyPress={(e) => {
-                                            const pattern = /^[A-Za-záéíóúñÁÉÍÓÚÑ ]+$/;
+                                            const pattern = /^[A-Za-záéíóúñÁÉÍÓÚÑ 0-9]+$/;
                                             if (!pattern.test(e.key)) {
                                               e.preventDefault();
                                             }
                                           }}
-                                          error={touched.substatus && !!errors.substatus}
-                                          helperText={touched.substatus && errors.substatus}
+                                          error={touched.subestado && !!errors.subestado}
+                                          helperText={touched.subestado && errors.subestado}
                                         />
                                       </Item>
                                       <Item className="group-form">
-                                        <LocalizationProvider dateAdapter={AdapterDayjs} error={touched.dateemision && !!errors.dateemision}>
-                                          <DatePicker
-                                            className="datepicker"
-                                            name="dateemision"
-                                            label="Fecha de emision"
-                                            value={values.dateemision}
-                                            onChange={(value) => {setFieldValue('dateemision', value); setSelectedBirthDate(value)}}
-                                            format="DD - MM - YYYY"
-                                            onBlur={()=>{
-                                              setIsTouched(true);
-                                              handleBlur}}
-                                            disableFuture
-                                            slotProps={
-                                              {
-                                                textField:{
-                                                  required: true,
-                                                  error: Boolean(errors.dateemision),
-                                                  helperText: errors.dateemision ? errors.dateemision: ''
-                                                }
-                                              }
-                                            }
-                                          />
-                                        </LocalizationProvider>
-                                      </Item>
-
-                                      <Item className="group-form">
-                                        <LocalizationProvider dateAdapter={AdapterDayjs} error={touched.dateconst && !!errors.dateconst}>
-                                          <DatePicker
-                                            className="datepicker"
-                                            name="dateconst"
-                                            label="Fecha de Contratación"
+                                        <Box mb={touched.dateGiven && !!errors.dateGiven ? 2.5:0}>
+                                          <LocalizationProvider dateAdapter={AdapterDayjs} error={touched.dateGiven && !!errors.dateGiven}>
+                                            <DatePicker
+                                              className="datepicker"
+                                              name="dateGiven"
+                                              label="Fecha de emision"
+                                              value={values.dateGiven}
+                                              onChange={(value) => {
+                                                setFieldValue('dateGiven', value);
                                             
-                                            value={values.dateconst}
-                                            onChange={(value) => {setFieldValue('dateconst', value); setSelectedBirthDate(value)}}
-                                            format="DD - MM - YYYY"
-                                            onBlur={()=>{
-                                              setIsTouched(true);
-                                              handleBlur}}
-                                            disableFuture
-                                            slotProps={
-                                              {
-                                                textField:{
-                                                  required: true,
-                                                  error: Boolean(errors.dateconst),
-                                                  helperText: errors.dateconst ? errors.dateconst: ''
+                                              }}
+                                              format="DD - MM - YYYY"
+                                              onBlur={()=>{
+                                                handleBlur}}
+                                              disableFuture
+                                              slotProps={
+                                                {
+                                                  textField:{
+                                                    required: true,
+                                                    variant:'filled',
+                                                    error: Boolean(errors.dateGiven),
+                                                    helperText: errors.dateGiven ? errors.dateGiven: ''
+                                                  }
                                                 }
                                               }
-                                            }
-                                          />
-                                        </LocalizationProvider>
-                                      </Item>
+                                            />
+                                          </LocalizationProvider>
+                                        </Box>
+                                      </Item>                                      
                                 </Item>
                               </Stack>
                               
@@ -643,58 +565,66 @@ export const Policy = (props) => {
 
 
                                    <Item className="group-form">
+                                    <Box mb={touched.paymentWay && errors.paymentWay ? 2.5:0}>
                                       <FormControl className="select-form">
-                                        <InputLabel htmlFor="paymentmethod">Metodo de Pago </InputLabel>
+                                        <InputLabel htmlFor="paymentWay">Metodo de Pago </InputLabel>
                                         <Select
-                                          id="paymentmethod"
+                                          id="paymentWay"
                                           variant="filled"
-                                          value={values.paymentmethod}
-                                          onChange={selectedpaymentmethod}
+                                          value={values.paymentWay}
+                                          onChange={(e)=>{
+                                            setValues((prevValues)=>({...prevValues, paymentWay:e.target.value}));
+                                            setdatapolicy({...datapolicy, paymentWay: e.target.value});
+                                          }}
                                           onBlur={handleBlur}
-                                          label="Metodo de pago "
-                                          error={touched.paymentmethod && !!errors.paymentmethod}
+                                          label="Metodo de pago"
+                                          error={touched.paymentWay && !!errors.paymentWay}
                                           required
                                         >
                                           <MenuItem value="PAC">PAC</MenuItem>
                                           <MenuItem value="PAT">PAT</MenuItem>
                                         </Select>
                                       </FormControl>
-                                      {errors.paymentmethod && touched.paymentmethod && (
-                                        <div className="error">{errors.paymentmethod}</div>
-                                      )}
+                                      {errors.paymentWay && touched.paymentWay && <FormHelperText>{errors.paymentWay}</FormHelperText>}
+                                    </Box>
                                     </Item>
 
                                       <Item className="group-form">
-                                        
-                                        <FormControl variant="filled" className="select-form" error={touched.Ppagos && !!errors.Ppagos}>
-                                          <InputLabel htmlFor="Ppagos">Periocidad de Pagos </InputLabel>
+                                        <Box mb={touched.num_instalments && !!errors.num_instalments ? 2.5:0}>
+                                        <FormControl variant="filled" className="select-form" error={touched.num_instalments && !!errors.num_instalments}>
+                                          <InputLabel htmlFor="num_instalments">Periocidad de Pagos </InputLabel>
                                           <Select
-                                            id="Ppagos"
-                                            name="Ppagos"
-                                            value={values.Ppagos}
-                                            onChange={selectedPpagos}
+                                            id="num_instalments"
+                                            name="num_instalments"
+                                            value={values.num_instalments}
+                                            onChange={(e)=>{
+                                              setValues((prevValues)=>({...prevValues, num_instalments: e.target.value}));
+                                              setdatapolicy({...datapolicy, num_instalments: e.target.value});
+                                            }}
                                             onBlur={handleBlur}
                                             label="Ppagos" >
                                               <MenuItem value = "Anual">   Anual </MenuItem>
-                                              <MenuItem value = "Mensual"> Mensual </MenuItem>
-                                              
+                                              <MenuItem value = "Mensual"> Mensual </MenuItem>                                              
                                           </Select>
-                                          {touched.region && errors.Ppagos && <FormHelperText>{errors.Ppagos}</FormHelperText>}
+                                          {touched.num_instalments && errors.num_instalments && <FormHelperText>{errors.num_instalments}</FormHelperText>}
                                         </FormControl>
-                                       
+                                        </Box>                                   
                                       </Item>
 
                                       <Item md="6" className="group-form">
                                         <TextField
                                           label="Prima Anual"
-                                          id="primanual"
+                                          id="payment_anual"
                                           type="text"
                                           variant="filled"
-                                          name="primanual"
+                                          name="payment_anual"
                                           placeholder="$60.000"
                                           required
-                                          value={values.primanual}
-                                          onChange={(e) => {handleChange(e);setdatapolicy({ ...datapolicy, primanual: e.target.value })}}
+                                          value={values.payment_anual}
+                                          onChange={(e) => {
+                                            handleChange(e);
+                                            setdatapolicy({ ...datapolicy, payment_anual: e.target.value })
+                                          }}
                                           onBlur={handleBlur}
                                           onKeyPress={(e) => {
                                             const pattern = /^[0-9.]+$/;
@@ -702,22 +632,25 @@ export const Policy = (props) => {
                                               e.preventDefault();
                                             }
                                           }}
-                                          error={touched.primanual && !!errors.primanual}
-                                          helperText={touched.primanual && errors.primanual}
+                                          error={touched.payment_anual && !!errors.payment_anual}
+                                          helperText={touched.payment_anual && errors.payment_anual}
                                         />
                                       </Item>
 
                                       <Item md="6" className="group-form">
                                         <TextField
                                           label="Prima Mensual"
-                                          id="primam"
+                                          id="payment_mensual"
                                           type="text"
                                           variant="filled"
-                                          name="primam"
+                                          name="payment_mensual"
                                           placeholder="$60.000"
                                           required
-                                          value={values.primam}
-                                          onChange={(e) => {handleChange(e);setdatapolicy({ ...datapolicy, primam: e.target.value })}}
+                                          value={values.payment_mensual}
+                                          onChange={(e) => {
+                                            handleChange(e);
+                                            setdatapolicy({ ...datapolicy, payment_mensual: e.target.value})
+                                          }}
                                           onBlur={handleBlur}
                                           onKeyPress={(e) => {
                                             const pattern = /^[0-9.]+$/;
@@ -725,18 +658,13 @@ export const Policy = (props) => {
                                               e.preventDefault();
                                             }
                                           }}
-                                          error={touched.primam && !!errors.primam}
-                                          helperText={touched.primam && errors.primam}
+                                          error={touched.payment_mensual && !!errors.payment_mensual}
+                                          helperText={touched.payment_mensual && errors.payment_mensual}
                                         />
-                                      </Item>
-
-                           
+                                      </Item>                           
                                 </Item>
                               </Stack>
-                          </Stack>  
-                                                          
-                        
-             
+                          </Stack>
         </Form>
       )}
     </Formik>

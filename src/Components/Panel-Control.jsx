@@ -11,6 +11,7 @@ const PanelControl = (props) => {
   const isPolicylistpage = location.pathname === "/policylist";
   const isPolicycreatepage = location.pathname ==="/Policy";
   const isModifyClient = location.pathname.includes ("/modify/");
+  const isModifyPolicy = location.pathname.includes ("/modifypolicy/");
   const {handleSubmit} = props;
   const {handleEdit} = props;
   const {handleState} = props;
@@ -19,15 +20,17 @@ const PanelControl = (props) => {
     window.history.back();
   };
   const [ocultar, setOcultar] = useState(true);
-  const editar = ()=>{
-    handleEdit();
+
+  const editar = ()=>{    
     if(ocultar){
       setOcultar(false);
     }
     else{
       setOcultar(true);
-    }    
+    }
+    handleEdit();
   }
+  
 
   return (
     <div className="Panel-Control">
@@ -73,6 +76,15 @@ const PanelControl = (props) => {
                 </div>        
          </div>    
         </> 
+      )}
+      {isModifyPolicy && (
+        <>
+          <Link to="/policylist" > <Button className="btn_back"> <ArrowLeftOutlined className="back-log" /></Button> </Link>
+          {ocultar && <Button className="edit" onClick={editar}><EditOutlined className="edit-log"/> Editar</Button>}
+          {!ocultar && <Button className="btn_create" type="Submit" onClick={handleSubmit}><SaveOutlined className="create-log" /> Guardar </Button>}
+          {!ocultar && <Button className="btn_cancel" onClick={editar}><CloseOutlined className="cancel-log" /> Cancelar </Button>}
+          
+        </>
       )}
      
     </div>

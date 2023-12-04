@@ -39,7 +39,7 @@ export const Modify = (props) => {
   const [selectedGender, setSelectedGender] = useState("");
   const [selectedTipo, setSelectedTipo] = useState("Natural");
   const [selectedProfession, setSelectedProfession] = useState("");
-  const [Currentdate, setCurrentDate]= useState(moment(new Date()));
+  const [Currentdate, setCurrentDate]= useState(dayjs());
   const [disableGender, setDisableGender] = useState(true);
   const [editar, setEditar] = useState(false);
  // COMUNAS Y REGIONES 
@@ -47,7 +47,7 @@ export const Modify = (props) => {
  const [fcomunas, setfcomunas] = useState([]);
  const [seComuna, setSeComuna] = useState();
   const { id } = useParams();
-  const {data : cliente} = useFetch(`http://localhost:8080/api/clients/${id}`);
+  const {data : cliente} = useFetch(`https://si-client-bkn.kps/api/v1/client/${id}`);
   const [loading, setLoading] = useState(true);
   const [clientData, setClientData] = useState({
     id: null,
@@ -274,36 +274,49 @@ export const Modify = (props) => {
     };
   }, []);
 
+  const[newClient, setNewClient] =  useState({});
   useEffect(()=>{
-    if(cliente){
-      setClientData((prevValues) => ({...prevValues, id: cliente.id,
-        documentNumber: cliente.documentNumber ,
-        firstName: cliente.firstName, 
-        lastName: cliente.lastName,
-        secondLastName: cliente.secondLastName,
-        fantasyName: cliente.fantasyName,
-        birthDate: cliente.birthDate,
-        gender: cliente.gender,
-        nationality: cliente.nationality,
-        phoneNumber: cliente.phoneNumber,
-        email: cliente.email,
-        address: cliente.address,
-        region: cliente.region,
-        comuna: cliente.comuna,
-        giro: cliente.giro,
-        profession: cliente.profession,
-        state: cliente.state,
-        tipo_persona: cliente.tipo_persona,
-        fechaCreacion: cliente.fechaCreacion
-      }));
+    if(cliente)
+    {
+      setNewClient(cliente.data);
+      setClientData((prevClientData)=>({...prevClientData, documentNumber: cliente.data.egn}));
       setSelectedBirthDate(dayjs(cliente.birthDate));
       setCreateDate(dayjs(cliente.fechaCreacion))
       setLoading(false);
       setDisableGender(false);
-      setSelectedTipo(cliente.tipo_persona);
+
+      if(cliente.data.manComp == 2){
+        setSelectedTipo("Juridica");
+        setClientData({...clientData, tipo_persona: 'Juridica'});
+        setSelectedGender({
+          ...selectedGender,
+          id_gender: 0,
+          gender: 'Company'
+        });
+      }
+      else{
+        setSelectedTipo("Natural");
+        setClientData({...clientData, tipo_persona: 'Natural'});
+        if(cliente.data.sexo == 1){
+          setSelectedGender({
+            ...selectedGender,
+            id_gender: 1,
+            gender: 'Masculino'
+          })
+        }
+        else if(cliente.data.sexo == 2){
+          setSelectedGender({
+            ...selectedGender,
+            id_gender: 2,
+            gender: 'Femenino'
+          })
+        }
+        
+      }
+
       RegionChange(cliente.region);
-      updateUserName(cliente.firstName, cliente.lastName, cliente.secondLastName);
-    }    
+      updateUserName(cliente.data.gname, cliente.data.sname, cliente.secondLastName);
+    }
   },[cliente])
 
   
@@ -402,23 +415,23 @@ export const Modify = (props) => {
         resetForm();
       }}
       initialValues={{ 
-        id: loading ? 'Cargando...' : clientData.id || 'No hay id',
-        documentNumber: loading ? 'Cargando...' : clientData.documentNumber,
-        firstName: loading ? 'Cargando...' : clientData.firstName,
-        lastName: loading ? 'Cargando...' : clientData.lastName,
-        secondLastName: loading ? 'Cargando...' : clientData.secondLastName,
+        id: loading ? 'Cargando...' : id || 'No hay id',
+        documentNumber: loading? 'Cargando': newClient.egn,
+        firstName: loading ? 'Cargando...' : newClient.gname,
+        lastName: loading ? 'Cargando...' : newClient.sname,
+        secondLastName: loading ? 'Cargando...' : newClient.fname,
         birthDate: loading ? 'Cargando...' : clientData.birthDate,
         phoneNumber: loading ? 'Cargando...' : clientData.phoneNumber,
         email: loading ? 'Cargando...' : clientData.email,
         address:loading ? 'Cargando...' : clientData.address,
         region:loading ? 'Cargando...' : clientData.region,
         comuna: loading ? 'Cargando...' :clientData.comuna,
-        gender:loading ? 'Cargando...' :clientData.gender.id_gender,
+        gender:loading ? 'Cargando...' :selectedGender?.id_gender,
         country: loading ? 'Cargando...' :clientData.nationality,
-      profession: loading ? 'Cargando...' :clientData.profession?.id_profession,
-        jdocument:loading ? 'Cargando...' :clientData.documentNumber,
-        jrazonsocial: loading ? 'Cargando...' :clientData.firstName,
-        jfname:loading ? 'Cargando...' :clientData.fantasyName,
+        profession: loading ? 'Cargando...' :clientData.profession?.id_profession,
+        jdocument:loading ? 'Cargando...' :newClient.egn,
+        jrazonsocial: loading ? 'Cargando...' :newClient.gname,
+        jfname:loading ? 'Cargando...' :newClient.sname,
         jemail: loading ? 'Cargando...' :clientData.email,
         jphone: loading ? 'Cargando...' :clientData.phoneNumber,
         jaddress: loading ? 'Cargando...' :clientData.address,
@@ -451,7 +464,6 @@ export const Modify = (props) => {
                                       InputProps={{
                                         readOnly: true,
                                       }}
-                                      disabled
                                       variant="filled"/> 
                                     </Item>
 
@@ -467,7 +479,6 @@ export const Modify = (props) => {
                                           InputProps={{
                                             readOnly: true,
                                           }}
-                                          disabled
                                         />
                                       </Item>
                               </Stack>           
@@ -488,7 +499,9 @@ export const Modify = (props) => {
                                           id="tipo-persona"
                                           variant="filled"
                                           value={selectedTipo}
-                                          disabled
+                                          inputProps={{
+                                            readOnly: true,
+                                          }}
                                           onChange={(e) => {
                                             GendersFilter(e);
                                             setClientData({...clientData, tipo_persona: e.target.value});
@@ -514,10 +527,11 @@ export const Modify = (props) => {
                                           label="RUT"
                                           name="documentNumber"
                                           type="text"
-                                          disabled
-                                          variant="filled"
+                                          InputProps={{
+                                            readOnly: true,
+                                          }}                                          variant="filled"
                                           placeholder="11.111.111-1"
-                                          value={values.documentNumber}
+                                          value={loading? 'Cargando...':values.documentNumber}
                                           onChange={(e)=>{
                                             handleChange(e);
                                             setClientData({...clientData, documentNumber: e.target.value})
@@ -531,8 +545,8 @@ export const Modify = (props) => {
                                           }}
                                           required
                                           inputProps={{ maxLength: 12 }}
-                                          error={touched.documentNumber && !!errors.documentNumber}
-                                          helperText={touched.documentNumber && errors.documentNumber}
+                                          // error={editar && touched.documentNumber && !!errors.documentNumber}
+                                          // helperText={editar && touched.documentNumber && errors.documentNumber}
                                         />
                                       </Item>
              
@@ -543,7 +557,9 @@ export const Modify = (props) => {
                                           type="text"
                                           variant="filled"
                                           name="firstName"
-                                          disabled={!editar}
+                                          InputProps={{
+                                            readOnly: !editar,
+                                          }}
                                           value={values.firstName}
                                           required
                                           onChange={(e) => {setClientData({ ...clientData, firstName: e.target.value });
@@ -557,8 +573,8 @@ export const Modify = (props) => {
                                               e.preventDefault();
                                             }
                                           }}
-                                          error={touched.firstName && !!errors.firstName}
-                                          helperText={touched.firstName && errors.firstName}
+                                          error={editar && touched.firstName && !!errors.firstName}
+                                          helperText={editar && touched.firstName && errors.firstName}
                                         />
                                       </Item>
 
@@ -569,8 +585,9 @@ export const Modify = (props) => {
                                           type="text"
                                           variant="filled"
                                           required
-                                          disabled={!editar}
-                                          name="lastName"
+                                          InputProps={{
+                                            readOnly: !editar,
+                                          }}                                          name="lastName"
                                           value={values.lastName}
                                           onChange={(e) => {setClientData({ ...clientData, lastName: e.target.value });
                                                             updateUserName(clientData.firstName, e.target.value,clientData.secondLastName);
@@ -583,8 +600,8 @@ export const Modify = (props) => {
                                               e.preventDefault();
                                             }
                                           }}
-                                          error={touched.lastName && !!errors.lastName}
-                                          helperText={touched.lastName && errors.lastName}
+                                          error={editar && touched.lastName && !!errors.lastName}
+                                          helperText={editar && touched.lastName && errors.lastName}
                                         />
                                       </Item>
 
@@ -595,8 +612,9 @@ export const Modify = (props) => {
                                           type="text"
                                           variant="filled"
                                           name="secondLastName"
-                                          disabled={!editar}
-                                          value={values.secondLastName}
+                                          InputProps={{
+                                            readOnly: !editar,
+                                          }}                                          value={values.secondLastName}
                                           onChange={(e) => {
                                             setClientData(({ ...clientData, secondLastName: e.target.value }));
                                             updateUserName(clientData.firstName,clientData.lastName,e.target.value);
@@ -609,19 +627,19 @@ export const Modify = (props) => {
                                               e.preventDefault();
                                             }
                                           }}
-                                          error={touched.secondLastName && !!errors.secondLastName}
-                                          helperText={touched.secondLastName && errors.secondLastName}
+                                          error={ editar && touched.secondLastName && !!errors.secondLastName}
+                                          helperText={editar && touched.secondLastName && errors.secondLastName}
 
                                         />
                                       </Item>
                                       <Item className="group-form">
-                                        <LocalizationProvider dateAdapter={AdapterDayjs} error={touched.birthDate && !!errors.birthDate}>
+                                        <LocalizationProvider dateAdapter={AdapterDayjs} error={editar && touched.birthDate && !!errors.birthDate}>
                                           <DatePicker
                                             className="datepicker"
                                             name="birthDate"
                                             label="Fecha de Nacimiento"
                                             value={selectedBirthDate}
-                                            disabled={!editar}
+                                            readOnly = {!editar}
                                             onChange={(value) => {
                                               setFieldValue('birthDate', value);
                                               setSelectedBirthDate(value);
@@ -636,8 +654,9 @@ export const Modify = (props) => {
                                               {
                                                 textField:{
                                                   required: true,
-                                                  error: Boolean(errors.birthDate),
-                                                  helperText: errors.birthDate ? errors.birthDate: ''
+                                                  variant: 'filled',
+                                                  error: editar && Boolean(errors.birthDate),
+                                                  helperText: editar && errors.birthDate ? errors.birthDate: ''
                                                 }
                                               }
                                             }
@@ -660,15 +679,17 @@ export const Modify = (props) => {
                                           variant="filled"
                                           name="email"
                                           placeholder="Correo@example.com"
-                                          disabled={!editar}
+                                          InputProps={{
+                                            readOnly: !editar,
+                                          }}
                                           value={values.email}
                                           onChange={(e) => {
                                             setClientData({ ...clientData, email: e.target.value });
                                             handleChange(e);
                                         }}                                          
                                           onBlur={handleBlur}
-                                          error={touched.email && !!errors.email}
-                                          helperText={touched.email && errors.email}
+                                          error={editar && touched.email && !!errors.email}
+                                          helperText={editar && touched.email && errors.email}
                                         />
                                       </Item>
 
@@ -681,14 +702,16 @@ export const Modify = (props) => {
                                           name="phoneNumber"
                                           placeholder="911111111"
                                           value={values.phoneNumber}
-                                          disabled={!editar}
+                                          InputProps={{
+                                            readOnly: !editar,
+                                          }}
                                           onChange={(e) => {
                                             setClientData({ ...clientData, phoneNumber: e.target.value });
                                             handleChange(e);
                                         }}
                                           onBlur={handleBlur}
-                                          error={touched.phoneNumber && !!errors.phoneNumber}
-                                          helperText={touched.phoneNumber && errors.phoneNumber}
+                                          error={editar && touched.phoneNumber && !!errors.phoneNumber}
+                                          helperText={editar  && touched.phoneNumber && errors.phoneNumber}
                                         />
                                       </Item>
 
@@ -701,25 +724,29 @@ export const Modify = (props) => {
                                           variant="filled"
                                           name="address"
                                           value={values.address}
-                                          disabled={!editar}
+                                          InputProps={{
+                                            readOnly: !editar,
+                                          }}
                                           onChange={(e) => {
                                             setClientData({ ...clientData, address: e.target.value });
                                             handleChange(e);                                        
                                         }}
                                           onBlur={handleBlur}
-                                          error={touched.address && !!errors.address}
-                                          helperText={touched.address && errors.address}
+                                          error={editar && touched.address && !!errors.address}
+                                          helperText={editar && touched.address && errors.address}
                                         />
                                       </Item>
 
                                       <Item className="group-form">
-                                        <Box mb={touched.region && errors.region ? 2.5 : 0}>
-                                        <FormControl variant="filled" className="select-form" error={touched.region && !!errors.region}>
+                                        <Box mb={editar && touched.region && errors.region ? 2.5 : 0}>
+                                        <FormControl variant="filled" className="select-form" error={editar && touched.region && !!errors.region}>
                                           <InputLabel htmlFor="region">Región </InputLabel>
                                           <Select
                                             id="region"
                                             name="region"
-                                            disabled={!editar}
+                                            inputProps={{
+                                              readOnly: !editar,
+                                            }}
                                             value={values.region}
                                             onChange={(e) => {
                                               RegionChange(e);
@@ -739,14 +766,14 @@ export const Modify = (props) => {
                                                   </MenuItem>
                                                 ))}
                                           </Select>
-                                          {touched.region && errors.region && <FormHelperText>{errors.region}</FormHelperText>}
+                                          { editar && touched.region && errors.region && <FormHelperText>{errors.region}</FormHelperText>}
                                         </FormControl>
                                         </Box>
                                       </Item>
 
                                       <Item className="group-form">
-                                      <Box mb={touched.comuna && errors.comuna ? 2.5 : 0}>
-                                        <FormControl variant="filled" className="select-form" error={touched.comuna && !!errors.comuna}>
+                                      <Box mb={editar && touched.comuna && errors.comuna ? 2.5 : 0}>
+                                        <FormControl variant="filled" className="select-form" error={editar && touched.comuna && !!errors.comuna}>
                                           <InputLabel htmlFor="comuna">Comuna </InputLabel>
                                           <Select
                                             id="comuna"
@@ -759,9 +786,12 @@ export const Modify = (props) => {
                                                 setClientData({...clientData, comuna : e.target.value});
                                               }}
                                             onBlur={handleBlur}
-                                            disabled ={!seRegion || !editar}
+                                            inputProps={{
+                                              readOnly: !seRegion || !editar,
+                                            }}
                                             label="Comuna"
-                                            required>
+                                            required
+                                            >
                                               <MenuItem value="">Seleccione una comuna</MenuItem>
                                               {Array.isArray(fcomunas) &&
                                                 fcomunas.map((comuna, index) =>
@@ -771,7 +801,7 @@ export const Modify = (props) => {
                                                   </MenuItem>
                                                 ))}
                                           </Select>
-                                          {touched.comuna && errors.comuna && <FormHelperText>{errors.comuna}</FormHelperText>}
+                                          {editar && touched.comuna && errors.comuna && <FormHelperText>{errors.comuna}</FormHelperText>}
                                         </FormControl>
                                         </Box>
                                       </Item>
@@ -784,8 +814,8 @@ export const Modify = (props) => {
                                   <span className="title-stack">Datos Adicionales</span>
 
                                       <Item className="group-form">
-                                        <Box mb={touched.gender && errors.gender ? 2.5 : 0}>
-                                          <FormControl variant="filled" className="select-form" error={touched.gender && !!errors.gender}>
+                                        <Box mb={editar && touched.gender && errors.gender ? 2.5 : 0}>
+                                          <FormControl variant="filled" className="select-form" error={editar && touched.gender && !!errors.gender}>
                                             <InputLabel htmlFor="gender">Género </InputLabel>
                                             <Select
                                               id="gender"
@@ -800,8 +830,10 @@ export const Modify = (props) => {
                                               }}
                                               onBlur={handleBlur}
                                               label="Género"
-                                              disabled= {disableGender || !editar}
-                                              error={touched.selectedGender && !!errors.selectedGender}
+                                              inputProps={{
+                                                readOnly: disableGender || !editar,
+                                              }}
+                                              error={editar && touched.selectedGender && !!errors.selectedGender}
                                             >
                                               <MenuItem value="">Selecciona un género</MenuItem>
                                               {selectedTipo !== 'Natural' && (
@@ -817,22 +849,24 @@ export const Modify = (props) => {
                                                 </MenuItem> 
                                               ))}
                                             </Select>
-                                            {touched.gender && errors.gender && <FormHelperText>{errors.gender}</FormHelperText>}
+                                            {editar && touched.gender && errors.gender && <FormHelperText>{errors.gender}</FormHelperText>}
                                           </FormControl>
                                         </Box>                                        
                                       </Item>
 
                                       {/* INFORMACION DE LOCACION */}
                                       <Item className="group-form">
-                                        <Box mb={touched.country && errors.country ? 2.5 : 0}>
-                                          <FormControl variant="filled" className="select-form" error={touched.country && !!errors.country}>
+                                        <Box mb={editar && touched.country && errors.country ? 2.5 : 0}>
+                                          <FormControl variant="filled" className="select-form" error={editar && touched.country && !!errors.country}>
                                             <InputLabel htmlFor="nacionalidad">Pais de origen </InputLabel>
                                             <Select
                                               id="nacionalidad"
                                               required
                                               name="country"
                                               value={values.country}
-                                              disabled={!editar}
+                                              inputProps={{
+                                                readOnly: !editar,
+                                              }}
                                               onChange={(e) => {
                                                 setValues((prevValues)=>({...prevValues, country: e.target.value}));
                                                 setClientData({...clientData, nationality: e.target.value})
@@ -848,20 +882,22 @@ export const Modify = (props) => {
                                                   </MenuItem>
                                                 ))}                                     
                                             </Select>
-                                            {touched.country && errors.country && <FormHelperText>{errors.country}</FormHelperText>}
+                                            {editar && touched.country && errors.country && <FormHelperText>{errors.country}</FormHelperText>}
                                           </FormControl>
                                         </Box>
                                       </Item>
 
                                       <Item className="group-form">
                                       <Box mb={1}>
-                                        <FormControl variant="filled" className="select-form" error={touched.profession && !!errors.profession}>
+                                        <FormControl variant="filled" className="select-form" error={editar && touched.profession && !!errors.profession}>
                                           <InputLabel htmlFor="profesion">Profesión </InputLabel>
                                           <Select
                                             id="profesion"
                                             name="profession"
                                             value={values.profession}
-                                            disabled={!editar}
+                                            inputProps={{
+                                              readOnly: !editar,
+                                            }}
                                             onChange={(e) => {
                                               setValues((prevValues)=>({...prevValues, profession: e.target.value}));
                                               const selectedProfessionId = e.target.value;
@@ -879,7 +915,7 @@ export const Modify = (props) => {
                                                 </MenuItem>
                                               ))}
                                           </Select>
-                                            {touched.profession && errors.profession && <FormHelperText>{errors.profession}</FormHelperText>}
+                                            {editar && touched.profession && errors.profession && <FormHelperText>{errors.profession}</FormHelperText>}
                                         </FormControl>
                                         </Box>
                                       </Item>
@@ -904,7 +940,9 @@ export const Modify = (props) => {
                                         id="tipo-persona"
                                         variant="filled"
                                         value={selectedTipo}
-                                        disabled
+                                        InputProps={{
+                                          readOnly: true,
+                                        }}
                                         onChange={(e)=>{
                                           GendersFilter(e);
                                           setClientData({...clientData, tipo_persona})

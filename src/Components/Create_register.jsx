@@ -22,6 +22,7 @@ import '../CSS/register-style.scss';
 import PanelControl from "./Panel-Control";
 import * as Yup from "yup";
 import { Box,FormHelperText } from "@mui/material";
+import dayjs from "dayjs";
 
 export const Registro = (props) => {
   const { data: country } = useFetch( "https://gist.githubusercontent.com/HectorCataldo/ceee7aa2b93e83d7d04f752e3adbe623/raw/81b6bc11b965720e6717975f665fe85869c71e81/paises.json" )
@@ -29,11 +30,12 @@ export const Registro = (props) => {
   const { data: clients } = useFetch("http://localhost:8080/api/clients");
   const { data: profession } = useFetch("http://localhost:8080/api/profession");
   const { data: gender} = useFetch("http://localhost:8080/api/gender");
-  const [selectedBirthDate, setSelectedBirthDate] = useState(new Date());
+  const [selectedBirthDate, setSelectedBirthDate] = useState(dayjs().format("YYYY-MM-DD"));
   const [objetos, setObjetos] = useState();
-  const [selectedcreateDate] = useState(moment(new Date()));
+  const [selectedcreateDate] = useState(dayjs());
+  const [er, setEr] = useState(false);
   const [selectedGender, setSelectedGender] = useState("");
-  const [selectedTipo, setSelectedTipo] = useState("Natural");
+  const [selectedTipo, setSelectedTipo] = useState(1);
   const [selectedProfession, setSelectedProfession] = useState("");
   const [Currentdate, setCurrentDate]= useState(moment(new Date()));
   const [clientData, setClientData] = useState({
@@ -63,7 +65,6 @@ export const Registro = (props) => {
     fechaCreacion: null
   })
   const [disableGender, setDisableGender] = useState(false);
-  const [isTouched, setIsTouched] = useState(false);
 
   // COMUNAS Y REGIONES 
   const [seRegion, setSeRegion] = useState('');
@@ -75,22 +76,22 @@ export const Registro = (props) => {
   //Filtrar Generos
   const GendersFilter = (e) => {
     const tp = e.target.value;
-    setSelectedTipo(tp);    
+    setSelectedTipo(tp);
 
-    if (tp === 'Natural'){
+    if (tp == 1){
       setDisableGender(false);
-      setSelectedTipo('Natural');
+      setSelectedTipo(1);
     }
-    else if( tp === 'Juridica'){
+    else if( tp == 2){
       setDisableGender(true);
       const genderObject = gender.find(item => item.id_gender === 0);
       setSelectedGender(genderObject);
-      setSelectedTipo('Juridica');
+      setSelectedTipo(2);
     }
-    else if( tp != 'Juridica' || tp != 'Natural'){
+    else if( tp != 2 || tp != 1){
       setDisableGender(true);
       setSelectedGender();
-      setSelectedTipo('');
+      setSelectedTipo(null);
     }
 
   }
@@ -138,40 +139,36 @@ export const Registro = (props) => {
         !clientData.phoneNumber ||
         !clientData.email ||
         !clientData.address ||
-        !professionData ||
-        !selectedTipo
-      ) {
-        Swal.fire({
-          icon: "error",
-          title: "Error",
-          text: "Por favor, complete todos los campos antes de enviar.",          
-        });
-        return;
-      }
-
-      const response = await axios.post("http://localhost:8080/api/clients", {
-        id: objetos,
-        documentNumber: clientData.documentNumber,
-        firstName: clientData.firstName,
-        lastName: clientData.lastName,
-        secondLastName: clientData.secondLastName,
-        fantasyName: clientData.fantasyName,
+        !clientData.profession ||
+        !selectedTipo,
+        console.log(clientData.documentNumber),
+        console.log(clientData.firstName),
+        console.log(clientData.lastName),
+        console.log(clientData.secondLastName),
+        console.log(selectedBirthDate),
+        console.log(selectedGender)
+        // console.log(),
+        // console.log(),
+        // console.log(),
+        // console.log()
+        ) {
+          Swal.fire({
+            icon: "error",
+            title: "Error",
+            text: "Por favor, complete todos los campos antes de enviar.",          
+          });
+          return;
+        }
+      const NombreCompleto = clientData.firstName + " " + clientData.lastName;
+      const response = await axios.post("https://si-client-bkn.kps/api/v1/client/", {
+        manComp: selectedTipo,
+        egn: clientData.documentNumber,
+        name: NombreCompleto,
+        gname: clientData.firstName,
+        sname: clientData.lastName,
+        fname: clientData.secondLastName,
         birthDate: selectedBirthDate,
-        gender: {
-          id_gender:selectedGender.id_gender,
-          gender: selectedGender.gender
-        },
-        nationality: clientData.nationality,
-        phoneNumber: clientData.phoneNumber,
-        email: clientData.email,
-        address: clientData.address,
-        region: seRegion,
-        comuna: seComuna,
-        giro: clientData.giro,
-        profession: professionData,
-        state: true,
-        tipo_persona: selectedTipo,
-        fechaCreacion: selectedcreateDate,        
+        sexo: selectedGender.id_gender,        
       });
 
       console.log("Respuesta de la API:", response.data);
@@ -367,7 +364,7 @@ export const Registro = (props) => {
 
 
                        {/* PERSONA NATURAL */}
-                       {selectedTipo === "Natural" && (
+                       {selectedTipo == 1 && (
                           <Stack direction="row" spacing={30} className="Containers-stacks2">
 
                               {/* Contenedor 1 */}
@@ -388,8 +385,8 @@ export const Registro = (props) => {
                                           required
                                         >
                                           {/*<MenuItem>Seleccione un tipo de persona</MenuItem>*/}
-                                          <MenuItem value="Natural">Natural</MenuItem>
-                                          <MenuItem value="Juridica">Jurídica</MenuItem>
+                                          <MenuItem value={1} >Natural</MenuItem>
+                                          <MenuItem value={2} >Jurídica</MenuItem>
                                         </Select>
                                       </FormControl>
                                       {errors.selectedTipo && touched.selectedTipo && (
@@ -500,21 +497,24 @@ export const Registro = (props) => {
                                       <Item className="group-form">
                                         <LocalizationProvider dateAdapter={AdapterDayjs} error={touched.birthDate && !!errors.birthDate}>
                                           <DatePicker
-                                            className="datepicker"
-                                            name="birthDate"
+                                            className="datepicker"                                            
                                             label="Fecha de Nacimiento"
+                                            name="birthDate"
                                             value={values.birthDate}
-                                            onChange={(value) => {setFieldValue('birthDate', value); setSelectedBirthDate(value)}}
+                                            onChange={(value) => {
+                                              setFieldValue('birthDate', value); 
+                                              setSelectedBirthDate(dayjs(value).format("YYYY-MM-DD"))}
+                                            }
                                             format="DD - MM - YYYY"
-                                            onBlur={()=>{
-                                              setIsTouched(true);
-                                              handleBlur}}
-                                            disableFuture
+                                            onBlur={handleBlur}
+                                            disableFuture                                            
                                             slotProps={
                                               {
                                                 textField:{
+                                                  name:"birthDate",
                                                   required: true,
-                                                  error: Boolean(errors.birthDate),
+                                                  variant:'filled',
+                                                  error: Boolean( !!errors.birthDate),
                                                   helperText: errors.birthDate ? errors.birthDate: ''
                                                 }
                                               }
@@ -673,7 +673,7 @@ export const Registro = (props) => {
                                             error={touched.selectedGender && !!errors.selectedGender}
                                           >
                                             <MenuItem value="">Selecciona un género</MenuItem>
-                                            {selectedTipo !== 'Natural' && (
+                                            {selectedTipo !== 1 && (
                                               gender && gender.slice(0, 1).map((item) => (
                                                 <MenuItem key={item.id_gender} value={item.id_gender}>
                                                   {item.gender}
@@ -761,7 +761,7 @@ export const Registro = (props) => {
                         
                         {/* PERSONA JURIDICA */}
 
-                        {selectedTipo === "Juridica" && (
+                        {selectedTipo == 2 && (
                           <Stack direction="row" spacing={30} className="Containers-stacks2">
 
                           {/* Contenedor 1 */}
@@ -782,8 +782,8 @@ export const Registro = (props) => {
                                         error={touched.selectedTipo && !!errors.selectedTipo}
                                       >
                                         <MenuItem>Seleccione un tipo de persona</MenuItem>
-                                        <MenuItem value="Natural">Natural</MenuItem>
-                                        <MenuItem value="Juridica">Jurídica</MenuItem>
+                                        <MenuItem value={1}>Natural</MenuItem>
+                                        <MenuItem value={2}>Jurídica</MenuItem>
                                       </Select>
                                     </FormControl>
                                     {errors.selectedTipo && touched.selectedTipo && (
@@ -847,7 +847,11 @@ export const Registro = (props) => {
                                       value={values.jfname}
                                       onChange={(e) => {
                                         handleChange(e);
-                                        setClientData({ ...clientData, fantasyName: e.target.value });
+                                        setClientData({ 
+                                          ...clientData,
+                                          fantasyName: e.target.value,
+                                          lastName: e.target.value 
+                                        });
                                         updateUserName(clientData.firstName, e.target.value)
                                       }}
                                       onBlur={handleBlur}
@@ -1006,7 +1010,10 @@ export const Registro = (props) => {
                                       value={values.jgiro}
                                       onChange={(e) => {
                                         handleChange(e);
-                                        setClientData({...clientData, giro: e.target.value})
+                                        setClientData({...clientData,
+                                          giro: e.target.value,
+                                          secondLastName: e.target.value
+                                        })
                                     }}
                                       onBlur={handleBlur}
                                       error={touched.jgiro && !!errors.jgiro}

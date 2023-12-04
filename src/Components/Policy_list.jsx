@@ -13,9 +13,15 @@ import Input from '@mui/material/Input';
 import InputAdornment from '@mui/material/InputAdornment';
 import SearchIcon from '@mui/icons-material/Search';
 import Modify from './Modify_register';
+import dayjs from 'dayjs';
+import utc from 'dayjs/plugin/utc';
+import timezone from 'dayjs/plugin/timezone';
+dayjs.extend(utc);
+dayjs.extend(timezone);
+
 
 export const Policylist = () => {
-  const { data:policy } = useFetch("https://gist.githubusercontent.com/LeandroGabrielAltamiranoPereira/77279958e557ad12f4df8796260cf21a/raw/24d7911737d5b5b53ae973c8e30486405ded9fc5/policylist.json");
+  const { data:policy } = useFetch("https://si-client-bkn.kps/api/v1/policy/");
 
   const [selectedClient, setSelectedClient] = useState(null);
   const [searchTerm, setSearchTerm] = useState('');
@@ -29,7 +35,7 @@ export const Policylist = () => {
   useEffect(() => {
     // Actualizar clientsPerPage basado en la longitud de los datos
     if (policy) {
-      const additionalClients = policy.length - clientsPerPage; // Calcula la cantidad de clientes adicionales
+      const additionalClients = policy.data.length - clientsPerPage; // Calcula la cantidad de clientes adicionales
       const newClientsPerPage = clientsPerPage + additionalClients; // Incrementa clientsPerPage
       setClientsPerPage(newClientsPerPage); // Actualiza clientsPerPage
     }
@@ -57,10 +63,10 @@ export const Policylist = () => {
     return <div>Cargando...</div>;
   }
 
-  const filteredData = policy.filter((item) => {
+  const filteredData = policy.data.filter((item) => {
     const searchText = searchTerm.toLowerCase();
     return (
-      (item.policyid && item.policyid.toString().toLowerCase().includes(searchText)) ||
+      (item.policyId && item.policyId.toString().toLowerCase().includes(searchText)) ||
       (item.policynumber && item.policynumber.toString().toLowerCase().includes(searchText)) ||
       (item.cliente && item.cliente.toString().toLowerCase().includes(searchText))
     );
@@ -69,31 +75,67 @@ export const Policylist = () => {
 
     const indexOfLastClient = currentPage * clientsPerPage;
     const indexOfFirstClient = indexOfLastClient - clientsPerPage;
-    const currentClients = filteredData.slice(indexOfFirstClient, indexOfLastClient);
-  
+    const currentClients = filteredData.map(
+      (item) =>{
+        if(!item){
+          return console.log("NO EXISTEN ITEMS PARA MOSTRAR");
+        }
+        return{
+          ...item,
+          id: item.policyId,      
+          policyId: item.policyId,
+          policyNo: item.policyNo,
+          cliente: item.client.people.name,
+          insrType: item.insrType.name,
+          agent: item.agent.people.name,
+          dateGiven: item.dateGiven,
+          startpolicy: item.insrBegin,
+          endpolicy: item.insrEnd,
+          policyState: item.policyState.name
+        }
+      },
+      // console.log(item)
+      )
+      .filter(Boolean)
+
+    //Función para dar formato visual a las fechas traidas de Insis en la lista de pólizas
+     const dateFormat = (params) => {      
+        if (params.value) {
+          return dayjs(params.value).utc().format("DD-MM-YYYY");
+        }
+        return 'NULL'; 
+      }
+
     const columns = [
       { width: 20, sortable: false, renderCell: (params) => {
           if   (isRowEmpty(params.row)) { return null; } 
           else { return ( <input type="checkbox" checked={params.row.isSelected} onChange={() => {}}/> ); }},
       },
-      { field: 'policyid', headerName: 'ID de Póliza', width: 150 },
-      { field: 'policynumber', headerName: 'Número de Póliza', width: 150},
-      { field: 'clientname', headerName: 'Cliente', width: 150},
-      { field: 'product', headerName: 'Producto', width: 150, sortable: false},
-      { field: 'agents', headerName: 'Agente', width: 150, sortable: false},
-      { field:  'dateemision', headerName: 'Fecha emisión',width: 150},
-      { field: 'startpolicy', headerName: 'Inicio de vigencia',width: 150,},
-      { field: 'endpolicy', headerName: 'Fin de Vigencia', width: 150 },
-      {field: 'status', headerName: 'Estado', width: 150,
-        valueFormatter: (params) => {
-          const stateValue = params.value;
-          if (stateValue) {
-            return stateValue ? 'Activo' : 'Inactivo';
-          } else {
-            return ''; // Devuelve una cadena vacía si el valor es NaN o nulo
-          }
-        },
+      { field: 'policyId', headerName: 'ID de Póliza', width: 150 },
+      { field: 'policyNo', headerName: 'Número de Póliza', width: 150,
+        renderCell:(params) => ( <a href={`/modifypolicy/${params.row.id}`} style={{ textDecoration: 'none' }}> {params.value} </a>)
       },
+      { field: 'cliente', headerName: 'Cliente', width: 150},
+      { field: 'insrType', headerName: 'Producto', width: 150, sortable: false,
+        valueFormatter: (params) => {
+          let stateValue = params.value;
+          if (stateValue == 4050){
+            stateValue = 'Invierno'
+            return stateValue;
+          }
+        }
+      },
+      { field: 'agent', headerName: 'Agente', width: 150, sortable: false},
+      { field:  'dateGiven', headerName: 'Fecha emisión',width: 150, 
+          valueFormatter: dateFormat,
+      },
+      { field: 'startpolicy', headerName: 'Inicio de vigencia',width: 150,
+        valueFormatter: dateFormat,
+      },
+      { field: 'endpolicy', headerName: 'Fin de Vigencia', width: 150,
+        valueFormatter: dateFormat,
+      },
+      {field: 'policyState', headerName: 'Estado', width: 150,},
     ];
 
     const handleSearchChange = (event) => {
@@ -103,19 +145,6 @@ export const Policylist = () => {
      const handleSearch = () => {
       setSearchTerm(searchValue);
     };
-
-  let uniqueIdCounter = 0;
-
-  while (currentClients.length < clientsPerPage) {
-    currentClients.push({
-      id: `fake-${uniqueIdCounter++}`,
-      documentNumber: '',
-      firstName: '',
-      lastName: '',
-      birthDate: '',
-      state: '',
-    });
-  }
 
   return (
     <>
