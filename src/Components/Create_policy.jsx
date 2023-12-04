@@ -1,32 +1,4 @@
 import React, { useState, useEffect, useMemo } from "react";
-<<<<<<< Updated upstream
-import moment from "moment";
-import axios from "axios";
-import Form from 'react-bootstrap/Form';
-import Swal from "sweetalert2";
-import TextLinkExample from "./Navbar";
-import Sidebar from "./sidebar";
-import { Formik } from "formik";
-import TextField from "@mui/material/TextField";
-import Select from "@mui/material/Select";
-import MenuItem from "@mui/material/MenuItem";
-import FormControl from "@mui/material/FormControl";
-import InputLabel from "@mui/material/InputLabel";
-import { AdapterDayjs } from '@mui/x-date-pickers/AdapterDayjs';
-import { LocalizationProvider } from '@mui/x-date-pickers/LocalizationProvider';
-import { DatePicker } from '@mui/x-date-pickers/DatePicker';
-import Stack from '@mui/material/Stack';
-import Item from '@mui/material/Stack';
-import '../CSS/policy-style.scss';
-import PanelControl from "./Panel-Control";
-import * as Yup from "yup";
-import { Box,FormHelperText } from "@mui/material";
-import dayjs from "dayjs";
-import utc from 'dayjs/plugin/utc';
-import timezone from 'dayjs/plugin/timezone';
-dayjs.extend(utc);
-dayjs.extend(timezone);
-=======
 import moment                                  from "moment";
 import axios                                   from "axios";
 import Form                                    from 'react-bootstrap/Form';
@@ -53,8 +25,11 @@ import { Insurerclaim }                        from "./insurerobj_claim";
 import { Objannex }                            from "./annex_obj";
 import { ObjPaymnt }                           from "./paymentplant_obj";
 import SearchIcon from '@mui/icons-material/Search';
-
->>>>>>> Stashed changes
+import dayjs from "dayjs";
+import utc from 'dayjs/plugin/utc';
+import timezone from 'dayjs/plugin/timezone';
+dayjs.extend(utc);
+dayjs.extend(timezone);
 
 export const Policy = (props) => {
 /// selected     
@@ -72,7 +47,6 @@ export const Policy = (props) => {
     durDimension: null,
     agent:null,
     office:null,
-<<<<<<< Updated upstream
     salesChannel: null,
     state:null,
     subestado:null,
@@ -82,20 +56,6 @@ export const Policy = (props) => {
     payment_anual: null,
     payment_mensual:null
   });
-=======
-    channelsale:null,
-    status:null,
-    substatus:null,
-    dateemision:null,
-    paymentmethod:null,
-    Ppagos:null,
-    primanual: null,
-    primam: null,
-    fechaCreacion: null
-  })
-
-  const [isTouched, setIsTouched] = useState(false);
->>>>>>> Stashed changes
 
 
   const handleSubmit = async () => {
@@ -111,28 +71,8 @@ export const Policy = (props) => {
         return;
       }
 
-<<<<<<< Updated upstream
       // const response = await axios.post(, {        
       // });
-=======
-      const response = await axios.post("http://localhost:8080/api/clients", {
-        policyid: datapolicy.policyid,
-        policynumber: datapolicy.policynumber,
-        clientname: datapolicy.clientname,
-        product:datapolicy.product,
-        startpolicy: selectedstartpolicy,
-        endpolicy: selectedendpolicy,       
-        datepolicy: datapolicy.datepolicy,
-        datetipe: selectedDatetipe,
-        channelsale:     selectedchannelsale,
-        primaanual: datapolicy.primanual,
-        paymentmethod: selectedpaymentmethod,
-        Ppagos: selectedPpagos,
-        primam: datapolicy.primam,
-        fechaCreacion: selectedcreateDate,
-        
-      });
->>>>>>> Stashed changes
 
       console.log("Respuesta de la API:", response.data);
       Swal.fire({
@@ -153,7 +93,6 @@ export const Policy = (props) => {
   const validationSchema = Yup.object().shape({
     policyid: Yup.string().min(2, 'El número debe contener al menos 12 dígitos').matches(/^[+0-9]+$/,'Ingrese un id de póliza válido').required('Ingrese un id de póliza'),
     policynumber: Yup.string().matches(/^(POL-)?[+0-9]+$/, 'Ingrese un número de póliza válido').min(8, 'El número debe contener al menos 12 caracteres').required('Ingrese un número de póliza'),
-<<<<<<< Updated upstream
     clientname:Yup.string().trim().matches(/^(?!\s*$)[A-Za-záéíóúñÁÉÍÓÚÑ 0-9]+(?:\s[A-Za-záéíóúñÁÉÍÓÚÑ]+)*$/,'El formato es incorrecto').required('Por favor ingresa un nombre'),
     insrBegin: Yup.date().required('La fecha de inicio de vigencia es requerida').min(new Date(), 'La fecha de inicio de vigencia no puede ser anterior a la fecha actual'),
     insrEnd: Yup.date().required('La fecha de termino de vigencia es requerida').min(new Date(), 'La fecha de termino de vigencia no puede ser anterior a la fecha actual'),
@@ -171,25 +110,6 @@ export const Policy = (props) => {
     dateGiven: Yup.date().required('La fecha de emision es requerida').min(new Date(), 'La fecha de emision no puede ser anterior a la fecha actual'),
     salesChannel:Yup.string().required('Por favor ingresa un canal de venta'),
   });
-=======
-    clientname:Yup.string().trim().matches(/^(?!\s*$)[A-Za-záéíóúñÁÉÍÓÚÑ]+(?:\s[A-Za-záéíóúñÁÉÍÓÚÑ]+)*$/,'El nombre solo debe contener letras').required('Por favor ingresa un nombre'),
-    startpolicy: Yup.date().required('La fecha de inicio de vigencia es requerida').max(new Date(), 'La fecha de inicio de vigencia no puede ser posterior a la fecha actual'),
-    endpolicy: Yup.date().required('La fecha de termino de vigencia es requerida').max(new Date(), 'La fecha de termino de vigencia no puede ser posterior a la fecha actual'),
-    datepolicy: Yup.string().min(1, 'El número debe contener al menos 1 dígito').matches(/^[+0-9]+$/,'Ingrese un número').required('Ingrese un número de duracion de póliza'),
-    datetipe: Yup.string().required('Seleccione un sistema de tiempo'),
-    paymentmethod:Yup.string().trim().matches(/^(?!\s*$)[A-Za-záéíóúñÁÉÍÓÚÑ]+(?:\s[A-Za-záéíóúñÁÉÍÓÚÑ]+)*$/,'El metodo de pago solo debe contener letras').required('Por favor ingresa un metodo de pago'),
-    primanual: Yup.string().min(6, 'El número debe contener al menos 6 dígitos').matches(/^[+0-9]+$/,'Ingrese un número de teléfono válido').required('Ingrese un valor de prima anual'), 
-    primam:Yup.string().min(5, 'El número debe contener al menos 5 dígitos').matches(/^[+0-9]+$/,'Ingrese un valor valido').required('Ingrese un valor de prima mensual'),
-    agents:Yup.string().trim().matches(/^(?!\s*$)[A-Za-záéíóúñÁÉÍÓÚÑ]+(?:\s[A-Za-záéíóúñÁÉÍÓÚÑ]+)*$/,'El nombre solo debe contener letras').required('Por favor ingresa un nombre'),
-    office:Yup.string().trim().matches(/^(?!\s*$)[A-Za-záéíóúñÁÉÍÓÚÑ]+(?:\s[A-Za-záéíóúñÁÉÍÓÚÑ]+)*$/,'El nombre solo debe contener letras').required('Por favor ingresa un nombre de la oficina'),
-    product:Yup.string().trim().matches(/^(?!\s*$)[A-Za-záéíóúñÁÉÍÓÚÑ]+(?:\s[A-Za-záéíóúñÁÉÍÓÚÑ]+)*$/,'El producto solo debe contener letras').required('Por favor ingresa un producto'),
-    status:Yup.string().trim().matches(/^(?!\s*$)[A-Za-záéíóúñÁÉÍÓÚÑ]+(?:\s[A-Za-záéíóúñÁÉÍÓÚÑ]+)*$/,'El Estado solo debe contener letras').required('Por favor ingresa un estado'),
-    substatus:Yup.string().trim().matches(/^(?!\s*$)[A-Za-záéíóúñÁÉÍÓÚÑ]+(?:\s[A-Za-záéíóúñÁÉÍÓÚÑ]+)*$/,'El subestado solo debe contener letras').required('Por favor ingresa un subestado'),
-    dateemision: Yup.date().required('La fecha de emision es requerida').max(new Date(), 'La fecha de emision no puede ser posterior a la fecha actual'),
-    channelsale:Yup.string().trim().matches(/^(?!\s*$)[A-Za-záéíóúñÁÉÍÓÚÑ]+(?:\s[A-Za-záéíóúñÁÉÍÓÚÑ]+)*$/,'El subestado solo debe contener letras').required('Por favor ingresa un canal de vent'),
-
-  }); 
->>>>>>> Stashed changes
 
   return (
     <>
@@ -205,7 +125,6 @@ export const Policy = (props) => {
         resetForm();
       }}
       initialValues={{
-<<<<<<< Updated upstream
         policyid: '',
         policynumber: '',
         clientname: '',
@@ -224,21 +143,6 @@ export const Policy = (props) => {
         num_instalments:'',
         payment_anual:'', 
         payment_mensual:''
-=======
-        policyid:"",
-        policynumber:"",
-        clientname:"",
-        datepolicy: "",
-        datetipe: "",
-        primanual: "",
-        primam:"",
-        agents:"",
-        office:"",
-        product:"",
-        status:"",
-        substatus:"",
-        
->>>>>>> Stashed changes
     }}
     validationSchema = {validationSchema}
     >
@@ -635,7 +539,6 @@ export const Policy = (props) => {
                                         />
                                       </Item>
                                       <Item className="group-form">
-<<<<<<< Updated upstream
                                         <Box mb={touched.dateGiven && !!errors.dateGiven ? 2.5:0}>
                                           <LocalizationProvider dateAdapter={AdapterDayjs} error={touched.dateGiven && !!errors.dateGiven}>
                                             <DatePicker
@@ -665,33 +568,6 @@ export const Policy = (props) => {
                                           </LocalizationProvider>
                                         </Box>
                                       </Item>                                      
-=======
-                                        <LocalizationProvider dateAdapter={AdapterDayjs} error={touched.dateemision && !!errors.dateemision}>
-                                          <DatePicker
-                                            className="datepicker"
-                                            name="dateemision"
-                                            label="Fecha de emision"
-                                            value={values.dateemision}
-                                            onChange={(value) => {setFieldValue('dateemision', value); setSelectedBirthDate(value)}}
-                                            format="DD - MM - YYYY"
-                                            onBlur={()=>{
-                                              setIsTouched(true);
-                                              handleBlur}}
-                                            disableFuture
-                                            slotProps={
-                                              {
-                                                textField:{
-                                                  required: true,
-                                                  error: Boolean(errors.dateemision),
-                                                  helperText: errors.dateemision ? errors.dateemision: ''
-                                                }
-                                              }
-                                            }
-                                          />
-                                        </LocalizationProvider>
-                                      </Item>
-
->>>>>>> Stashed changes
                                 </Item>
                               </Stack>
                               
@@ -802,14 +678,7 @@ export const Policy = (props) => {
                                       </Item>                           
                                 </Item>
                               </Stack>
-<<<<<<< Updated upstream
                           </Stack>
-=======
-                          </Stack>  
-                                                          
-                        
-
->>>>>>> Stashed changes
         </Form>
       )}
     </Formik>

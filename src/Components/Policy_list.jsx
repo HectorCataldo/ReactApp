@@ -61,11 +61,7 @@ export const Policylist = () => {
     return <div>Cargando...</div>;
   }
 
-<<<<<<< Updated upstream
   const filteredData = policy.data.filter((item) => {
-=======
-    const filteredData = policy.filter((item) => {
->>>>>>> Stashed changes
     const searchText = searchTerm.toLowerCase();
     return (
       (item.policyId && item.policyId.toString().toLowerCase().includes(searchText)) ||
@@ -106,7 +102,6 @@ export const Policylist = () => {
       }
 
     const columns = [
-<<<<<<< Updated upstream
       { width: 20, sortable: false, renderCell: (params) => {
           if   (isRowEmpty(params.row)) { return null; } 
           else { return ( <input type="checkbox" checked={params.row.isSelected} onChange={() => {}}/> ); }},
@@ -136,33 +131,6 @@ export const Policylist = () => {
         valueFormatter: dateFormat,
       },
       {field: 'policyState', headerName: 'Estado', width: 150,},
-=======
-      {width: 20, sortable: false, renderCell: (params) => {
-        if   (isRowEmpty(params.row)) { return null; } 
-        else { return ( <input type="checkbox" checked={params.row.isSelected} onChange={() => {}}/> ); }},
-    },
-      { field: 'policyid', headerName: 'ID de Póliza', width: 150 },
-      { field: 'policynumber', headerName: 'Número de Póliza', width: 150
-      ,renderCell: (params) => ( <a href={`/Modifypolicy/${params.row.id}`} style={{ textDecoration: 'none' }}> {params.value} </a>),},
-      { field: 'clientname', headerName: 'Cliente', width: 150},
-      { field: 'product', headerName: 'Producto', width: 150, sortable: false},
-      { field: 'agents', headerName: 'Agente', width: 150, sortable: false},
-      { field: 'dateemision', headerName: 'Fecha emisión',width: 150},
-      { field: 'startpolicy', headerName: 'Inicio de vigencia',width: 150,},
-      { field: 'endpolicy', headerName: 'Fin de Vigencia', width: 150 },
-       {field:  'status', headerName: 'Estado', width: 150,
-        valueFormatter: (params) => {
-          const stateValue = params.value;
-          if (stateValue) {
-            return stateValue ? 'Activo' : 'Inactivo';
-          } else {
-            return ''; // Devuelve una cadena vacía si el valor es NaN o nulo
-          }
-        },
-      },
-    { field:'null',  headerName: 'Descargar póliza', width: 150,
-     renderCell: (params) => ( <button className='btn-list' ><FileDownloadIcon className='icon'></FileDownloadIcon></button> ),},
->>>>>>> Stashed changes
     ];
 
     const handleSearchChange = (event) => {
