@@ -39,6 +39,7 @@ body {
     font-size: 20px;
     font-weight: 600;
     margin-left: 20px;
+    width: 100%;
 
 }
 
@@ -158,6 +159,15 @@ body {
     font-size: small;
    
 }
+.Containers-Stack .Containers-Item .group-form-des{
+    margin-top: 10px;
+    margin-bottom: 10px;
+    width: 350px;
+    height: 1000px !important;
+
+   
+}
+
 
 .Containers-Stack .Containers-Item .group-form .datepolicy{
     margin-top: 10px;

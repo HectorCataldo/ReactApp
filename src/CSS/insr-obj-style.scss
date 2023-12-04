@@ -1,0 +1,75 @@
+
+.modal-dialog{
+    
+    margin-top: 300px;
+    margin-left: 700px ;
+    width: 700px;
+    height: 350px;
+}
+
+.btn-header{
+    width: 100px !important;
+    height: 35px !important;
+    font-size: 10px !important;
+    padding: 0,0,0,0 !important;
+    background-color:#00304E !important;
+    border-style: none !important;
+    border-radius: 3px !important;
+    cursor: pointer;
+}
+
+.btn-header:hover{
+    background-color:#02446d !important;
+    cursor: pointer;
+}
+
+.icons{
+    margin-right: 6px;
+}
+
+.modal-content{
+    width: 900px;
+    height: 350px;
+}
+
+.title-header
+{
+    font-size: x-large;
+ }
+
+
+.modal-body 
+{
+    margin-top: 10px;
+    width: 100%;
+}
+
+.group-form
+{
+    margin-left: 10px;
+    margin-bottom: 10px;
+    margin-right: 10px;
+    width: 400px;
+    
+}
+
+.group-form .textfield {
+
+    margin-bottom: 10px;
+    margin-top: 10px;
+}
+
+
+.btn-list{
+    background-color:transparent;
+    border-style:none;
+    color:#0d6efd;
+
+}
+
+
+.boxgrid-cov{
+    margin-left: 70px;
+    height: 90%;
+    width: 77.5%;
+}

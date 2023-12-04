@@ -210,7 +210,7 @@ td.statusC[data-state='Activo'] {
    /*NAV BAR */
 
 
-.navbar {
+.nav-bar {
   position: fixed;
   top: 0;
   left: 0;
@@ -300,8 +300,9 @@ td.statusC[data-state='Activo'] {
 .sidebar li a{
   text-decoration: none;
   color:#000000;
-  font-weight: 600;
+  /*font-weight: 600;*/
   padding-top: 10px;
+  width: 100%;
   padding-bottom: 10px;
 }
 
@@ -313,6 +314,10 @@ td.statusC[data-state='Activo'] {
 
 .sidebar ul li:hover {
   background-color: rgba(0, 0, 0, 0.1); /* Cambia el color de fondo en hover */
+}
+.sidebar li a.active {
+  background-color: #00304E; // Cambia el color según tus necesidades
+  color: #fff; // Cambia el color del texto según tus necesidades
 }
 
 /* Contenido principal */
@@ -380,4 +385,3 @@ td.statusC[data-state='Activo'] {
       /* Otros ajustes de estilo para pantallas más pequeñas */
   }
 }
-

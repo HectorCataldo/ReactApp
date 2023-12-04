@@ -1,5 +1,5 @@
 import React, { useState, useEffect, useMemo } from "react";
-
+import '../CSS/register-style.scss';
 import moment from "moment";
 import axios from "axios";
 import Form from 'react-bootstrap/Form';
@@ -18,7 +18,7 @@ import { LocalizationProvider } from '@mui/x-date-pickers/LocalizationProvider';
 import { DatePicker } from '@mui/x-date-pickers/DatePicker';
 import Stack from '@mui/material/Stack';
 import Item from '@mui/material/Stack';
-import '../CSS/register-style.scss';
+
 import PanelControl from "./Panel-Control";
 import * as Yup from "yup";
 import { Box,FormHelperText } from "@mui/material";

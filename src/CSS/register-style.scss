@@ -13,13 +13,15 @@ body {
 
 .formulario {
     background-color: rgb(255, 255, 255);
-    height: 100vh; 
+    height: 80vh !important; 
     width: 100hv;
     margin-left: 250px;
     z-index: 0;
 }
 
-
+.icon{
+    align-items: center;
+}
 
 /* Panel de usuario y otros estilos relacionados */
 .Panel-User {
@@ -27,7 +29,7 @@ body {
     justify-content: space-between;
     align-items: center;
     margin-left: 5%;
-    width: 80.2%; /* Igualar el ancho al de Containers-stacks2 */
+    width: 74.5% !important; /* Igualar el ancho al de Containers-stacks2 */
     height: 100px;
     margin-top: 10px;
     margin-bottom: 20px;
@@ -104,7 +106,7 @@ body {
     width: 82.5%;
     height: 600px;
     display: flex;
-    margin-left: 65px;
+    margin-left: 73px !important;
 }
 
 
@@ -113,7 +115,8 @@ body {
 // CONTENEDORES NUEVOS 
 
 .Containers-Stack {
-    width: 500px; 
+    width: 500px;
+    height: 670px; 
     background-color: #fffcfc;
     align-items: center;
     display: flex;
@@ -174,14 +177,45 @@ body {
     font-weight: 500;
 }
 
-/* Ejemplo de cómo quitar el color de fondo de los campos */
-.group-form,
-.select-form,
-.datepicker {
-    background-color: transparent !important; /* Establecer el fondo como transparente */
-    /* Otros estilos de los campos */
+
+
+// contenedor OBJ 
+
+.container-obj {
+    border: 1px solid #ccc; 
+    padding: 10px; 
+    margin-left: 85px;
+    margin-right:20px;
+    margin-top : 20px;
+    width: 1328px;
+    box-shadow: rgba(0, 0, 0, 0.12) 0px 0px 2px, rgba(0, 0, 0, 0.14) 0px 2px 4px;
+}
+.container-obj  .title-stack
+{
+    display: flex;
+    align-items:start;
+    font-weight: 500;
+    margin-bottom: 10px;
 }
 
+
+.container-obj .group-form .stack-2 .select-form{
+    margin-top: 0px;
+    margin-bottom: 10px;
+    width: 350px;
+    margin-right: 10px;
+    
+}
+
+.container-obj .group-form{
+  
+    margin-bottom: 10px;
+    width: 350px;
+    font-size: small;
+    margin-left: 10px;
+    /*background-color:#e7f5f9 !important;*/
+   
+}
 
 /// FIN DE LOS CONTENEDORES 
 

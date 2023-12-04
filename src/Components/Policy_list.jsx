@@ -20,6 +20,8 @@ dayjs.extend(utc);
 dayjs.extend(timezone);
 
 
+import FileDownloadIcon from '@mui/icons-material/FileDownload';
+
 export const Policylist = () => {
   const { data:policy } = useFetch("https://si-client-bkn.kps/api/v1/policy/");
 
@@ -51,11 +53,7 @@ export const Policylist = () => {
 
   const isRowEmpty = (row) => {
     return (
-      !row.documentNumber &&
-      !row.firstName &&
-      !row.lastName &&
-      !row.birthDate &&
-      !row.state
+      !row.policynumber 
     );
   };
 
@@ -63,16 +61,17 @@ export const Policylist = () => {
     return <div>Cargando...</div>;
   }
 
+<<<<<<< Updated upstream
   const filteredData = policy.data.filter((item) => {
+=======
+    const filteredData = policy.filter((item) => {
+>>>>>>> Stashed changes
     const searchText = searchTerm.toLowerCase();
     return (
       (item.policyId && item.policyId.toString().toLowerCase().includes(searchText)) ||
       (item.policynumber && item.policynumber.toString().toLowerCase().includes(searchText)) ||
-      (item.cliente && item.cliente.toString().toLowerCase().includes(searchText))
-    );
-  });
-
-
+      (item.cliente && item.cliente.toString().toLowerCase().includes(searchText)));});
+      
     const indexOfLastClient = currentPage * clientsPerPage;
     const indexOfFirstClient = indexOfLastClient - clientsPerPage;
     const currentClients = filteredData.map(
@@ -107,6 +106,7 @@ export const Policylist = () => {
       }
 
     const columns = [
+<<<<<<< Updated upstream
       { width: 20, sortable: false, renderCell: (params) => {
           if   (isRowEmpty(params.row)) { return null; } 
           else { return ( <input type="checkbox" checked={params.row.isSelected} onChange={() => {}}/> ); }},
@@ -136,6 +136,33 @@ export const Policylist = () => {
         valueFormatter: dateFormat,
       },
       {field: 'policyState', headerName: 'Estado', width: 150,},
+=======
+      {width: 20, sortable: false, renderCell: (params) => {
+        if   (isRowEmpty(params.row)) { return null; } 
+        else { return ( <input type="checkbox" checked={params.row.isSelected} onChange={() => {}}/> ); }},
+    },
+      { field: 'policyid', headerName: 'ID de Póliza', width: 150 },
+      { field: 'policynumber', headerName: 'Número de Póliza', width: 150
+      ,renderCell: (params) => ( <a href={`/Modifypolicy/${params.row.id}`} style={{ textDecoration: 'none' }}> {params.value} </a>),},
+      { field: 'clientname', headerName: 'Cliente', width: 150},
+      { field: 'product', headerName: 'Producto', width: 150, sortable: false},
+      { field: 'agents', headerName: 'Agente', width: 150, sortable: false},
+      { field: 'dateemision', headerName: 'Fecha emisión',width: 150},
+      { field: 'startpolicy', headerName: 'Inicio de vigencia',width: 150,},
+      { field: 'endpolicy', headerName: 'Fin de Vigencia', width: 150 },
+       {field:  'status', headerName: 'Estado', width: 150,
+        valueFormatter: (params) => {
+          const stateValue = params.value;
+          if (stateValue) {
+            return stateValue ? 'Activo' : 'Inactivo';
+          } else {
+            return ''; // Devuelve una cadena vacía si el valor es NaN o nulo
+          }
+        },
+      },
+    { field:'null',  headerName: 'Descargar póliza', width: 150,
+     renderCell: (params) => ( <button className='btn-list' ><FileDownloadIcon className='icon'></FileDownloadIcon></button> ),},
+>>>>>>> Stashed changes
     ];
 
     const handleSearchChange = (event) => {
@@ -154,7 +181,7 @@ export const Policylist = () => {
   
       <div className='App'>
         <div className='container-sm container-title'>
-          <h4 className='title'>Póliza</h4>
+          <h4 className='title'>Pólizas</h4>
           <div className="search-container">
             <FormControl variant="standard">
               <InputLabel htmlFor="input-with-icon-adornment">Buscar</InputLabel>
@@ -171,6 +198,7 @@ export const Policylist = () => {
         </div>
 
         <Box className='boxgrid' sx={{ height: '100%', width: '100%' }}>
+   
           <DataGrid
             className='dataGrid'
             initialState={{ pagination: { paginationModel: { page: 0, pageSize: 15 }, }}}

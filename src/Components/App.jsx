@@ -64,7 +64,7 @@ export const App = () => {
       );
     });
 
-    const selectedV = 'prueba de datos'
+
     const indexOfLastClient = currentPage * clientsPerPage;
     const indexOfFirstClient = indexOfLastClient - clientsPerPage;
     const currentClients = filteredData.map(
@@ -93,6 +93,7 @@ export const App = () => {
 
     console.log("Current_clients: "+currentClients);
   
+<<<<<<< Updated upstream
     const columns = 
     [
       { field: 'manId', headerName: 'ID', width: 200 },
@@ -100,6 +101,36 @@ export const App = () => {
       { field: 'egn', headerName: 'Número de Documento', width: 200 },
       { field: 'name', headerName: 'Nombre Completo', width: 200, sortable: false,
         renderCell:(params) => ( <a href={`/modify/${params.row.id}`} style={{ textDecoration: 'none' }}> {params.value} </a>),
+=======
+    const columns = [
+    { width: 20, sortable: false, renderCell: (params) => {
+        if   (isRowEmpty(params.row)) { return null; } 
+        else { return ( <input type="checkbox" checked={params.row.isSelected} onChange={() => {}}/> ); }},
+    },
+    { field: 'documentNumber', headerName: 'RUT', width: 200 },
+    { field: 'fullName', headerClassName:'title',  headerName: 'Nombre Completo', width: 200, sortable: false,
+    valueGetter: (params) => {
+      if (params.row.tipo_persona === 'juridico') 
+      { return `${params.row.jrazonsocial}  ${params.row.jfaname || ''}`;}
+      else 
+      { return `${params.row.firstName } ${params.row.lastName || '' }`;}
+    },
+      renderCell: (params) => ( <a href={`/modify/${params.row.id}`} style={{ textDecoration: 'none' }}> {params.value} </a>),
+    },
+    {field: 'birthDate', headerName: 'Fecha de nacimiento', width: 200,
+      valueFormatter: (params) => {
+
+        const date = new Date(params.value);
+        if(params.value){
+          const day = date.getDate();
+          const month = date.getMonth() + 1; 
+          const year = date.getFullYear();
+          const formattedDate = `${day.toString().padStart(2, '0')}/${month.toString().padStart(2, '0')}/${year}`;
+          return formattedDate; }
+          
+          else { return ''; }
+        
+>>>>>>> Stashed changes
       },
       { field: 'gname', headerName: 'Nombre', width: 200 },
       { field: 'sname', headerName: 'Apellido', width: 200 },
@@ -139,8 +170,10 @@ export const App = () => {
           </div>
         </div>
 
-        <Box className='boxgrid' sx={{ height: '100%', width: '100%' }}>
+        <Box className='boxgrid' sx={{ height: '100%', width: '100%' , fontWeight: '600'}}>
+       
           <DataGrid
+           
             className='dataGrid'
             initialState={{ pagination: { paginationModel: { page: 0, pageSize: 15 }, }}}
             rows={currentClients}
