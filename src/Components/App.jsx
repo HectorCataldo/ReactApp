@@ -99,8 +99,7 @@ export const App = () => {
       { field: 'manComp', headerName: 'Tipo de Persona', width: 200 },
       { field: 'egn', headerName: 'Número de Documento', width: 200 },
       { field: 'name', headerName: 'Nombre Completo', width: 200, sortable: false,
-        renderCell:(params) => ( <a href={`/modify/${params.row.id}`} style={{ textDecoration: 'none' }}> {params.value} </a>),
-      },
+        renderCell:(params) => ( <a href={`/modify/${params.row.id}`} style={{ textDecoration: 'none' }}> {params.value} </a>),},
       { field: 'gname', headerName: 'Nombre', width: 200 },
       { field: 'sname', headerName: 'Apellido', width: 200 },
       { field: 'fname', headerName: 'Family Name', width: 200 },
@@ -152,7 +151,7 @@ export const App = () => {
               console.log("Usuario seleccionado:", params.row);
              }}  
           />
-          {isModifyOpen && <Modify selectedClient={selectedClient}/>}
+    
         </Box>
       </div>
     </>

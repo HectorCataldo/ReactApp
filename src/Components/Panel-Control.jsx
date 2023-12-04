@@ -13,10 +13,7 @@ const PanelControl = (props) => {
   // POLIZA
   const isPolicylistpage   = location.pathname === "/policylist";
   const isPolicycreatepage = location.pathname ==="/Policy";
-<<<<<<< Updated upstream
-  const isModifyClient = location.pathname.includes ("/modify/");
   const isModifyPolicy = location.pathname.includes ("/modifypolicy/");
-=======
   const isPolicyModifypage = location.pathname.includes ("/Modifypolicy/");
  // COTIZACION 
   const isQuotationlistpage    = location.pathname === "/Quotationlist";
@@ -31,7 +28,6 @@ const PanelControl = (props) => {
   const isClaimcreatepage = location.pathname === "/Claim";
   const isClaimModifypage = location.pathname.includes ("/Modifyclaim/");
 
->>>>>>> Stashed changes
   const {handleSubmit} = props;
   const {handleEdit} = props;
   const {handleState} = props;
@@ -146,7 +142,6 @@ const PanelControl = (props) => {
           {!ocultar  && !state && <Button className="btn_desactive" onClick={handleState}><CheckCircleOutlined className="active-log"/> Activar</Button>}
         </>
       )}
-<<<<<<< Updated upstream
       {isModifyPolicy && (
         <>
           <Link to="/policylist" > <Button className="btn_back"> <ArrowLeftOutlined className="back-log" /></Button> </Link>
@@ -157,7 +152,6 @@ const PanelControl = (props) => {
         </>
       )}
      
-=======
 
       {isQuiotationModifypage && (
         <>
@@ -181,7 +175,6 @@ const PanelControl = (props) => {
         </>
       )}
 
->>>>>>> Stashed changes
     </div>
   );
 };

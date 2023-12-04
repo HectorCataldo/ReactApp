@@ -1,16 +1,6 @@
 import React                                      from 'react';
 import { createRoot }                             from 'react-dom/client';
 import { BrowserRouter as Router, Routes, Route } from 'react-router-dom';
-<<<<<<< Updated upstream
-import { Principal } from '../src/Components/Principal';
-import { App } from './Components/App';
-import { Registro } from './Components/Create_register';
-import { Modify } from './Components/Modify_register';
-import { Policylist } from './Components/Policy_list';
-import { Policy } from './Components/Create_policy';
-import { Modifypolicy } from './Components/Modify_policy';
-import { Login } from './Components/Login';
-=======
 import { Principal }                              from '../src/Components/Principal';
 import { App }                                    from './Components/App';
 import { Registro }                               from './Components/Create_register';
@@ -30,7 +20,6 @@ import { Modifyclaim }                            from './Components/Modify_Clai
 import { Objmodal }                               from './Components/insrobj_modal';
 import { Objannex }                               from './Components/annex_obj';
 import { ObjPaymnt }                              from './Components/paymentplant_obj';
->>>>>>> Stashed changes
 import './CSS/index.scss';
 // ventanas modales 
 
@@ -41,16 +30,6 @@ const AppRouter = () => {
     <React.StrictMode>
       <Router>
         <Routes>
-<<<<<<< Updated upstream
-          <Route path="/" element={<Principal />} />
-          <Route path="/ApClients" element={<App/>} />
-          <Route path="/registro" element={<Registro />} />
-          <Route path="/modify/:id" element={<Modify/>} />
-          <Route path='/policylist' element={<Policylist/>}/>
-          <Route path='/Policy' element={<Policy/>}/>
-          <Route path='/Login' element={<Login/>}></Route>
-          <Route path='/modifypolicy/:id' element={<Modifypolicy/>}></Route>
-=======
           <Route path="/"                     element={<Principal />} />
           <Route path='/Login'                element={<Login/>}/>
 
@@ -86,7 +65,6 @@ const AppRouter = () => {
 
            
             
->>>>>>> Stashed changes
         </Routes>
       </Router>
     </React.StrictMode>
