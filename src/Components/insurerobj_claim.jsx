@@ -89,7 +89,7 @@ export const Insurerclaim = (props) => {
   return (
     <>
       <div className='App-insr'>
-        <div className='container-sm container-title'>
+        <div className='container-sm container-title-br'>
           <h4 className='title-obj'>Objetos asegurados</h4>
         </div>
         <Box className='boxgrid-cov' >

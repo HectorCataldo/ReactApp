@@ -20,6 +20,12 @@ import { Modifyclaim }                            from './Components/Modify_Clai
 import { Objmodal }                               from './Components/insrobj_modal';
 import { Objannex }                               from './Components/annex_obj';
 import { ObjPaymnt }                              from './Components/paymentplant_obj';
+import { Correos }                                from './Components/contact_cor';
+import { Telefonos }                              from './Components/contact_tel';
+import { Direcciones }                            from './Components/contact_dir';
+import { Modaltel }                               from './Components/modal_tel';
+import { Modalcor }                               from './Components/modal_cor';
+import { Modaldir }                               from './Components/modal_dir';
 import './CSS/index.scss';
 // ventanas modales 
 
@@ -48,6 +54,10 @@ const AppRouter = () => {
           <Route path='/Insurer'              element={<Insurer/>}/>
           <Route path='/Objannex'             element={<Objannex/>}/>
           <Route path='/Objpaymnt'            element={<ObjPaymnt/>}/>
+          <Route path='/Correos'              element={<Correos/>}/>
+          <Route path='/Telefonos'            element={<Telefonos/>}/>
+          <Route path='/Direcciones'          element={<Direcciones/>}/>
+          
             {/* COTIZACIONES */}
           <Route path='/Quotation'            element={<Quotation/>}/>
           <Route path='/Quotationlist'        element={<Quotationlist/>}/>
@@ -62,8 +72,9 @@ const AppRouter = () => {
 
             {/*MODALS*/}
             <Route path="/objmodal/:id"         element={<Objmodal/>}/>
-
-           
+            <Route path="/modaltel"             element={<Modaltel/>}/>
+            <Route path="/modalcor"             element={<Modalcor/>}/> 
+            <Route path="/modaldir"             element={<Modaldir/>}/>       
             
         </Routes>
       </Router>

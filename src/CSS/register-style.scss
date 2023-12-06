@@ -372,5 +372,120 @@ body {
         height: 35px;
     }
     
+
+
+
+
+
+
+
+    ////////////////////////////////////////////////////////////////////////////////////////////////////////
+    /// CONTAINTERS CREATE REGISTER 
+    /// 
+    /// 
+    /// 
+    /// 
+    .formulario-cr {
+        background-color: rgb(255, 255, 255);
+        height: 50vh !important; 
+        width: 100hv;
+        margin-left: 250px;
+        z-index: 0;
+    }
+    .Containers-stacks-3{
+        width: 82.5%;
+        height: 350px !important;
+        display: flex;
+        margin-left: 73px !important;
+    }
+    
+    .Containers-stacks-3 .Containers-Stack-in {
+        border: 1px solid #ccc; 
+        padding: 10px; 
+        margin-left: 20px;
+        margin-right:20px;
+        width: 450px;
+        box-shadow: rgba(0, 0, 0, 0.12) 0px 0px 2px, rgba(0, 0, 0, 0.14) 0px 2px 4px;
+    }
+    .Containers-Stack-in {
+        width: 500px;
+        height: 350px; 
+        background-color: #fffcfc;
+        align-items: center;
+        display: flex;
+        flex-direction: column;
+        margin-left: 20px;
+        margin-right: 20px;
+        border-color: #000000;
+        border-style: 2px solid;
+    }
+
+    .Containers-Stack-in .Containers-Item  .select-form{
+        border-color: #C7C7C7;
+        border-style: 2px solid;
+        border-radius: 5px;
+        height: 35px;
+        width: 220px;
+        
+    }
+
+    .Containers-Stack-in .Containers-Item .group-form{
+        margin-top: 10px;
+        margin-bottom: 10px;
+        width: 350px;
+        font-size: small;
+        /*background-color:#e7f5f9 !important;*/
+       
+    }
     
     
+    .Containers-Stack-in .Containers-Item .group-form .select-form{
+        margin-top: 0px;
+        margin-bottom: 20px;
+        width: 350px;
+        
+    }
+    
+    
+    .Containers-Stack-in .Containers-Item .datepicker{
+        margin-top: 0px;
+        margin-bottom: 20px;
+        width: 350px;
+    }
+    .Containers-Stack-in .Containers-Item  .title-stack
+    {
+        display: flex;
+        align-items:start;
+        font-weight: 500;
+    }
+    
+
+
+    .Containers-stacks-contact {
+        border: 1px solid #ccc; 
+        padding: 10px; 
+        margin-top: 12px;
+        margin-left: 91px;
+        margin-right:20px;
+        height: 120px;
+        width: 1393px;
+        box-shadow: rgba(0, 0, 0, 0.12) 0px 0px 2px, rgba(0, 0, 0, 0.14) 0px 2px 4px;
+    }
+    .Containers-stacks-contact  .group-form .select-form{
+        margin-top: 0px;
+        margin-bottom: 20px;
+        width: 300px;
+        
+    }
+
+    .Containers-stacks-contact .group-form{
+        margin-top: 15px;
+        margin-bottom: 10px;
+        width: 350px;
+        font-size: small;
+        /*background-color:#e7f5f9 !important;*/
+       
+    }
+    
+    /// JUD
+    /// 

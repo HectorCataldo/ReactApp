@@ -82,7 +82,7 @@ export const Objannex = () => {
 
   
       <div className='App-cov'>
-        <div className='container-sm container-title'>
+        <div className='container-sm container-title-br'>
           <h4 className='title'>Endoso </h4>
         </div>
 

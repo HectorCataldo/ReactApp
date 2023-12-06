@@ -99,7 +99,7 @@ export const Coverage = () => {
 
   
       <div className='App-cov'>
-        <div className='container-sm container-title'>
+        <div className='container-sm container-title-br'>
           <h4 className='title'>Coberturas </h4>
         </div>
 

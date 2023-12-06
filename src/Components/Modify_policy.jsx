@@ -26,7 +26,10 @@ import utc from 'dayjs/plugin/utc';
 import timezone from 'dayjs/plugin/timezone';
 dayjs.extend(utc);
 dayjs.extend(timezone);
-
+import { Coverage }                            from "./Coverage";
+import { Insurerclaim }                        from "./insurerobj_claim";
+import { Objannex }                            from "./annex_obj";
+import { ObjPaymnt }                           from "./paymentplant_obj";
 export const Modifypolicy = (props) => {
   //  APIS
   const {id} = useParams();
@@ -791,6 +794,10 @@ export const Modifypolicy = (props) => {
         </Form>
       )}
     </Formik>
+    <Objannex></Objannex>
+    <Insurerclaim></Insurerclaim>
+    <Coverage></Coverage>
+    <ObjPaymnt></ObjPaymnt>
   </>
   );
 };

@@ -101,7 +101,7 @@ export const Insurer = () => {
   
   
       <div className='App-insr'>
-        <div className='container-sm container-title'>
+        <div className='container-sm container-title-br'>
           <h4 className='title'>Objetos asegurados</h4>
           {/* <div className="search-container">
             <FormControl variant="standard">

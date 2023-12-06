@@ -104,14 +104,13 @@ export const Policylist = () => {
     const columns = [
       { width: 20, sortable: false, renderCell: (params) => {
           if   (isRowEmpty(params.row)) { return null; } 
-          else { return ( <input type="checkbox" checked={params.row.isSelected} onChange={() => {}}/> ); }},
-      },
+          else { return ( <input type="checkbox" checked={params.row.isSelected} onChange={() => {}}/> ); }},},
       { field: 'policyId', headerName: 'ID de Póliza', width: 150 },
       { field: 'policyNo', headerName: 'Número de Póliza', width: 150,
         renderCell:(params) => ( <a href={`/modifypolicy/${params.row.id}`} style={{ textDecoration: 'none' }}> {params.value} </a>)
       },
       { field: 'cliente', headerName: 'Cliente', width: 150},
-      { field: 'insrType', headerName: 'Producto', width: 150, sortable: false,
+      { field: 'insrType', headerName: 'Producto', width: 250, sortable: false,
         valueFormatter: (params) => {
           let stateValue = params.value;
           if (stateValue == 4050){
@@ -120,7 +119,7 @@ export const Policylist = () => {
           }
         }
       },
-      { field: 'agent', headerName: 'Agente', width: 150, sortable: false},
+      { field: 'agent', headerName: 'Agente', width: 190, sortable: false},
       { field:  'dateGiven', headerName: 'Fecha emisión',width: 150, 
           valueFormatter: dateFormat,
       },

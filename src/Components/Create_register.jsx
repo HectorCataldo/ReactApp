@@ -1,35 +1,37 @@
 import React, { useState, useEffect, useMemo } from "react";
 import '../CSS/register-style.scss';
-import moment from "moment";
-import axios from "axios";
-import Form from 'react-bootstrap/Form';
-import Swal from "sweetalert2";
-import { useFetch } from "../assets/useFetch";
-import TextLinkExample from "./Navbar";
-import Sidebar from "./sidebar";
-import { Formik } from "formik";
-import TextField from "@mui/material/TextField";
-import Select from "@mui/material/Select";
-import MenuItem from "@mui/material/MenuItem";
-import FormControl from "@mui/material/FormControl";
-import InputLabel from "@mui/material/InputLabel";
-import { AdapterDayjs } from '@mui/x-date-pickers/AdapterDayjs';
-import { LocalizationProvider } from '@mui/x-date-pickers/LocalizationProvider';
-import { DatePicker } from '@mui/x-date-pickers/DatePicker';
-import Stack from '@mui/material/Stack';
-import Item from '@mui/material/Stack';
-
-import PanelControl from "./Panel-Control";
-import * as Yup from "yup";
-import { Box,FormHelperText } from "@mui/material";
-import dayjs from "dayjs";
+import moment                                  from "moment";
+import axios                                   from "axios";
+import Form                                    from 'react-bootstrap/Form';
+import Swal                                    from "sweetalert2";
+import { useFetch }                            from "../assets/useFetch";
+import TextLinkExample                         from "./Navbar";
+import Sidebar                                 from "./sidebar";
+import { Formik }                              from "formik";
+import TextField                               from "@mui/material/TextField";
+import Select                                  from "@mui/material/Select";
+import MenuItem                                from "@mui/material/MenuItem";
+import FormControl                             from "@mui/material/FormControl";
+import InputLabel                              from "@mui/material/InputLabel";
+import { AdapterDayjs }                        from '@mui/x-date-pickers/AdapterDayjs';
+import { LocalizationProvider }                from '@mui/x-date-pickers/LocalizationProvider';
+import { DatePicker }                          from '@mui/x-date-pickers/DatePicker';
+import Stack                                   from '@mui/material/Stack';
+import Item                                    from '@mui/material/Stack';
+import { Correos }                             from "./contact_cor";
+import { Telefonos }                           from "./contact_tel";
+import { Direcciones }                         from "./contact_dir";
+import PanelControl                            from "./Panel-Control";
+import * as Yup                                from "yup";
+import { Box,FormHelperText }                  from "@mui/material";
+import dayjs                                   from "dayjs";
 
 export const Registro = (props) => {
-  const { data: country } = useFetch( "https://gist.githubusercontent.com/HectorCataldo/ceee7aa2b93e83d7d04f752e3adbe623/raw/81b6bc11b965720e6717975f665fe85869c71e81/paises.json" )
-  const { data: regions} = useFetch("https://gist.githubusercontent.com/HectorCataldo/11e149d5ba18e9dfe72b6c21e38ca439/raw/b7281863b44021b362338493025cc0723e39b7a9/regions.json");
-  const { data: clients } = useFetch("http://localhost:8080/api/clients");
+  const { data: country }    = useFetch( "https://gist.githubusercontent.com/HectorCataldo/ceee7aa2b93e83d7d04f752e3adbe623/raw/81b6bc11b965720e6717975f665fe85869c71e81/paises.json" )
+  const { data: regions}     = useFetch("https://gist.githubusercontent.com/HectorCataldo/11e149d5ba18e9dfe72b6c21e38ca439/raw/b7281863b44021b362338493025cc0723e39b7a9/regions.json");
+  const { data: clients }    = useFetch("http://localhost:8080/api/clients");
   const { data: profession } = useFetch("http://localhost:8080/api/profession");
-  const { data: gender} = useFetch("http://localhost:8080/api/gender");
+  const { data: gender}      = useFetch("http://localhost:8080/api/gender");
   const [selectedBirthDate, setSelectedBirthDate] = useState(dayjs().format("YYYY-MM-DD"));
   const [objetos, setObjetos] = useState();
   const [selectedcreateDate] = useState(dayjs());
@@ -141,12 +143,13 @@ export const Registro = (props) => {
         !clientData.address ||
         !clientData.profession ||
         !selectedTipo,
+        console.log(selectedTipo),
         console.log(clientData.documentNumber),
         console.log(clientData.firstName),
         console.log(clientData.lastName),
         console.log(clientData.secondLastName),
         console.log(selectedBirthDate),
-        console.log(selectedGender)
+        console.log(selectedGender.id_gender)
         // console.log(),
         // console.log(),
         // console.log(),
@@ -324,7 +327,7 @@ export const Registro = (props) => {
     validationSchema = {validationSchema}
     >
       {({ errors, touched, handleSubmit: formikHandleSubmit, handleChange, handleBlur, values, setFieldValue, setValues}) => (
-        <Form className="formulario" onSubmit={formikHandleSubmit}>
+        <Form className="formulario-cr" onSubmit={formikHandleSubmit}>
                       {/* PANEL DE CONTROL */}
                    <Stack direction="row" className="Panel-User">
                             <div className="user-info-container">
@@ -365,10 +368,10 @@ export const Registro = (props) => {
 
                        {/* PERSONA NATURAL */}
                        {selectedTipo == 1 && (
-                          <Stack direction="row" spacing={30} className="Containers-stacks2">
+                          <Stack direction="row" spacing={30} className="Containers-stacks-3">
 
                               {/* Contenedor 1 */}
-                              <Stack md="4" className="Containers-Stack">
+                              <Stack md="4" className="Containers-Stack-in">
                                 <Item md="12" className="Containers-Item">
                                 <span className="title-stack">Datos Personales</span>
                                 <Item className="group-form">
@@ -423,6 +426,54 @@ export const Registro = (props) => {
                                       </Item>
              
                                       <Item className="group-form">
+                                        <Box mb={touched.gender && errors.gender ? 2.5:0}>
+                                        <FormControl variant="filled" className="select-form" error={touched.gender && !!errors.gender}>
+                                          <InputLabel htmlFor="gender">Género </InputLabel>
+                                          <Select
+                                            id="gender"
+                                            name="gender"
+                                            value={values.gender}
+                                            onChange={(e) => {
+                                              const genderSelected = e.target.value;
+                                              setValues((prevValues)=>({...prevValues, gender: genderSelected}));
+                                              const id_gender = e.target.value;
+                                              const genderObjerc = gender.find(item => item.id_gender === id_gender);
+                                              setSelectedGender(genderObjerc || null);
+                                            }}
+                                            onBlur={handleBlur}
+                                            label="Género"
+                                            disabled= {disableGender}
+                                            error={touched.selectedGender && !!errors.selectedGender}
+                                          >
+                                            <MenuItem value="">Selecciona un género</MenuItem>
+                                            {selectedTipo !== 1 && (
+                                              gender && gender.slice(0, 1).map((item) => (
+                                                <MenuItem key={item.id_gender} value={item.id_gender}>
+                                                  {item.gender}
+                                                </MenuItem>
+                                              ))
+                                            )}
+                                            {gender && gender.slice(-2).map((item)=>(
+                                              <MenuItem key={item.id_gender} value={item.id_gender}>
+                                                {item.gender}
+                                              </MenuItem> 
+                                            ))}
+                                          </Select>
+                                          {touched.gender && errors.gender && <FormHelperText>{errors.gender}</FormHelperText>}
+                                        </FormControl>
+                                        </Box>
+                                      </Item>
+
+                                    
+                                </Item>
+                              </Stack>
+
+                              {/* Contenedor 2 */}
+                              <Stack md="4" className="Containers-Stack-in">
+                                
+                              <Item md="12" className="Containers-Item">
+                              <span className="title-stack">Datos Personales</span>
+                              <Item className="group-form">
                                         <TextField
                                           id="firstName"
                                           label="Nombres"
@@ -494,7 +545,14 @@ export const Registro = (props) => {
 
                                         />
                                       </Item>
-                                      <Item className="group-form">
+                                      
+                                    </Item>
+                              </Stack>
+                              {/* Contenedor 3 */}
+                              <Stack md="4" className="Containers-Stack-in">
+                                <Item md="12" className="Containers-Item">    
+                                  <span className="title-stack">Datos Adicionales</span>                                  
+                                  <Item className="group-form">
                                         <LocalizationProvider dateAdapter={AdapterDayjs} error={touched.birthDate && !!errors.birthDate}>
                                           <DatePicker
                                             className="datepicker"                                            
@@ -521,174 +579,6 @@ export const Registro = (props) => {
                                             }
                                           />
                                         </LocalizationProvider>
-                                      </Item>
-                                </Item>
-                              </Stack>
-
-                              {/* Contenedor 2 */}
-                              <Stack md="4" className="Containers-Stack">
-                                <Item md="12" className="Containers-Item">                 
-                                  <span className="title-stack" >Datos de Contacto</span>
-
-                                  <Item className="group-form">
-                                        <TextField
-                                          id="email"
-                                          label="Correo "
-                                          type="email"
-                                          variant="filled"
-                                          name="email"
-                                          required
-                                          placeholder="Correo@example.com"
-                                          onChange={(e) => {handleChange(e);setClientData({ ...clientData, email: e.target.value })}}
-                                          value={values.email}
-                                          onBlur={handleBlur}
-                                          error={touched.email && !!errors.email}
-                                          helperText={touched.email && errors.email}
-                                        />
-                                      </Item>
-
-                                      <Item className="group-form">
-                                        <TextField
-                                          id="phoneNumber"
-                                          label="Teléfono "
-                                          type="text"
-                                          variant="filled"
-                                          name="phoneNumber"
-                                          required
-                                          placeholder="911111111"
-                                          inputProps={{maxLength : 12}}
-                                          onKeyPress={(e) => {
-                                            const pattern = /^[+0-9]+$/;
-                                            if (!pattern.test(e.key)) {
-                                              e.preventDefault();
-                                            }
-                                          }}
-                                          onChange={(e) => {handleChange(e);setClientData({ ...clientData, phoneNumber: e.target.value })}}
-                                          onBlur={handleBlur}
-                                          value={values.phoneNumber}
-                                          error={touched.phoneNumber && !!errors.phoneNumber}
-                                          helperText={touched.phoneNumber && errors.phoneNumber}
-                                        />
-                                      </Item>
-
-                                      <Item md="6" className="group-form">
-                                        <TextField
-                                          label="Dirección "
-                                          type="text"
-                                          variant="filled"
-                                          name="address"
-                                          required
-                                          value={values.address}
-                                          onChange={(e) => {handleChange(e);setClientData({ ...clientData, address: e.target.value })}}
-                                          onBlur={handleBlur}
-                                          error={touched.address && !!errors.address}
-                                          helperText={touched.address && errors.address}
-                                        />
-                                      </Item>
-
-                                      <Item className="group-form">
-                                        <Box mb={touched.region && errors.region ? 2.5 : 0}>
-                                        <FormControl variant="filled" className="select-form" error={touched.region && !!errors.region}>
-                                          <InputLabel htmlFor="region">Región </InputLabel>
-                                          <Select
-                                            id="region"
-                                            name="region"
-                                            value={values.region}
-                                            onChange={(e) => {
-                                              RegionChange(e);
-                                              const newRegionValue = e.target.value;                                               
-                                              setValues((prevValues) => ({ ...prevValues, region: newRegionValue }))
-                                            }}
-                                            onBlur={handleBlur}
-                                            label="Región"                                            >
-                                              <MenuItem value = "">
-                                              Seleccione una región
-                                              </MenuItem>
-                                              {Array.isArray(regions?.regions) &&
-                                                regions.regions.map((region, index) =>(
-                                                  <MenuItem key={index} value={region.name}>
-                                                  {region.name}
-                                                  </MenuItem>
-                                                ))}
-                                          </Select>
-                                          {touched.region && errors.region && <FormHelperText>{errors.region}</FormHelperText>}
-                                        </FormControl>
-                                        </Box>
-                                      </Item>
-
-                                      <Item className="group-form">
-                                        <Box mb={touched.comuna && errors.comuna ? 2.5:0}>
-                                        <FormControl variant="filled" className="select-form" error={touched.comuna && !!errors.comuna}>
-                                          <InputLabel htmlFor="comuna">Comuna </InputLabel>
-                                          <Select
-                                            id="comuna"
-                                            name="comuna"
-                                            value={values.comuna}
-                                            onChange={(e) =>{
-                                                const comunaSelect = e.target.value;
-                                                setValues((prevValues)=> ({...prevValues, comuna: comunaSelect}));
-                                                setSeComuna(comunaSelect);
-                                              }}
-                                            onBlur={handleBlur}
-                                            disabled ={!seRegion}
-                                            label="Comuna"
-                                            required>
-                                              <MenuItem value="">Seleccione una comuna</MenuItem>
-                                              {Array.isArray(fcomunas) &&
-                                                fcomunas.map((comuna, index) =>
-                                                (
-                                                  <MenuItem key={index} value={comuna.name}>
-                                                    {comuna.name}
-                                                  </MenuItem>
-                                                ))}
-                                          </Select>
-                                          {seRegion && touched.comuna && errors.comuna && <FormHelperText>{errors.comuna}</FormHelperText>}
-                                        </FormControl>
-                                        </Box>
-                                      </Item>
-                                </Item>
-                              </Stack>
-                              {/* Contenedor 3 */}
-                              <Stack md="4" className="Containers-Stack">
-                                <Item md="12" className="Containers-Item">    
-                                  <span className="title-stack">Datos Adicionales</span>                                  
-                                      <Item className="group-form">
-                                        <Box mb={touched.gender && errors.gender ? 2.5:0}>
-                                        <FormControl variant="filled" className="select-form" error={touched.gender && !!errors.gender}>
-                                          <InputLabel htmlFor="gender">Género </InputLabel>
-                                          <Select
-                                            id="gender"
-                                            name="gender"
-                                            value={values.gender}
-                                            onChange={(e) => {
-                                              const genderSelected = e.target.value;
-                                              setValues((prevValues)=>({...prevValues, gender: genderSelected}));
-                                              const id_gender = e.target.value;
-                                              const genderObjerc = gender.find(item => item.id_gender === id_gender);
-                                              setSelectedGender(genderObjerc || null);
-                                            }}
-                                            onBlur={handleBlur}
-                                            label="Género"
-                                            disabled= {disableGender}
-                                            error={touched.selectedGender && !!errors.selectedGender}
-                                          >
-                                            <MenuItem value="">Selecciona un género</MenuItem>
-                                            {selectedTipo !== 1 && (
-                                              gender && gender.slice(0, 1).map((item) => (
-                                                <MenuItem key={item.id_gender} value={item.id_gender}>
-                                                  {item.gender}
-                                                </MenuItem>
-                                              ))
-                                            )}
-                                            {gender && gender.slice(-2).map((item)=>(
-                                              <MenuItem key={item.id_gender} value={item.id_gender}>
-                                                {item.gender}
-                                              </MenuItem> 
-                                            ))}
-                                          </Select>
-                                          {touched.gender && errors.gender && <FormHelperText>{errors.gender}</FormHelperText>}
-                                        </FormControl>
-                                        </Box>
                                       </Item>
 
                                       {/* INFORMACION DE LOCACION */}
@@ -754,18 +644,19 @@ export const Registro = (props) => {
                                         </Box>
                                       </Item>                                  
                                 </Item>
+                            
                               </Stack>
-
+                             
                           </Stack>  
                         )} 
-                        
+
                         {/* PERSONA JURIDICA */}
 
                         {selectedTipo == 2 && (
-                          <Stack direction="row" spacing={30} className="Containers-stacks2">
+                          <Stack direction="row" spacing={30} className="Containers-stacks-3">
 
                           {/* Contenedor 1 */}
-                          <Stack md="4" className="Containers-Stack">
+                          <Stack md="4" className="Containers-Stack-in">
                             <Item md="12" className="Containers-Item">
                                <span className="title-stack">Datos de la Empresa</span>
 
@@ -819,7 +710,17 @@ export const Registro = (props) => {
                                     />
                                   </Item>
                                                 
-                                  <Item className="group-form">
+         
+
+                            </Item>
+                          </Stack>
+
+                          {/* Contenedor 2 */}
+                          <Stack md="4" className="Containers-Stack-in">
+                            <Item md="12" className="Containers-Item">                 
+                              <span className="title-stack" >Datos de Contacto</span>
+
+                              <Item className="group-form">
                                     <TextField
                                       label="Razon Social"
                                       type="text"
@@ -859,143 +760,12 @@ export const Registro = (props) => {
                                       helperText={touched.jfname && errors.jfname}
                                     />
                                   </Item>
-
-                            </Item>
-                          </Stack>
-
-                          {/* Contenedor 2 */}
-                          <Stack md="4" className="Containers-Stack">
-                            <Item md="12" className="Containers-Item">                 
-                              <span className="title-stack" >Datos de Contacto</span>
-
-                              <Item className="group-form">
-                                    <TextField
-                                      label="Correo "
-                                      type="email"
-                                      required
-                                      variant="filled"
-                                      name="jemail"
-                                      placeholder="Correo@example.com"
-                                      value={values.jemail}
-                                      onChange={(e) => {
-                                        handleChange(e);
-                                        setClientData({ ...clientData, email: e.target.value })}}
-                                      onBlur={handleBlur}
-                                      error={touched.jemail && !!errors.jemail}
-                                      helperText={touched.jemail && errors.jemail}
-                                    />
-                                  </Item>
-
-                                  <Item className="group-form">
-                                    <TextField
-                                      label="Teléfono "
-                                      type="text"
-                                      variant="filled"
-                                      name="jphone"
-                                      required
-                                      placeholder="911111111"
-                                      value={values.jphone}
-                                      inputProps={{maxLength : 12}}
-                                          onKeyPress={(e) => {
-                                            const pattern = /^[+0-9]+$/;
-                                            if (!pattern.test(e.key)) {
-                                              e.preventDefault();
-                                            }
-                                          }}
-                                      onChange={(e) => {
-                                        handleChange(e);
-                                        setClientData({ ...clientData, phoneNumber: e.target.value })}}
-                                      onBlur={handleBlur}
-                                      error={touched.jphone && !!errors.jphone}
-                                      helperText={touched.jphone && errors.jphone}
-                                    />
-                                  </Item>
-
-                          
-
-                                  <Item md="6" className="group-form">
-                                    <TextField
-                                      label="Dirección "
-                                      type="text"
-                                      variant="filled"
-                                      required
-                                      name="jaddress"
-                                      value={values.jaddress}
-                                      onChange={(e)=>{
-                                        handleChange(e);
-                                        setClientData({...clientData, address: e.target.value});
-                                      }}
-                                      onBlur={handleBlur}
-                                      error={touched.jaddress && !!errors.jaddress}
-                                      helperText={touched.jaddress && errors.jaddress}
-                                    />
-                                  </Item>
-
-                                  <Item className="group-form">
-                                    <Box mb={touched.region && errors.region ? 2.5 : 0}>
-                                    <FormControl variant="filled" className="select-form" error={touched.jregion && !!errors.jregion}>
-                                      <InputLabel htmlFor="region">Región </InputLabel>
-                                      <Select
-                                        id="region"
-                                        value={values.jregion}
-                                        name="jregion"
-                                        onChange={(e)=>{
-                                          setValues((prevValues)=>({...prevValues, jregion:e.target.value}));
-                                          RegionChange(e);
-                                        }}
-                                        onBlur={handleBlur}
-                                        required
-                                        label="Región">
-                                          <MenuItem value = "">
-                                          Seleccione una región
-                                          </MenuItem>
-                                          {Array.isArray(regions?.regions) &&
-                                            regions.regions.map((region, index) =>(
-                                              <MenuItem key={index} value={region.name}>
-                                              {region.name}
-                                              </MenuItem>
-                                            ))}
-                                      </Select>
-                                      {touched.jregion && errors.jregion && <FormHelperText>{errors.jregion}</FormHelperText>}
-                                    </FormControl>
-                                    </Box>
-                                  </Item>
-
-                                  <Item className="group-form">
-                                  <Box mb={touched.jcomuna && errors.jcomuna ? 2.5 : 0}>
-                                    <FormControl variant="filled" className="select-form" error={touched.jcomuna && !!errors.jcomuna}>
-                                      <InputLabel htmlFor="comuna">Comuna </InputLabel>
-                                      <Select
-                                        id="comuna"
-                                        name="jcomuna"
-                                        value={values.jcomuna}
-                                        onChange={(e) => {
-                                          setValues((prevValues)=>({...prevValues, jcomuna: e.target.value}))
-                                          setSeComuna(e.target.value)}}
-                                        onBlur={handleBlur}
-                                        disabled ={!seRegion}
-                                        label="Comuna"
-                                        required>
-                                          <MenuItem value="">Seleccione una comuna</MenuItem>
-                                          {Array.isArray(fcomunas) &&
-                                            fcomunas.map((comuna, index) =>
-                                            (
-                                              <MenuItem key={index} value={comuna.name}>
-                                                {comuna.name}
-                                              </MenuItem>
-                                            ))}
-                                      </Select>
-                                      {touched.jcomuna && errors.jcomuna && <FormHelperText>{errors.jcomuna}</FormHelperText>}
-                                    </FormControl>
-                                    </Box>
-                                  </Item>
-                                  
                      
                             </Item>
                           </Stack>
                       
                               {/* Contenedor 3 */}
-                              <Stack md="4" className="Containers-Stack">
+                              <Stack md="4" className="Containers-Stack-in">
                                 <Item md="12" className="Containers-Item">    
                                   <span className="title-stack">Datos Adicionales</span>
                                     
@@ -1054,6 +824,14 @@ export const Registro = (props) => {
         </Form>
       )}
     </Formik>
+
+
+    <div className="container-comp" style={{ display: 'flex' }}>
+     <Telefonos></Telefonos>
+     <Correos></Correos>
+</div>
+
+<Direcciones></Direcciones>
   </>
   );
 };
