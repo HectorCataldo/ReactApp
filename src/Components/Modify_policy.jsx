@@ -89,8 +89,6 @@ export const Modifypolicy = (props) => {
       setLoading(false);
     }
   },[policy])
-  console.log(datapolicy)
-
    
   const handleSubmit = async () => {
     try {
@@ -794,10 +792,10 @@ export const Modifypolicy = (props) => {
         </Form>
       )}
     </Formik>
-    <Objannex></Objannex>
-    <Insurerclaim></Insurerclaim>
-    <Coverage></Coverage>
-    <ObjPaymnt></ObjPaymnt>
+    <Objannex id={id}></Objannex>
+    <Insurerclaim id={id}></Insurerclaim>
+    <Coverage id={id}></Coverage>
+    <ObjPaymnt id={id}></ObjPaymnt>
   </>
   );
 };
