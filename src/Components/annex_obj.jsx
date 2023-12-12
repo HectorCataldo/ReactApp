@@ -10,10 +10,10 @@ import axios from 'axios';
 
 export const Objannex = (props) => {
   const {id} = useParams();
-  console.log(id);
   const [insureobjd, setInsrobjd]         = useState(null);
   const [searchTerm, setSearchTerm]       = useState('');
   const [currentPage, setCurrentPage]     = useState(1);
+  const [annexRows, setAnnexRows] = useState([]);
   const [annex, setAnnex] = useState({
     id         :1,
     annex_id   :null,
@@ -35,13 +35,15 @@ export const Objannex = (props) => {
       try{
         const response = await axios.get(`https://si-client-bkn.kps/api/v1/policy/${id}`);
         const data = response.data.data.policyAnnex;
-        if(data && data.length > 0){
-          const firstAnnex = data[0];
+        const upAnnexRows = [];
+        for (let i = 0; i < data.length; i++) {
+          const an = data[i];
+          
           const dataAnnex = {
-            id          : firstAnnex.annexId,
-            annex_id    : firstAnnex.annexId,
+            id          : an.annexId,
+            annex_id    : an.annexId,
             annexno     : null,
-            annextype   : firstAnnex.insrType,
+            annextype   : an.insrType,
             annexdate   : null,
             annexstart  : null,
             annexend    : null,
@@ -50,31 +52,20 @@ export const Objannex = (props) => {
             annexreason : null
           };
           setAnnex(dataAnnex);
+          upAnnexRows.push(dataAnnex);
         }
+        setAnnexRows(upAnnexRows);
       }
       catch(error){
         console.error('Error al hacer la solicitud:', error);
       }
     };
     annexData();
-/*
-    // Actualizar clientsPerPage basado en la longitud de los datos    
-    const additionalinsureobj = annexdata.length - insrobjPerPage; // Calcula la cantidad de clientes adicionales
-    const newinsureobjsPerPage = insrobjPerPage + additionalinsureobj; // Incrementa clientsPerPage
-    setinsrobjPerPage(newinsureobjsPerPage); // Actualiza clientsPerPage
-*/
   }, []);
-
-  console.log(annex);
 
   const pag = useEffect(() => {
     setCurrentPage(1);
-  }, [searchTerm]);
-
-
-  // if (!annexdata ) {
-  //   return <div>Cargando...</div>;
-  // }
+  }, [searchTerm]); 
 
   const isRowEmpty = (row) => {
     return (
@@ -95,11 +86,6 @@ export const Objannex = (props) => {
         { field: 'annexreason'      ,headerName: 'Razón de endoso'              ,width: 150 },
       ];
 
-
-
-
-
-
   return (
     <>
 
@@ -111,19 +97,19 @@ export const Objannex = (props) => {
 
         <Box className='boxgrid-cov' >
           <DataGrid
-            className='dataGrid'
-            initialState={{ pagination: { paginationModel: { page: 0, pageSize: 5 }, }}}
-            rows={[annex]}
-            columns={coverage}  
-            onRowClick={(params) => {
-              setInsrobjd(params.row); 
-              console.log("Usuario seleccionado:", params.row);
-             }}  
-          />
-          
+            className   = 'dataGrid'
+            initialState= {{ 
+                            pagination: { paginationModel: { page: 0, pageSize: 5 }, },
+                            sorting:{ sortModel: [{field: 'annex_id', sort: 'desc'}] },
+                          }}
+            rows        = {annexRows}
+            columns     = {coverage}
+            onRowClick  = {(params) => {
+                            setInsrobjd(params.row); 
+                            console.log("Fila seleccionada:", params.row);
+                          }}
+          />          
         </Box>
-
-        
       </div>
     </>
   );  

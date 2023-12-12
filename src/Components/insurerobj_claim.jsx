@@ -18,6 +18,7 @@ export const Insurerclaim = (props) => {
   const [searchValue, setSearchValue] = useState('');
   const [selectedRowIndex, setSelectedRowIndex] = useState(null);
   const [modalShow, setModalShow] = useState(false);
+  const [objectsRows, setObjectsRows] = useState([]);
   const [insuredObject, setInsuredObject] = useState({
     id              :    1,
     annexid         :    null,
@@ -26,28 +27,49 @@ export const Insurerclaim = (props) => {
     insuredvalue    :    null,
     currencytype    :    null,
     tasa            :    null,
-    premium         :    null,
-    corevalue       :    null
+    premium         :    null
   })
 
 
   useEffect(() => {
-    try{
-      const ibj = async () =>{
+    const objectList = async () =>{
+      try{      
         const  response = await axios.get(`https://si-client-bkn.kps/api/v1/policy/${id}`);
         const data = response.data.data.policyAnnex;
+        const upObjectRows = [];
+
+        for (let i = 0; i < data.length; i++) {
+          const e = data[i];
+          const e2 = e.insuredObject
+
+          for (let index = 0; index < e2.length; index++) {
+
+            const dato = e2[index];
+
+            const iobdata = {
+              id              :    dato.insuredObjId++,
+              objectid        :    dato.objectId,
+              annexid         :    dato.annexId,
+              objname         :    dato.objectType,
+              objstatus       :    dato.objectState,
+              insuredvalue    :    dato.insuredValue,
+              currencytype    :    dato.ivCurrency,
+              tasa            :    dato.ivCurrencyRate,
+              premium         :    dato.premium,
+            }
+            setInsuredObject(iobdata);
+            upObjectRows.push(iobdata);
+          }
+        }
+        setObjectsRows(upObjectRows);
+      }
+    
+      catch(error){
+        console.error('Error: ' + error);
       }
     }
-    catch(error){
-      console.error('Error: ' + error);
-    }
-    // Actualizar clientsPerPage basado en la longitud de los datos
-    if (insureobjdata) {
-      const additionalinsureobj = insureobjdata.length - insrobjPerPage;
-      const newinsureobjsPerPage = insrobjPerPage + additionalinsureobj;
-      setinsrobjPerPage(newinsureobjsPerPage);
-    }
-  }, [insureobjdata]);
+    objectList ();    
+  }, []);
 
   const pag = useEffect(() => {
     setCurrentPage(1);
@@ -79,7 +101,6 @@ export const Insurerclaim = (props) => {
 
   const indexOfLastClient = currentPage * insrobjPerPage;
   const indexOfFirstClient = indexOfLastClient - insrobjPerPage;
-  const currentClients = filteredData.slice(indexOfFirstClient, indexOfLastClient);
 
   const insureobj = [
     { width: 20, sortable: false, renderCell: (params) => {
@@ -91,6 +112,8 @@ export const Insurerclaim = (props) => {
         );
       }
     }},
+
+    { field: 'objectid',      headerName: 'ID de objeto',       width: 160 },
     { field: 'annexid',       headerName: 'ID de endoso',       width: 160 },
     { field: 'objname',       headerName: 'Nombre del objeto',  width: 150,
       renderCell: (params) => ( <button className='btn-list' onClick={()=> setModalShow(true)}>{params.value}</button> ),},
@@ -99,7 +122,6 @@ export const Insurerclaim = (props) => {
     { field: 'currencytype',  headerName: 'Moneda',             width: 120 },
     { field: 'tasa',          headerName: 'Tasa',               width: 150 },
     { field: 'premium',       headerName: 'Prima',              width: 150 },
-    { field: 'corevalue',     headerName: 'Valor real',         width: 150 },
   ];
 
   const handleSearchChange = (event) => {
@@ -119,7 +141,10 @@ export const Insurerclaim = (props) => {
         <Box className='boxgrid-cov' >
           <DataGrid
             className='dataGrid'
-            rows={currentClients}
+            initialState={{
+              sorting:{ sortModel: [{field: 'annexid', sort: 'desc'}] },
+            }}
+            rows={objectsRows}
             columns={insureobj}
             onRowClick={(params) => {
               setInsrobjd(params.row);
