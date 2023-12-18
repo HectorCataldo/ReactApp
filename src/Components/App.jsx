@@ -1,22 +1,36 @@
 import React, { useState, useEffect } from 'react';
-import { useFetch } from '../assets/useFetch';
 import '../CSS/index.scss';
-import _ from 'lodash';
-import  TextLinkExample  from './Navbar';
-import Sidebar from './sidebar'; 
-import PanelControl from "./Panel-Control";
-import { DataGrid } from '@mui/x-data-grid';
-import Box from '@mui/material/Box';
-import FormControl from '@mui/material/FormControl';
-import InputLabel from '@mui/material/InputLabel';
-import Input from '@mui/material/Input';
-import InputAdornment from '@mui/material/InputAdornment';
-import SearchIcon from '@mui/icons-material/Search';
-import Modify from './Modify_register';
+import _                              from 'lodash';
+import  TextLinkExample               from './Navbar';
+import Sidebar                        from './sidebar'; 
+import PanelControl                   from "./Panel-Control";
+import { DataGrid }                   from '@mui/x-data-grid';
+import Box                            from   '@mui/material/Box';
+import FormControl                    from '@mui/material/FormControl';
+import InputLabel                     from '@mui/material/InputLabel';
+import Input                          from '@mui/material/Input';
+import InputAdornment                 from '@mui/material/InputAdornment';
+import SearchIcon                     from '@mui/icons-material/Search';
+import Modify                         from './Modify_register';
+import axios from 'axios';
 
 export const App = () => {
-  const { data:client } = useFetch("https://si-client-bkn.kps/api/v1/client/");
+  const [client, setClient] = useState([]);
 
+  useEffect(()=>{
+    const clientApi = async ()=>{
+      try{
+        const response = await axios.get(`https://si-client-bkn.kps/api/v1/client/`);
+        const data = response.data.data;
+        setClient(data);
+      }
+      catch(error){
+        console.error("Error " + error);
+      }    
+    }
+    clientApi();
+  },[])
+  
   const [selectedClient, setSelectedClient] = useState();
   const [searchTerm, setSearchTerm] = useState('');
   const [currentPage, setCurrentPage] = useState(1);
@@ -55,7 +69,7 @@ export const App = () => {
       return <div>Cargando...</div>;
     }
 
-    const filteredData = client.data.filter((item) => {
+    const filteredData = client.filter((item) => {
       const searchText = searchTerm.toLowerCase();
       return (
         (String(item.manId) && String(item.manId).toLowerCase().includes(searchText)) ||
@@ -89,10 +103,7 @@ export const App = () => {
       )
       .filter(Boolean)
       // .slice(indexOfFirstClient, indexOfLastClient);
-    console.log("filteredData: "+filteredData);
 
-    console.log("Current_clients: "+currentClients);
-  
     const columns = 
     [
       { field: 'manId', headerName: 'ID', width: 200 },

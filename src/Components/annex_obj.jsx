@@ -10,11 +10,11 @@ import axios from 'axios';
 
 export const Objannex = (props) => {
   const {id} = useParams();
-  const [insureobjd, setInsrobjd]         = useState(null);
-  const [searchTerm, setSearchTerm]       = useState('');
-  const [currentPage, setCurrentPage]     = useState(1);
-  const [annexRows, setAnnexRows] = useState([]);
-  const [annex, setAnnex] = useState({
+  const [insureobjd, setInsrobjd]      = useState(null);
+  const [searchTerm, setSearchTerm]    = useState('');
+  const [currentPage, setCurrentPage]  = useState(1);
+  const [annexRows, setAnnexRows]      = useState([]);
+  const [annex, setAnnex]              = useState({
     id         :1,
     annex_id   :null,
     annexno    :null,

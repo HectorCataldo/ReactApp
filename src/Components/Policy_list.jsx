@@ -1,43 +1,56 @@
-import React, { useState, useEffect } from 'react';
-import { useFetch } from '../assets/useFetch';
+import React, { useState, useEffect }       from 'react';
 import '../CSS/index.scss';
-import _ from 'lodash';
-import  TextLinkExample  from './Navbar';
-import Sidebar from './sidebar'; 
-import PanelControl from "./Panel-Control";
-import { DataGrid } from '@mui/x-data-grid';
-import Box from '@mui/material/Box';
-import FormControl from '@mui/material/FormControl';
-import InputLabel from '@mui/material/InputLabel';
-import Input from '@mui/material/Input';
-import InputAdornment from '@mui/material/InputAdornment';
-import SearchIcon from '@mui/icons-material/Search';
-import Modify from './Modify_register';
-import dayjs from 'dayjs';
-import utc from 'dayjs/plugin/utc';
-import timezone from 'dayjs/plugin/timezone';
+import _                                    from 'lodash';
+import  TextLinkExample                     from './Navbar';
+import Sidebar                              from './sidebar'; 
+import PanelControl                         from "./Panel-Control";
+import { DataGrid}                          from '@mui/x-data-grid';
+import Box                                  from '@mui/material/Box';
+import FormControl                          from '@mui/material/FormControl';
+import InputLabel                           from '@mui/material/InputLabel';
+import Input                                from '@mui/material/Input';
+import InputAdornment                       from '@mui/material/InputAdornment';
+import SearchIcon                           from '@mui/icons-material/Search';
+import Modify                               from './Modify_register';
+import dayjs                                from 'dayjs';
+import utc                                  from 'dayjs/plugin/utc';
+import timezone                             from 'dayjs/plugin/timezone';
+import axios                                from 'axios';
 dayjs.extend(utc);
 dayjs.extend(timezone);
-
-
 import FileDownloadIcon from '@mui/icons-material/FileDownload';
 
 export const Policylist = () => {
-  const { data:policy } = useFetch("https://si-client-bkn.kps/api/v1/policy/");
+  const [policy, setPolicy] = useState([]);
 
-  const [selectedClient, setSelectedClient] = useState(null);
-  const [searchTerm, setSearchTerm] = useState('');
-  const [currentPage, setCurrentPage] = useState(1);
-  const [clientsPerPage,setClientsPerPage] = useState(25);
-  const [searchValue, setSearchValue] = useState('');
-  const [isModifyOpen, setIsModifyOpen] = useState(false);
+  useEffect(() =>{
+    const policyList = async () => {
+      try{
+        const response = await axios.get(`https://si-client-bkn.kps/api/v1/policy/`);
+        const data = response.data.data;
+        setPolicy(data);
+      }
+      catch(error){
+        console.error("Error " + error);
+      }
+    }
+    policyList();
+  }
+  ,[])
+
+  const [selectedClient,  setSelectedClient]  = useState(null);
+  const [searchTerm,      setSearchTerm]      = useState('');
+  const [currentPage,     setCurrentPage]     = useState(1);
+  const [clientsPerPage,  setClientsPerPage]  = useState(25);
+  const [searchValue,     setSearchValue]     = useState('');
+  const [isModifyOpen,    setIsModifyOpen]    = useState(false);
 
 
 
   useEffect(() => {
     // Actualizar clientsPerPage basado en la longitud de los datos
     if (policy) {
-      const additionalClients = policy.data.length - clientsPerPage; // Calcula la cantidad de clientes adicionales
+      const additionalClients = policy.length  - clientsPerPage; // Calcula la cantidad de clientes adicionales
       const newClientsPerPage = clientsPerPage + additionalClients; // Incrementa clientsPerPage
       setClientsPerPage(newClientsPerPage); // Actualiza clientsPerPage
     }
@@ -61,7 +74,7 @@ export const Policylist = () => {
     return <div>Cargando...</div>;
   }
 
-  const filteredData = policy.data.filter((item) => {
+  const filteredData = policy.filter((item) => {
     const searchText = searchTerm.toLowerCase();
     return (
       (item.policyId && item.policyId.toString().toLowerCase().includes(searchText)) ||
@@ -77,15 +90,15 @@ export const Policylist = () => {
         }
         return{
           ...item,
-          id: item.policyId,      
-          policyId: item.policyId,
-          policyNo: item.policyNo,
-          cliente: item.client.people.name,
-          insrType: item.insrType.name,
-          agent: item.agent.people.name,
-          dateGiven: item.dateGiven,
+          id         : item.policyId,      
+          policyId   : item.policyId,
+          policyNo   : item.policyNo,
+          cliente    : item.client.people.name,
+          insrType   : item.insrType.name,
+          agent      : item.agent.people.name,
+          dateGiven  : item.dateGiven,
           startpolicy: item.insrBegin,
-          endpolicy: item.insrEnd,
+          endpolicy  : item.insrEnd,
           policyState: item.policyState.name
         }
       },
