@@ -80,12 +80,12 @@ export const ObjPaymnt = () => {
   
       <div className='App-cov'>
         <div className='container-sm container-title-br'>
-          <h4 className='title'>Plan de pago </h4>
+          <h4 className='title-obj'>Plan de pago </h4>
         </div>
 
         <Box className='boxgrid-cov' >
           <DataGrid
-            className='dataGrid'
+            className='dataGrid-annex'
             initialState={{ pagination: { paginationModel: { page: 0, pageSize: 5 }, }}}
             rows={currentClients}
             columns={coverage}  

@@ -28,8 +28,8 @@ body {
     display: flex;
     justify-content: space-between;
     align-items: center;
-    margin-left: 5%;
-    width: 74.5% !important; /* Igualar el ancho al de Containers-stacks2 */
+    margin-left: 5.5% !important;
+    width: 80.3% !important; /* Igualar el ancho al de Containers-stacks2 */
     height: 100px;
     margin-top: 10px;
     margin-bottom: 20px;
@@ -333,6 +333,16 @@ body {
     }
     
     
+    .btn-export{
+        background-color:transparent;
+        color:#000000;
+        border-style:none;
+    }
+  .border{
+
+    border-style:none;
+    border-color:transparent;
+  }
     
     /// FIN DE LOS CONTENEDORES 
     
@@ -372,13 +382,6 @@ body {
         height: 35px;
     }
     
-
-
-
-
-
-
-
     ////////////////////////////////////////////////////////////////////////////////////////////////////////
     /// CONTAINTERS CREATE REGISTER 
     /// 
@@ -391,6 +394,7 @@ body {
         width: 100hv;
         margin-left: 250px;
         z-index: 0;
+        margin-bottom: 20px !important;
     }
     .Containers-stacks-3{
         width: 82.5%;
@@ -483,9 +487,7 @@ body {
         margin-bottom: 10px;
         width: 350px;
         font-size: small;
-        /*background-color:#e7f5f9 !important;*/
+      
        
     }
     
-    /// JUD
-    /// 

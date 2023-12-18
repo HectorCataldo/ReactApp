@@ -26,7 +26,11 @@ import { Direcciones }                            from './Components/contact_dir
 import { Modaltel }                               from './Components/modal_tel';
 import { Modalcor }                               from './Components/modal_cor';
 import { Modaldir }                               from './Components/modal_dir';
+import { ModalClient }                            from './Components/modalclient';
+import { Clientlist }                             from './Components/clientlist';
 import './CSS/index.scss';
+
+
 // ventanas modales 
 
 
@@ -57,6 +61,7 @@ const AppRouter = () => {
           <Route path='/Correos'              element={<Correos/>}/>
           <Route path='/Telefonos'            element={<Telefonos/>}/>
           <Route path='/Direcciones'          element={<Direcciones/>}/>
+          <Route path='/Clientlist'           element={<Clientlist/>}/>
           
             {/* COTIZACIONES */}
           <Route path='/Quotation'            element={<Quotation/>}/>
@@ -75,6 +80,10 @@ const AppRouter = () => {
             <Route path="/modaltel"             element={<Modaltel/>}/>
             <Route path="/modalcor"             element={<Modalcor/>}/> 
             <Route path="/modaldir"             element={<Modaldir/>}/>       
+            <Route path="/modalclient"          element={<ModalClient/>}/>
+
+
+            
             
         </Routes>
       </Router>

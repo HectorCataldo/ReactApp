@@ -69,7 +69,8 @@ export const Objannex = (props) => {
 
   const isRowEmpty = (row) => {
     return (
-      !row.annex_id 
+      !row.annex_id  &&
+      !row.annextype
     );
   };
 
@@ -92,12 +93,12 @@ export const Objannex = (props) => {
   
       <div className='App-cov'>
         <div className='container-sm container-title-br'>
-          <h4 className='title'>Endoso </h4>
+          <h4 className='title-obj'>Endoso </h4>
         </div>
 
         <Box className='boxgrid-cov' >
           <DataGrid
-            className   = 'dataGrid'
+            className   = 'dataGrid-annex'
             initialState= {{ 
                             pagination: { paginationModel: { page: 0, pageSize: 5 }, },
                             sorting:{ sortModel: [{field: 'annex_id', sort: 'desc'}] },

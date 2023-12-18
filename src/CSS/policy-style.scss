@@ -1,10 +1,3 @@
-/* CONTENEDOR TOTAL DEL CREATE*/
-
-@use "@material/floating-label/mdc-floating-label";
-@use "@material/line-ripple/mdc-line-ripple";
-@use "@material/notched-outline/mdc-notched-outline";
-@use "@material/textfield";
-@include textfield.core-styles;
 
 body {
     height: 100vh;
@@ -19,7 +12,9 @@ body {
     z-index: 0;
 }
 
-
+.a{
+    color: transparent;
+}
 
 /* Panel de usuario y otros estilos relacionados */
 .Panel-User {
@@ -43,20 +38,6 @@ body {
 
 }
 
-/* Ajustes de estilo para pantallas más pequeñas */
-@media (max-width: 768px) {
-    .formulario {
-        width: 100%; /* Cambiado a porcentaje para ser responsive */
-        margin-left: 0;
-    }
-    
-    .Panel-User {
-        margin-left: 5%; /* Cambiado a porcentaje para ser responsive */
-        width: 90%; /* Cambiado a porcentaje para ser responsive */
-    }
-}
-
-
 
 
 
@@ -72,7 +53,7 @@ body {
     font-size: 20px;
 }
 
-// FIN DEL PANEL DE USUARIO
+/* FIN DEL PANEL DE USUARIO */
 .Panel-User .group-user{
     width: 130px;
     margin-right: 20px;
@@ -107,7 +88,7 @@ body {
 
 
 
-// CONTENEDOR DE LOS CONTENEDORES {
+/* CONTENEDOR DE LOS CONTENEDORES*/ 
 .Containers-stacks2{
     width: 82.5%;
     height: 790px;
@@ -116,9 +97,9 @@ body {
 }
 
 
-//}
 
-// CONTENEDORES NUEVOS 
+
+/* CONTENEDORES NUEVOS */
 
 .Containers-Stack {
     width: 500px; 
@@ -208,14 +189,14 @@ body {
 }
 
 
-/// FIN DE LOS CONTENEDORES 
+/* FIN DE LOS CONTENEDORES */
 
 
- // regla de contenedores offf
+ /* regla de contenedores offf */
 
 .css-ycrhu6-MuiStack-root > :not(style) ~ :not(style) {
     margin-left: 0 !important; }
- // fin regla de contenedores offf
+ /* fin regla de contenedores offf */
 
 
 .group-form .labels
@@ -249,21 +230,10 @@ body {
 
 
 
-// CONTENEDORES JURIDICO 
+/* CONTENEDORES JURIDICO */
 
-// CONTENEDOR DE LOS CONTENEDORES {
-    .Containers-stacks2-jud{
-        width: 82.5%;
-        height: 600px;
-        display: flex;
-        margin-left: 100px;
-        padding-left: 250px;
-    }
-    
-    
-    //}
-    
-    // CONTENEDORES NUEVOS 
+
+    /* CONTENEDORES NUEVOS */
     
     .Containers-Stack-jud {
         width: 500px; 
@@ -325,14 +295,14 @@ body {
     
     
     
-    /// FIN DE LOS CONTENEDORES 
+    /* FIN DE LOS CONTENEDORES */
     
     
-     // regla de contenedores offf
+     /* regla de contenedores offf */
     
     .css-ycrhu6-MuiStack-root > :not(style) ~ :not(style) {
         margin-left: 0 !important; }
-     // fin regla de contenedores offf
+     /* fin regla de contenedores offf */
     
     
     .group-form .labels

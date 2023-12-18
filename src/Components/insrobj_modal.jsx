@@ -9,7 +9,7 @@ import InputLabel from "@mui/material/InputLabel";
 import Stack from '@mui/material/Stack';
 import Item from '@mui/material/Stack';
 import { Box,FormHelperText } from "@mui/material"
-import '../CSS/insr-obj-style.scss';
+
 import Button from '@mui/material/Button';
 
 

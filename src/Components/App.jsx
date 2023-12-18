@@ -32,11 +32,11 @@ export const App = () => {
   },[])
   
   const [selectedClient, setSelectedClient] = useState();
-  const [searchTerm, setSearchTerm] = useState('');
-  const [currentPage, setCurrentPage] = useState(1);
-  const [clientsPerPage,setClientsPerPage] = useState(25);
-  const [searchValue, setSearchValue] = useState('');
-  const [isModifyOpen, setIsModifyOpen] = useState(false);
+  const [searchTerm, setSearchTerm]         = useState('');
+  const [currentPage, setCurrentPage]       = useState(1);
+  const [clientsPerPage,setClientsPerPage]  = useState(25);
+  const [searchValue, setSearchValue]       = useState('');
+  const [isModifyOpen, setIsModifyOpen]     = useState(false);
 
 
   useEffect(() => {
@@ -104,18 +104,55 @@ export const App = () => {
       .filter(Boolean)
       // .slice(indexOfFirstClient, indexOfLastClient);
 
+    console.log("Current_clients: "+currentClients);
+
+
+    
+      // Función para obtener la descripción del tipo de persona
+const obtenerDescripcionTipoPersona = (codigoTipoPersona) => {
+  switch (codigoTipoPersona) {
+    case 2:
+      return 'Jurídico';
+    case 1:
+      return 'Natural';
+    default:
+      return '';
+  }
+};
+
+const obtenerDescripcionSexo = (codigoSexo) => {
+  switch (codigoSexo) {
+    case 0:
+      return 'Compañía';
+    case 1:
+      return 'Masculino';
+    case 2:
+      return 'Femenino';
+    default:
+      return '';
+  }
+};
+
     const columns = 
     [
-      { field: 'manId', headerName: 'ID', width: 200 },
-      { field: 'manComp', headerName: 'Tipo de Persona', width: 200 },
-      { field: 'egn', headerName: 'Número de Documento', width: 200 },
-      { field: 'name', headerName: 'Nombre Completo', width: 200, sortable: false,
+      { field: 'manId',  headerName: 'ID', width: 200 },
+      { field: 'manComp',headerName: 'Tipo de Persona', width: 200,
+        renderCell: (params) => {
+          const tipoPersonaDescripcion = obtenerDescripcionTipoPersona(params.value);
+          return <span>{tipoPersonaDescripcion}</span>;
+        },
+      },
+      { field: 'egn',  headerName: 'Número de Documento', width: 200 },
+      { field: 'name', headerName: 'Nombre Completo'    , width: 200, sortable: false,
         renderCell:(params) => ( <a href={`/modify/${params.row.id}`} style={{ textDecoration: 'none' }}> {params.value} </a>),},
-      { field: 'gname', headerName: 'Nombre', width: 200 },
-      { field: 'sname', headerName: 'Apellido', width: 200 },
+      { field: 'gname', headerName: 'Nombre'     , width: 200 },
+      { field: 'sname', headerName: 'Apellido'   , width: 200 },
       { field: 'fname', headerName: 'Family Name', width: 200 },
-      { field: 'sexo', headerName: 'Sexo', width: 200 }
+      { field: 'sexo' , headerName: 'Sexo '      , width: 200,
+        renderCell: (params) => { const sexoDescripcion = obtenerDescripcionSexo(params.value);  return <span>{sexoDescripcion}</span>;},
+      },
     ];
+
 
     const handleSearchChange = (event) => {
       setSearchValue(event.target.value);

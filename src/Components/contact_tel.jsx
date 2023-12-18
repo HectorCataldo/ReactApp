@@ -81,7 +81,7 @@ export const Telefonos = () => {
           <DataGrid
             
             disableColumnSort
-            className='dataGrid'
+            className='dataGrid-tel'
             initialState={{ pagination: { paginationModel: { page: 0, pageSize: 3 }, }}}
             rows={currentClients}
             columns={insureobj}  
