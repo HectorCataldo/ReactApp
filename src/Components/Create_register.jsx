@@ -319,7 +319,7 @@ export const Registro = (props) => {
         <Form className="formulario-cr" onSubmit={formikHandleSubmit}>
               {/* PANEL DE CONTROL */}
                 <Stack   
-                direction={{ xs: 'column', sm: 'row' }}                
+                direction="row" //{ xs: 'column', sm: 'row' }
                 spacing={{ xs: 1, sm: 2, md: 4 }}
                 className="Panel-User"
                 >
@@ -327,9 +327,9 @@ export const Registro = (props) => {
                     <h1  className   = "title-user"> {userName ? userName : 'Usuario'}</h1>  
                     <h1  className   = "title-newuser">Cliente nuevo</h1>
                   </div>
-                  <Stack 
-                  direction={{ xs: 'column', sm: 'row' }}                
-                  spacing={{ xs: 1, sm: 2, md: 4 }}
+                  <Stack
+                  direction={{ xs: 'column', md: 'row' }}
+                  // spacing={{ xs: 1, sm: 2, md: 4 }}
                   >
                       <Item className="group-user">                                    
                         <TextField
