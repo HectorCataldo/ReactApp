@@ -89,7 +89,7 @@ export const Direcciones = () => {
           <DataGrid 
             xs={12} md={8}
             disableColumnSort
-            className='dataGrid'
+            className='dataGrid-dir'
             initialState={{ pagination: { paginationModel: { page: 0, pageSize: 3 }, }}}
             rows={currentClients}
             columns={insureobj}  

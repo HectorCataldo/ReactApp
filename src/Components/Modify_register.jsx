@@ -24,7 +24,9 @@ import { Box, FormHelperText } from "@mui/material";
 import { useParams } from 'react-router-dom';
 import dayjs from 'dayjs';
 import { faL } from "@fortawesome/free-solid-svg-icons";
-
+import { Correos }                             from "./contact_cor";
+import { Telefonos }                           from "./contact_tel";
+import { Direcciones }                         from "./contact_dir";
 
 
 export const Modify = (props) => {
@@ -443,7 +445,7 @@ export const Modify = (props) => {
     validationSchema = {validationSchema}
     >
       {({ errors, touched, handleSubmit: formikHandleSubmit, handleChange, handleBlur, values, setFieldValue, setValues}) => (
-        <Form className="formulario" onSubmit={formikHandleSubmit}>
+        <Form className="formulario-cr" onSubmit={formikHandleSubmit}>
                       {/* PANEL DE CONTROL */}
 
 
@@ -486,10 +488,10 @@ export const Modify = (props) => {
 
                        {/* PERSONA NATURAL */}
                        {selectedTipo === "Natural"  && (
-                          <Stack direction="row" spacing={30} className="Containers-stacks2">
+                          <Stack direction="row" spacing={30} className="Containers-stacks-3">
 
                               {/* Contenedor 1 */}
-                              <Stack md="4" className="Containers-Stack">
+                              <Stack md="4" className="Containers-Stack-in">
                                 <Item md="12" className="Containers-Item">
                                 <span className="title-stack">Datos Personales</span>
                                 <Item className="group-form">
@@ -549,8 +551,61 @@ export const Modify = (props) => {
                                           // helperText={editar && touched.documentNumber && errors.documentNumber}
                                         />
                                       </Item>
-             
+
+
+                                      {/*AQUI VA GENERO*/}  
                                       <Item className="group-form">
+                                        <Box mb={editar && touched.gender && errors.gender ? 2.5 : 0}>
+                                          <FormControl variant="filled" className="select-form" error={editar && touched.gender && !!errors.gender}>
+                                            <InputLabel htmlFor="gender">Género </InputLabel>
+                                            <Select
+                                              id="gender"
+                                              value={values.gender}
+                                              name="gender"                                              
+                                              onChange={(e) => {                                               
+                                                const sgi = e.target.value;
+                                                const genderObject = gender.find(item => item.id_gender === sgi);
+                                                setSelectedGender(genderObject || null);
+                                                setClientData({...clientData, gender: genderObject || null});
+                                                setValues((prevValues)=>({...prevValues,gender:e.target.value}))
+                                              }}
+                                              onBlur={handleBlur}
+                                              label="Género"
+                                              inputProps={{
+                                                readOnly: disableGender || !editar,
+                                              }}
+                                              error={editar && touched.selectedGender && !!errors.selectedGender}
+                                            >
+                                              <MenuItem value="">Selecciona un género</MenuItem>
+                                              {selectedTipo !== 'Natural' && (
+                                                gender && gender.slice(0, 1).map((item) => (
+                                                  <MenuItem key={item.id_gender} value={item.id_gender}>
+                                                    {item.gender}
+                                                  </MenuItem>
+                                                ))
+                                              )}
+                                              {gender && gender.slice(-2).map((item)=>(
+                                                <MenuItem key={item.id_gender} value={item.id_gender}>
+                                                  {item.gender}
+                                                </MenuItem> 
+                                              ))}
+                                            </Select>
+                                            {editar && touched.gender && errors.gender && <FormHelperText>{errors.gender}</FormHelperText>}
+                                          </FormControl>
+                                        </Box>                                        
+                                      </Item>
+
+                                      
+                     
+                                </Item>
+                              </Stack>
+
+                              {/* Contenedor 2 */}
+                              <Stack md="4" className="Containers-Stack-in">
+                                <Item md="12" className="Containers-Item">                 
+                                  <span className="title-stack" >Datos de Contacto</span>
+
+                                  <Item className="group-form">
                                         <TextField
                                           id="firstName"
                                           label="Nombres"
@@ -632,7 +687,14 @@ export const Modify = (props) => {
 
                                         />
                                       </Item>
-                                      <Item className="group-form">
+                                </Item>
+                              </Stack>
+                              {/* Contenedor 3 */}
+                              <Stack md="4" className="Containers-Stack-in">
+                                <Item md="12" className="Containers-Item">    
+                                  <span className="title-stack">Datos Adicionales</span>
+
+                                  <Item className="group-form">
                                         <LocalizationProvider dateAdapter={AdapterDayjs} error={editar && touched.birthDate && !!errors.birthDate}>
                                           <DatePicker
                                             className="datepicker"
@@ -663,196 +725,6 @@ export const Modify = (props) => {
                                           />
                                         </LocalizationProvider>
                                       </Item> 
-                                </Item>
-                              </Stack>
-
-                              {/* Contenedor 2 */}
-                              <Stack md="4" className="Containers-Stack">
-                                <Item md="12" className="Containers-Item">                 
-                                  <span className="title-stack" >Datos de Contacto</span>
-
-                                  <Item className="group-form">
-                                        <TextField
-                                          id="email"
-                                          label="Correo "
-                                          type="email"
-                                          variant="filled"
-                                          name="email"
-                                          placeholder="Correo@example.com"
-                                          InputProps={{
-                                            readOnly: !editar,
-                                          }}
-                                          value={values.email}
-                                          onChange={(e) => {
-                                            setClientData({ ...clientData, email: e.target.value });
-                                            handleChange(e);
-                                        }}                                          
-                                          onBlur={handleBlur}
-                                          error={editar && touched.email && !!errors.email}
-                                          helperText={editar && touched.email && errors.email}
-                                        />
-                                      </Item>
-
-                                      <Item className="group-form">
-                                        <TextField
-                                          id="phoneNumber"
-                                          label="Teléfono "
-                                          type="text"
-                                          variant="filled"
-                                          name="phoneNumber"
-                                          placeholder="911111111"
-                                          value={values.phoneNumber}
-                                          InputProps={{
-                                            readOnly: !editar,
-                                          }}
-                                          onChange={(e) => {
-                                            setClientData({ ...clientData, phoneNumber: e.target.value });
-                                            handleChange(e);
-                                        }}
-                                          onBlur={handleBlur}
-                                          error={editar && touched.phoneNumber && !!errors.phoneNumber}
-                                          helperText={editar  && touched.phoneNumber && errors.phoneNumber}
-                                        />
-                                      </Item>
-
-                              
-
-                                      <Item md="6" className="group-form">
-                                        <TextField
-                                          label="Dirección "
-                                          type="text"
-                                          variant="filled"
-                                          name="address"
-                                          value={values.address}
-                                          InputProps={{
-                                            readOnly: !editar,
-                                          }}
-                                          onChange={(e) => {
-                                            setClientData({ ...clientData, address: e.target.value });
-                                            handleChange(e);                                        
-                                        }}
-                                          onBlur={handleBlur}
-                                          error={editar && touched.address && !!errors.address}
-                                          helperText={editar && touched.address && errors.address}
-                                        />
-                                      </Item>
-
-                                      <Item className="group-form">
-                                        <Box mb={editar && touched.region && errors.region ? 2.5 : 0}>
-                                        <FormControl variant="filled" className="select-form" error={editar && touched.region && !!errors.region}>
-                                          <InputLabel htmlFor="region">Región </InputLabel>
-                                          <Select
-                                            id="region"
-                                            name="region"
-                                            inputProps={{
-                                              readOnly: !editar,
-                                            }}
-                                            value={values.region}
-                                            onChange={(e) => {
-                                              RegionChange(e);
-                                              const newRegionValue = e.target.value;                                               
-                                              setValues((prevValues) => ({ ...prevValues, region: newRegionValue }));
-                                              setClientData({...clientData, region:e.target.value});
-                                            }}
-                                            onBlur={handleBlur}
-                                            label="Región"                                            >
-                                              <MenuItem value = "">
-                                              Seleccione una región
-                                              </MenuItem>
-                                              {Array.isArray(regions?.regions) &&
-                                                regions.regions.map((region, index) =>(
-                                                  <MenuItem key={index} value={region.name}>
-                                                  {region.name}
-                                                  </MenuItem>
-                                                ))}
-                                          </Select>
-                                          { editar && touched.region && errors.region && <FormHelperText>{errors.region}</FormHelperText>}
-                                        </FormControl>
-                                        </Box>
-                                      </Item>
-
-                                      <Item className="group-form">
-                                      <Box mb={editar && touched.comuna && errors.comuna ? 2.5 : 0}>
-                                        <FormControl variant="filled" className="select-form" error={editar && touched.comuna && !!errors.comuna}>
-                                          <InputLabel htmlFor="comuna">Comuna </InputLabel>
-                                          <Select
-                                            id="comuna"
-                                            value={values.comuna}                                            
-                                            name="comuna"
-                                            onChange={(e) =>{
-                                                const comunaSelect = e.target.value;
-                                                setValues((prevValues)=> ({...prevValues, comuna: comunaSelect}));
-                                                setSeComuna(comunaSelect);
-                                                setClientData({...clientData, comuna : e.target.value});
-                                              }}
-                                            onBlur={handleBlur}
-                                            inputProps={{
-                                              readOnly: !seRegion || !editar,
-                                            }}
-                                            label="Comuna"
-                                            required
-                                            >
-                                              <MenuItem value="">Seleccione una comuna</MenuItem>
-                                              {Array.isArray(fcomunas) &&
-                                                fcomunas.map((comuna, index) =>
-                                                (
-                                                  <MenuItem key={index} value={comuna.name}>
-                                                    {comuna.name}
-                                                  </MenuItem>
-                                                ))}
-                                          </Select>
-                                          {editar && touched.comuna && errors.comuna && <FormHelperText>{errors.comuna}</FormHelperText>}
-                                        </FormControl>
-                                        </Box>
-                                      </Item>
-
-                                </Item>
-                              </Stack>
-                              {/* Contenedor 3 */}
-                              <Stack md="4" className="Containers-Stack">
-                                <Item md="12" className="Containers-Item">    
-                                  <span className="title-stack">Datos Adicionales</span>
-
-                                      <Item className="group-form">
-                                        <Box mb={editar && touched.gender && errors.gender ? 2.5 : 0}>
-                                          <FormControl variant="filled" className="select-form" error={editar && touched.gender && !!errors.gender}>
-                                            <InputLabel htmlFor="gender">Género </InputLabel>
-                                            <Select
-                                              id="gender"
-                                              value={values.gender}
-                                              name="gender"                                              
-                                              onChange={(e) => {                                               
-                                                const sgi = e.target.value;
-                                                const genderObject = gender.find(item => item.id_gender === sgi);
-                                                setSelectedGender(genderObject || null);
-                                                setClientData({...clientData, gender: genderObject || null});
-                                                setValues((prevValues)=>({...prevValues,gender:e.target.value}))
-                                              }}
-                                              onBlur={handleBlur}
-                                              label="Género"
-                                              inputProps={{
-                                                readOnly: disableGender || !editar,
-                                              }}
-                                              error={editar && touched.selectedGender && !!errors.selectedGender}
-                                            >
-                                              <MenuItem value="">Selecciona un género</MenuItem>
-                                              {selectedTipo !== 'Natural' && (
-                                                gender && gender.slice(0, 1).map((item) => (
-                                                  <MenuItem key={item.id_gender} value={item.id_gender}>
-                                                    {item.gender}
-                                                  </MenuItem>
-                                                ))
-                                              )}
-                                              {gender && gender.slice(-2).map((item)=>(
-                                                <MenuItem key={item.id_gender} value={item.id_gender}>
-                                                  {item.gender}
-                                                </MenuItem> 
-                                              ))}
-                                            </Select>
-                                            {editar && touched.gender && errors.gender && <FormHelperText>{errors.gender}</FormHelperText>}
-                                          </FormControl>
-                                        </Box>                                        
-                                      </Item>
 
                                       {/* INFORMACION DE LOCACION */}
                                       <Item className="group-form">
@@ -926,10 +798,10 @@ export const Modify = (props) => {
                        {/* PERSONA JURIDICA */}
 
                        {selectedTipo === "Juridica" && (
-                          <Stack direction="row" spacing={30} className="Containers-stacks2">
+                          <Stack direction="row" spacing={30} className="Containers-stacks-3">
 
                           {/* Contenedor 1 */}
-                          <Stack md="4" className="Containers-Stack">
+                          <Stack md="4" className="Containers-Stack-in">
                             <Item md="12" className="Containers-Item">
                                <span className="title-stack">Datos de la Empresa</span>
 
@@ -990,7 +862,17 @@ export const Modify = (props) => {
                                     />
                                   </Item>
                                                 
-                                  <Item className="group-form">
+                                
+
+                            </Item>
+                          </Stack>
+
+                          {/* Contenedor 2 */}
+                          <Stack md="4" className="Containers-Stack-in">
+                            <Item md="12" className="Containers-Item">                 
+                              <span className="title-stack" >Datos de Contacto</span>
+
+                              <Item className="group-form">
                                     <TextField
                                       label="Razon Social"
                                       type="text"
@@ -1029,146 +911,13 @@ export const Modify = (props) => {
                                     />
                                   </Item>
 
-                            </Item>
-                          </Stack>
-
-                          {/* Contenedor 2 */}
-                          <Stack md="4" className="Containers-Stack">
-                            <Item md="12" className="Containers-Item">                 
-                              <span className="title-stack" >Datos de Contacto</span>
-
-                              <Item className="group-form">
-                                    <TextField
-                                      label="Correo "
-                                      type="email"
-                                      required
-                                      disabled={!editar}
-                                      variant="filled"
-                                      name="jemail"
-                                      placeholder="Correo@example.com"
-                                      value={values.jemail}
-                                      onChange={(e) => {
-                                        handleChange(e);
-                                        setClientData({ ...clientData, email: e.target.value })}}
-                                      onBlur={handleBlur}
-                                      error={touched.jemail && !!errors.jemail}
-                                      helperText={touched.jemail && errors.jemail}
-                                    />
-                                  </Item>
-
-                                  <Item className="group-form">
-                                    <TextField
-                                      label="Teléfono "
-                                      type="text"
-                                      variant="filled"
-                                      disabled={!editar}
-                                      name="jphone"
-                                      required
-                                      placeholder="911111111"
-                                      value={values.jphone}
-                                      inputProps={{maxLength : 12}}
-                                          onKeyPress={(e) => {
-                                            const pattern = /^[+0-9]+$/;
-                                            if (!pattern.test(e.key)) {
-                                              e.preventDefault();
-                                            }
-                                          }}
-                                      onChange={(e) => {
-                                        handleChange(e);
-                                        setClientData({ ...clientData, phoneNumber: e.target.value })}}
-                                      onBlur={handleBlur}
-                                      error={touched.jphone && !!errors.jphone}
-                                      helperText={touched.jphone && errors.jphone}
-                                    />
-                                  </Item>
-
-                          
-
-                                  <Item md="6" className="group-form">
-                                    <TextField
-                                      label="Dirección "
-                                      type="text"
-                                      variant="filled"
-                                      required
-                                      name="jaddress"
-                                      disabled={!editar}
-                                      value={values.jaddress}
-                                      onChange={(e)=>{
-                                        handleChange(e);
-                                        setClientData({...clientData, address: e.target.value});
-                                      }}
-                                      onBlur={handleBlur}
-                                      error={touched.jaddress && !!errors.jaddress}
-                                      helperText={touched.jaddress && errors.jaddress}
-                                    />
-                                  </Item>
-
-                                  <Item className="group-form">
-                                    <Box mb={touched.region && errors.region ? 2.5 : 0}>
-                                    <FormControl variant="filled" className="select-form" error={touched.jregion && !!errors.jregion}>
-                                      <InputLabel htmlFor="region">Región </InputLabel>
-                                      <Select
-                                        id="region"
-                                        value={values.jregion}
-                                        name="jregion"
-                                        disabled={!editar}
-                                        onChange={(e)=>{
-                                          setValues((prevValues)=>({...prevValues, jregion:e.target.value}));
-                                          RegionChange(e);
-                                        }}
-                                        onBlur={handleBlur}
-                                        required
-                                        label="Región">
-                                          <MenuItem value = "">
-                                          Seleccione una región
-                                          </MenuItem>
-                                          {Array.isArray(regions?.regions) &&
-                                            regions.regions.map((region, index) =>(
-                                              <MenuItem key={index} value={region.name}>
-                                              {region.name}
-                                              </MenuItem>
-                                            ))}
-                                      </Select>
-                                      {touched.jregion && errors.jregion && <FormHelperText>{errors.jregion}</FormHelperText>}
-                                    </FormControl>
-                                    </Box>
-                                  </Item>
-
-                                  <Item className="group-form">
-                                  <Box mb={touched.jcomuna && errors.jcomuna ? 2.5 : 0}>
-                                    <FormControl variant="filled" className="select-form" error={touched.jcomuna && !!errors.jcomuna}>
-                                      <InputLabel htmlFor="comuna">Comuna </InputLabel>
-                                      <Select
-                                        id="comuna"
-                                        name="jcomuna"
-                                        value={values.jcomuna}
-                                        onChange={(e) => {
-                                          setValues((prevValues)=>({...prevValues, jcomuna: e.target.value}))
-                                          setSeComuna(e.target.value)}}
-                                        onBlur={handleBlur}
-                                        disabled ={!seRegion || !editar}
-                                        label="Comuna"
-                                        required>
-                                          <MenuItem value="">Seleccione una comuna</MenuItem>
-                                          {Array.isArray(fcomunas) &&
-                                            fcomunas.map((comuna, index) =>
-                                            (
-                                              <MenuItem key={index} value={comuna.name}>
-                                                {comuna.name}
-                                              </MenuItem>
-                                            ))}
-                                      </Select>
-                                      {touched.jcomuna && errors.jcomuna && <FormHelperText>{errors.jcomuna}</FormHelperText>}
-                                    </FormControl>
-                                    </Box>
-                                  </Item>
                                   
                      
                             </Item>
                           </Stack>
                       
                               {/* Contenedor 3 */}
-                              <Stack md="4" className="Containers-Stack">
+                              <Stack md="4" className="Containers-Stack-in">
                                 <Item md="12" className="Containers-Item">    
                                   <span className="title-stack">Datos Adicionales</span>
                                     
@@ -1226,6 +975,13 @@ export const Modify = (props) => {
         </Form>
       )}
     </Formik>
+
+   <div className="container-comp" style={{ display: 'flex' }}>
+     <Telefonos></Telefonos>
+     <Correos></Correos>
+  </div>
+
+   <Direcciones></Direcciones>
 
   </>
                   

@@ -140,7 +140,7 @@ export const Insurerclaim = (props) => {
         </div>
         <Box className='boxgrid-cov' >
           <DataGrid
-            className='dataGrid'
+            className='dataGrid-annex'
             initialState={{
               sorting:{ sortModel: [{field: 'annexid', sort: 'desc'}] },
             }}

@@ -94,6 +94,7 @@ td{
 .inBuscar{
   border-radius: 5px;
   border: none;
+  width: 200px;
 
 }
 
@@ -110,11 +111,23 @@ td{
 
   display: flex;
   justify-content: flex-start;
-  width: 100%;
+  width: 1700px !important;
   height: 70%;
   margin-top: 20px;
   text-align: left;
-  margin-left: 290px !important;
+  
+  margin-left: 300px !important;
+}
+
+.container-title-pol{
+
+  display: flex;
+  justify-content: space-between;
+  width: 1500px !important;
+  height: 70%;
+  margin-top: 20px;
+  text-align: left;
+  margin-left: 200px !important;
 }
 
 .container-title-br{
@@ -137,10 +150,24 @@ td{
 
 .search-container
 {
-  margin-left: 100px;
+  margin-left: 20px;
+  width: 200px;
 }
 
+.btn-exportar-all{
+  width: 40px;
+}
 
+.btn-export{
+
+  &:disabled {
+    background-color:transparent;
+    color:#868686;
+    opacity: 0.5; 
+    cursor: not-allowed;
+
+  }
+}
 
 th, td {
   padding: 8px;
@@ -328,8 +355,8 @@ td.statusC[data-state='Activo'] {
   background-color: rgba(0, 0, 0, 0.1); /* Cambia el color de fondo en hover */
 }
 .sidebar li a.active {
-  background-color: #00304E; // Cambia el color según tus necesidades
-  color: #fff; // Cambia el color del texto según tus necesidades
+  background-color: #00304E; 
+  color: #fff;
 }
 
 /* Contenido principal */
@@ -339,8 +366,9 @@ td.statusC[data-state='Activo'] {
   padding: 20px;
 }
 
-
-
+.title-pol{
+margin-right: 40px;
+}
 
 /*asterisco a la izq*/
 
@@ -360,40 +388,5 @@ td.statusC[data-state='Activo'] {
   background-color: #dfdbdb;
 }
 
-// RESPONSIVE 
 
 
-.navbar {
-  /* Tus estilos actuales */
-
-  @media (max-width: 768px) {
-      height: 50px; /* Reducir la altura del Navbar en pantallas más pequeñas */
-      padding: 0 10px; /* Reducir el espacio en los lados del Navbar en pantallas más pequeñas */
-      .title-bar {
-          font-size: 20px; /* Reducir el tamaño de fuente del título en pantallas más pequeñas */
-      }
-      .title-name {
-          font-size: 8px; /* Reducir el tamaño de fuente del nombre en pantallas más pequeñas */
-      }
-      /* Otros ajustes de estilo para pantallas más pequeñas */
-  }
-}
-
-.sidebar {
-  /* Tus estilos actuales */
-
-  @media (max-width: 768px) {
-      width: 150px; /* Reducir el ancho de la barra lateral en pantallas más pequeñas */
-      padding: 10px; /* Reducir el espacio interno de la barra lateral en pantallas más pequeñas */
-      /* Otros ajustes de estilo para pantallas más pequeñas */
-  }
-}
-
-.main-content {
-  /* Tus estilos actuales */
-
-  @media (max-width: 768px) {
-      margin-left: 0; /* Eliminar el margen izquierdo en pantallas más pequeñas */
-      /* Otros ajustes de estilo para pantallas más pequeñas */
-  }
-}

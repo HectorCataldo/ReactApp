@@ -84,12 +84,11 @@ export const Correos = () => {
   
   
       <div className='App-cor'>
-
         <Box className='boxgrid-a' >
           <DataGrid
            
             disableColumnSort
-            className='dataGrid'
+            className='dataGrid-cor'
             initialState={{ pagination: { paginationModel: { page: 0, pageSize: 3 }, }}}
             rows={currentClients}
             columns={insureobj}  

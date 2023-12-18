@@ -10,7 +10,7 @@
 }
 
 .App-cor{
-    width: 500px;
+    width: 510px !important;
     margin-left: 100px;
 }
 
@@ -18,6 +18,8 @@
 .App-dir{
     margin-left: 72px;
 }
+
+
 .container-comp{
     margin-left: 72px;
 }
@@ -27,3 +29,68 @@
     width: 800px;
 }
 
+.dataGrid-tel{
+    margin-top: 10px;
+    margin-left: 270px;
+    width: 639px;
+}
+
+.dataGrid-cor{
+    margin-top: 10px;
+    margin-left: 220px;
+    width: 666px;
+}
+
+.dataGrid-dir{
+    margin-top: 10px;
+    margin-left: 270px;
+    width: 1330px;
+}
+.btn-modal{
+    width: 100px !important;
+    height: 35px !important;
+    margin-top: 10px !important;
+    margin-left: 10px !important;
+    font-size: 10px !important;
+    padding: 0,0,0,0 !important;
+    background-color:#00304E !important;
+    border-style: none !important;
+    border-radius: 3px !important;
+    cursor: pointer;
+}
+
+.btn-modal:hover{
+    background-color:#02446d !important;
+    cursor: pointer;
+}
+
+
+.modal-content{
+    width: 900px;
+    height: 500px !important;
+}
+
+.group-form{
+    width: 350px !important;
+}
+
+.select-form-in{
+    width: 350px;
+    margin-left: 7px !important;
+    margin-bottom: 10px !important;
+    
+}
+
+
+.modal-body-contact{
+    padding-top: 0px;
+    padding-left: 0px;
+    padding-right: 0px;
+    margin-top: 0px !important;
+}
+
+
+
+.container-modal{
+    margin-left: 70px;
+}

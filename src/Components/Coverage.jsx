@@ -68,14 +68,14 @@ export const Coverage = () => {
 
 
      const coverage = [
-        { width: 20, sortable: false, renderCell: (params) => {
+        { width: 10, sortable: false, renderCell: (params) => {
             if   (isRowEmpty(params.row)) { return null; } 
             else { return ( <input type="checkbox" checked={params.row.isSelected} onChange={() => {}}/> ); }},},
-        { field: 'idapen'            ,headerName: 'ID de apéndice'         ,width: 150 },
+        { field: 'idapen'            ,headerName: 'ID de apéndice'         ,width: 120 },
         { field: 'coveragename'      ,headerName: 'Nombre de cobertura'    ,width: 150 },
         { field: 'riskstatus'        ,headerName: 'Estado de riesgo'       ,width: 150 },
         { field: 'coveragevalue'     ,headerName: 'Valor asegurado'        ,width: 150 },
-        { field: 'currencytype'      ,headerName: 'Moneda'                 ,width: 110 },
+        { field: 'currencytype'      ,headerName: 'Moneda'                 ,width: 100 },
         { field: 'dimpremium'        ,headerName: 'Dimension de la prima'  ,width: 170 },
         { field: 'porcenttips'       ,headerName: 'Porcentaje de tarifa'   ,width: 150 },
         { field: 'prima'             ,headerName: 'Prima'                  ,width: 150 },
@@ -100,12 +100,12 @@ export const Coverage = () => {
   
       <div className='App-cov'>
         <div className='container-sm container-title-br'>
-          <h4 className='title'>Coberturas </h4>
+          <h4 className='title-obj'>Coberturas </h4>
         </div>
 
         <Box className='boxgrid-cov' >
           <DataGrid
-            className='dataGrid'
+            className='dataGrid-annex'
             initialState={{ pagination: { paginationModel: { page: 0, pageSize: 5 }, }}}
             rows={currentClients}
             columns={coverage}  

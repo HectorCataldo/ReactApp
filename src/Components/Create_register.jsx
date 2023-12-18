@@ -25,6 +25,7 @@ import PanelControl                            from "./Panel-Control";
 import * as Yup                                from "yup";
 import { Box,FormHelperText, Grid }            from "@mui/material";
 import dayjs                                   from "dayjs";
+import { BorderStyle } from "@mui/icons-material";
 
 export const Registro = (props) => {
   const { data: country }                            = useFetch( "https://gist.githubusercontent.com/HectorCataldo/ceee7aa2b93e83d7d04f752e3adbe623/raw/81b6bc11b965720e6717975f665fe85869c71e81/paises.json" )
@@ -89,6 +90,7 @@ export const Registro = (props) => {
       const genderObject = gender.find(item => item.id_gender === 0);
       setSelectedGender(genderObject);
       setSelectedTipo(2);
+      setSelectedBirthDate("");
     }
     else if( tp != 2 || tp != 1){
       setDisableGender(true);
@@ -810,7 +812,8 @@ export const Registro = (props) => {
         </Form>
       )}
     </Formik>
-    {/* <Stack
+  <Stack
+    className="border"
     direction={{ xs: 'column', sm: 'row' }}
     justifyContent="flex-start"
     spacing={{ xs: 1, sm: 2, md: 4 }}
@@ -824,7 +827,7 @@ export const Registro = (props) => {
         <Correos></Correos>
       </Item>
     </Stack>
-    <Direcciones></Direcciones> */}
+    <Direcciones></Direcciones> 
   </>
   );
 };

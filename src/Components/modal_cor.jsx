@@ -1,6 +1,6 @@
 import React, { useState } from 'react';
 import Modal from 'react-bootstrap/Modal';
-import '../CSS/insr-obj-style.scss';
+import '../CSS/contact-style.scss';
 import TextField from "@mui/material/TextField";
 import Select from "@mui/material/Select";
 import MenuItem from "@mui/material/MenuItem";
@@ -8,10 +8,9 @@ import FormControl from "@mui/material/FormControl";
 import InputLabel from "@mui/material/InputLabel";
 import Stack from '@mui/material/Stack';
 import Item from '@mui/material/Stack';
-import { Box,FormHelperText } from "@mui/material"
-import '../CSS/insr-obj-style.scss';
-import Button from '@mui/material/Button';
-import CancelIcon from '@mui/icons-material/Cancel';
+import PanelControlModal from './Panel-Control-modal';
+
+
 
 export const Modalcor = (props) => {
 
@@ -25,15 +24,12 @@ export const Modalcor = (props) => {
     <Modal className='modal-container'
            {...props}>
 
-        <Modal.Header >
+        <Modal.Header closeButton>
             <h1 className='title-header'>Agregar nuevo Correo</h1>
             
-            <Stack direction="row" spacing={2}>
-            <Button className='btn-header' onClick={handleClose} variant="contained"><CancelIcon className='icons'></CancelIcon>      Cerrar          </Button>
-  
-            </Stack>
         </Modal.Header>
-            <Modal.Body className='modal-body'>
+            <Modal.Body className='modal-body-contact'>
+              <PanelControlModal></PanelControlModal>
                 <Stack direction="row" className='stack-content'>
                 <Item className="group-form">
                  <TextField
@@ -44,10 +40,29 @@ export const Modalcor = (props) => {
                     name="email"
                     required
                     placeholder="Correo@example.com"
-                   
                     />
                 </Item>
+                
+                <Item className="group-form">
+                                      <FormControl className="select-form">
+                                        <InputLabel htmlFor="tipo-persona">Tipo </InputLabel>
+                                        <Select
+                                          id="tipo-persona"
+                                          variant="filled"
+                  
+                                        >
+                                          {/*<MenuItem>Seleccione un tipo de persona</MenuItem>*/}
+                                          <MenuItem value={1} >Natural</MenuItem>
+                                          <MenuItem value={2} >Jurídica</MenuItem>
+                                        </Select>
+                                      </FormControl>
+                                     
+                                    </Item>
+
                 </Stack>
+                
+
+
             </Modal.Body>
     </Modal>
     </>
