@@ -321,16 +321,18 @@ export const Registro = (props) => {
         <Form className="formulario-cr" onSubmit={formikHandleSubmit}>
               {/* PANEL DE CONTROL */}
                 <Stack   
-                direction="row" //{ xs: 'column', sm: 'row' }
+                direction={{ xs: 'column', sm: 'column', md: 'row' }}
                 spacing={{ xs: 1, sm: 2, md: 4 }}
                 className="Panel-User"
+                mb={5}
                 >
                   <div   className   = "user-info-container">
                     <h1  className   = "title-user"> {userName ? userName : 'Usuario'}</h1>  
                     <h1  className   = "title-newuser">Cliente nuevo</h1>
                   </div>
                   <Stack
-                  direction={{ xs: 'column', md: 'row' }}
+                  direction={{ sm: 'column', md: 'row' }}
+                  margin={1}
                   // spacing={{ xs: 1, sm: 2, md: 4 }}
                   >
                       <Item className="group-user">                                    
@@ -366,7 +368,7 @@ export const Registro = (props) => {
               {/* PERSONA NATURAL */}
               {selectedTipo == 1 && (
                   <Stack 
-                  direction={{ xs: 'column', sm: 'row' }}
+                  direction={{ xs: 'column', sm: 'column', md: 'row' }}
                   // spacing={30}
                   spacing={{ xs: 1, sm: 2, md: 4 }}
                   className="Containers-stacks-3">
@@ -812,22 +814,26 @@ export const Registro = (props) => {
         </Form>
       )}
     </Formik>
-  <Stack
+  {/* <Stack
     className="border"
-    direction={{ xs: 'column', sm: 'row' }}
+    direction={{ xs: 'column', sm: 'column' }}
     justifyContent="flex-start"
     spacing={{ xs: 1, sm: 2, md: 4 }}
     border={1}
     ml={9}
     >
-      <Item >
-        <Telefonos></Telefonos>
-      </Item>
-      <Item>
-        <Correos></Correos>
-      </Item>
+      <Stack
+      direction={{xs: 'column',sm:'column', md: 'row'}}
+      >
+        <Item >
+          <Telefonos></Telefonos>
+        </Item>
+        <Item>
+          <Correos></Correos>
+        </Item>
+      </Stack>
     </Stack>
-    <Direcciones></Direcciones> 
+    <Direcciones></Direcciones>  */}
   </>
   );
 };
