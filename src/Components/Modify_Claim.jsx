@@ -1,4 +1,4 @@
-import '../CSS/claim-style.scss';
+
 import React, { useState, useEffect, useMemo } from "react";
 import moment from "moment";
 import axios from "axios";

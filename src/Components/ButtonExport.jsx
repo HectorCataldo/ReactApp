@@ -1,7 +1,8 @@
 import react ,{useState} from 'react';
 import {Button,Spinner} from 'react-bootstrap';
 import * as XLSX from "xlsx";
-
+import VerticalAlignBottomIcon from '@mui/icons-material/VerticalAlignBottom';
+import '../CSS/icons-things-style.scss';
 
 export const ButtonExport = (props) =>{
 
@@ -29,9 +30,9 @@ export const ButtonExport = (props) =>{
         <>
 
         {!loading ? (
-            <Button color='success' onClick={handleDownload}> Export</Button>
+            <Button className='btn-export' onClick={handleDownload}> Export<VerticalAlignBottomIcon className='icon-export'/></Button>
         ):(
-            <Button color='success' disabled>
+            <Button className='btn-export'  disabled>
                 <Spinner></Spinner>
                 <span>Generando...</span>
             </Button>

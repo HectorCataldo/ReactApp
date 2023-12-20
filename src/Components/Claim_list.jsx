@@ -1,4 +1,4 @@
-import '../CSS/claim-style.scss';
+
 import React, { useState, useEffect } from 'react';
 import { useFetch } from '../assets/useFetch';
 import _ from 'lodash';

@@ -6,6 +6,79 @@
 @use "@material/textfield";
 @include textfield.core-styles;
 
+
+
+  
+  .work .icon-work {
+    width: 200px;
+    height: 100px;
+    position: absolute; /* Permite posicionar este elemento de manera absoluta dentro de .work */
+    top: 0;
+    left: 0;
+  
+    /* Añade animación de movimiento */
+    animation: moveAnimation 4s infinite linear;
+  
+    /* Añade transición de cambio de color */
+    transition: background-color 1s ease-in-out;
+  }
+  
+  /* Definición de la animación de movimiento */
+  @keyframes moveAnimation {
+    0% {
+      transform: translate(0, 0);
+    }
+    25% {
+      transform: translate(50px, 50px);
+    }
+    50% {
+      transform: translate(100px, 0);
+    }
+    75% {
+      transform: translate(50px, -50px);
+    }
+    100% {
+      transform: translate(0, 0);
+    }
+  }
+  
+  /* Cambio de color al pasar el mouse sobre el elemento */
+  .work .icon-work:hover {
+    background-color: #ffcc00;
+  }
+
+  .work {
+    margin-top: 200px;
+    margin-left: 800px;
+    position: relative;
+    animation: moveWork 4s infinite linear;
+    transition: background-color 1s ease-in-out;
+  }
+  
+  .work:hover {
+    background-color: #ffcc00;
+  }
+  
+  @keyframes moveWork {
+    0% {
+      transform: translate(0, 0);
+    }
+    25% {
+      transform: translate(50px, 50px);
+    }
+    50% {
+      transform: translate(100px, 0);
+    }
+    75% {
+      transform: translate(50px, -50px);
+    }
+    100% {
+      transform: translate(0, 0);
+    }
+  }
+
+  // ICONOS 
+
 body {
     height: 100vh;
     margin: 0; /* Elimina el margen predeterminado del cuerpo */

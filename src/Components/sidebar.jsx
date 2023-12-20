@@ -23,17 +23,17 @@ const Sidebar = () => {
         <div className="linea"></div>
         <li><Link to="/policylist" className={isActive(['/policylist','/Policy']) ? 'active' : ''}><FileTextOutlined /> Pólizas</Link></li>
         <div className="linea"></div>
-        <li><Link to="/Objannex" className={isActive(['/Objannex']) ? 'active' : ''}><FileExcelOutlined /> Endosos</Link></li>
+        <li><Link to="/PANTALLA"  className={isActive(['/Objannex']) ? 'active' : ''}><FileExcelOutlined /> Endosos</Link></li>
         <div className="linea"></div>
-        <li><Link to="/configuracion" className={isActive(['/configuracion']) ? 'active' : ''}><StockOutlined /> Cobranzas</Link></li>
+        <li><Link to="/PANTALLA"  className={isActive(['/configuracion']) ? 'active' : ''}><StockOutlined /> Cobranzas</Link></li>
         <div className="linea"></div>
         <li><Link to="/Claimlist" className={isActive(['/Claimlist','/Claim']) ? 'active' : ''}><FireOutlined /> Siniestros</Link></li>
         <div className="linea"></div>
-        <li><Link to="/Direcciones" className={isActive(['/clientes']) ? 'active' : ''}><ScheduleOutlined /> Reservas</Link></li>
+        <li><Link to="/PANTALLA" className={isActive(['/clientes']) ? 'active' : ''}><ScheduleOutlined /> Reservas</Link></li>
         <div className="linea"></div>
-        <li><Link to="/Telefonos" className={isActive(['/configuracion']) ? 'active' : ''}><SafetyCertificateOutlined /> Reaseguro</Link></li>
+        <li><Link to="/PANTALLA" className={isActive(['/configuracion']) ? 'active' : ''}><SafetyCertificateOutlined /> Reaseguro</Link></li>
         <div className="linea"></div>
-      </ul>
+      </ul> 
     </div>
   );
 };

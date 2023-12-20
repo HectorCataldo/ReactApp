@@ -29,7 +29,7 @@ import { Modaldir }                               from './Components/modal_dir';
 import { ModalClient }                            from './Components/modalclient';
 import { Clientlist }                             from './Components/clientlist';
 import './CSS/index.scss';
-
+import { PANTALLA }                               from './Components/pantalla-de-humo';
 
 // ventanas modales 
 
@@ -42,6 +42,7 @@ const AppRouter = () => {
         <Routes>
           <Route path="/"                     element={<Principal />} />
           <Route path='/Login'                element={<Login/>}/>
+          <Route path='/PANTALLA'             element={<PANTALLA/>}/>
 
           {/*CLIENTE */}
           <Route path="/ApClients"            element={<App/>} />

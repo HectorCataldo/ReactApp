@@ -818,7 +818,7 @@ export const Registro = (props) => {
     className="border"
     direction={{ xs: 'column', sm: 'column' }}
     justifyContent="flex-start"
-    spacing={{ xs: 1, sm: 2, md: 4 }}
+    spacing={{ xs: 1, sm: 2, md: 0 }}
     border={1}
     ml={9}
     >

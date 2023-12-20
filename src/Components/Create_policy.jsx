@@ -55,7 +55,7 @@ export const Policy = (props) => {
     paymentWay: null,
     num_instalments: null,
     payment_anual: null,
-    payment_mensual:null
+    quote_value:null
   });
 
   const [modalShow, setModalShow] = useState(false);
@@ -104,7 +104,7 @@ export const Policy = (props) => {
     paymentWay:Yup.string().required('Seleccione un método de pago'),
     num_instalments: Yup.string().required('Seleccione perioricidad de pagos'),
     payment_anual: Yup.string().min(6, 'El número debe contener al menos 6 dígitos').matches(/^[+0-9]+$/,'Ingrese un número de teléfono válido').required('Ingrese un valor de prima anual'), 
-    payment_mensual:Yup.string().min(5, 'El número debe contener al menos 5 dígitos').matches(/^[+0-9]+$/,'Ingrese un valor valido').required('Ingrese un valor de prima mensual'),
+    quote_value:Yup.string().min(5, 'El número debe contener al menos 5 dígitos').matches(/^[+0-9]+$/,'Ingrese un valor valido').required('Ingrese un valor de prima mensual'),
     agent:Yup.string().trim().matches(/^(?!\s*$)[A-Za-záéíóúñÁÉÍÓÚÑ -()+0-9]+(?:\s[A-Za-záéíóúñÁÉÍÓÚÑ]+)*$/,'Formato de agente incorrecto').required('Por favor ingresa un agente'),
     office:Yup.string().trim().matches(/^(?!\s*$)[A-Za-záéíóúñÁÉÍÓÚÑ -()+0-9]+(?:\s[A-Za-záéíóúñÁÉÍÓÚÑ]+)*$/,'Formato de la oficina es incorrecto').required('Por favor ingresa una oficina'),
     product:Yup.string().trim().matches(/^(?!\s*$)[A-Za-záéíóúñÁÉÍÓÚÑ -]*$/,'Formato de producto incorrecto').required('Por favor ingresa un producto'),
@@ -145,7 +145,7 @@ export const Policy = (props) => {
         paymentWay:'',
         num_instalments:'',
         payment_anual:'', 
-        payment_mensual:''
+        quote_value:''
     }}
     validationSchema = {validationSchema}
     >
@@ -656,17 +656,17 @@ export const Policy = (props) => {
 
                                       <Item md="6" className="group-form">
                                         <TextField
-                                          label="Prima Mensual"
-                                          id="payment_mensual"
+                                          label="Valor Cuota"
+                                          id="quote_value"
                                           type="text"
                                           variant="filled"
-                                          name="payment_mensual"
+                                          name="quote_value"
                                           placeholder="$60.000"
                                           required
-                                          value={values.payment_mensual}
+                                          value={values.quote_value}
                                           onChange={(e) => {
                                             handleChange(e);
-                                            setdatapolicy({ ...datapolicy, payment_mensual: e.target.value})
+                                            setdatapolicy({ ...datapolicy, quote_value: e.target.value})
                                           }}
                                           onBlur={handleBlur}
                                           onKeyPress={(e) => {
@@ -675,8 +675,8 @@ export const Policy = (props) => {
                                               e.preventDefault();
                                             }
                                           }}
-                                          error={touched.payment_mensual && !!errors.payment_mensual}
-                                          helperText={touched.payment_mensual && errors.payment_mensual}
+                                          error={touched.quote_value && !!errors.quote_value}
+                                          helperText={touched.quote_value && errors.quote_value}
                                         />
                                       </Item>                           
                                 </Item>
