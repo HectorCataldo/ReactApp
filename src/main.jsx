@@ -1,4 +1,4 @@
-import React                                      from 'react';
+import * as React                                 from 'react';
 import { createRoot }                             from 'react-dom/client';
 import { BrowserRouter as Router, Routes, Route } from 'react-router-dom';
 import { Principal }                              from '../src/Components/Principal';
@@ -28,9 +28,8 @@ import { Modalcor }                               from './Components/modal_cor';
 import { Modaldir }                               from './Components/modal_dir';
 import { ModalClient }                            from './Components/modalclient';
 import { Clientlist }                             from './Components/clientlist';
-import './CSS/index.scss';
 import { PANTALLA }                               from './Components/pantalla-de-humo';
-
+import './CSS/index.scss';
 // ventanas modales 
 
 

@@ -164,7 +164,7 @@ const obtenerDescripcionSexo = (codigoSexo) => {
 
   return (
     <>
-      <TextLinkExample />
+      <TextLinkExample />      
       <Sidebar />
       <PanelControl/>
   

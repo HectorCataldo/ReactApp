@@ -280,7 +280,7 @@ export const Registro = (props) => {
     <>
     <TextLinkExample />
     <Sidebar />
-    <PanelControl handleSubmit={handleSubmit} objetos={objetos} />
+    <PanelControl handleSubmit={handleSubmit} objetos={objetos}/>
 
 
     <Formik
@@ -324,6 +324,7 @@ export const Registro = (props) => {
                 direction={{ xs: 'column', sm: 'column', md: 'row' }}
                 spacing={{ xs: 1, sm: 2, md: 4 }}
                 className="Panel-User"
+                // border={1}
                 mb={5}
                 >
                   <div   className   = "user-info-container">
@@ -333,7 +334,10 @@ export const Registro = (props) => {
                   <Stack
                   direction={{ sm: 'column', md: 'row' }}
                   margin={1}
-                  // spacing={{ xs: 1, sm: 2, md: 4 }}
+                  // border={1}
+                  alignItems="center"
+                  justifyContent="center"
+                  spacing={{ xs: 1, sm: 1, md: 1 }}
                   >
                       <Item className="group-user">                                    
                         <TextField
@@ -359,8 +363,7 @@ export const Registro = (props) => {
                           InputProps  ={{
                             readOnly: true,
                           }}
-                          disabled
-                        />
+                          disabled/>
                       </Item>
                   </Stack>
                 </Stack>
@@ -371,7 +374,8 @@ export const Registro = (props) => {
                   direction={{ xs: 'column', sm: 'column', md: 'row' }}
                   // spacing={30}
                   spacing={{ xs: 1, sm: 2, md: 4 }}
-                  className="Containers-stacks-3">
+                  // className="Containers-stacks-3"
+                  >
                      {/* Contenedor 1 */}
                      <Stack
                     //  direction={{ xs: 'column', sm: 'row' }}
@@ -379,7 +383,7 @@ export const Registro = (props) => {
                     spacing={{ xs: 1, sm: 2, md: 4 }}
                     className="Containers-Stack-in"
                     >
-                       <Item md="12" className="Containers-Item">
+                       <Item className="Containers-Item">
                         <span className="title-stack">Datos Personales</span>
                           <Item className="group-form">
                              <FormControl className="select-form">
@@ -811,29 +815,34 @@ export const Registro = (props) => {
                 </Stack>                  
               </Stack>
             )}
+          <Stack
+          // className="border"
+          direction={{ xs: 'column', sm: 'column', md: 'colum' }}
+          justifyContent="center"
+          alignItems="center"
+          spacing={{ xs: 1, sm: 2, md: 4 }}
+          // border={1}
+          // ml={9}
+          >
+            <Item
+            position={"relative"}
+            right={"400px"}
+            direction={{ xs: 'column', sm: 'column', md: 'row' }}
+            >
+              <Telefonos></Telefonos>
+              <Correos></Correos>
+            </Item>
+            <Item
+            position={"relative"}
+            right={"230px"}
+            >
+              <Direcciones></Direcciones>
+            </Item>
+          </Stack>          
         </Form>
       )}
     </Formik>
-  {/* <Stack
-    className="border"
-    direction={{ xs: 'column', sm: 'column' }}
-    justifyContent="flex-start"
-    spacing={{ xs: 1, sm: 2, md: 0 }}
-    border={1}
-    ml={9}
-    >
-      <Stack
-      direction={{xs: 'column',sm:'column', md: 'row'}}
-      >
-        <Item >
-          <Telefonos></Telefonos>
-        </Item>
-        <Item>
-          <Correos></Correos>
-        </Item>
-      </Stack>
-    </Stack>
-    <Direcciones></Direcciones>  */}
+  
   </>
   );
 };

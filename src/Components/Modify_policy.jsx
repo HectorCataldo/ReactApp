@@ -149,7 +149,6 @@ export const Modifypolicy = (props) => {
   const[er,setEr] = useState(false);
 
 
-
   //Validaciones con YUP formatos:
   // if (editar) {    
   // }

@@ -98,16 +98,16 @@ body {
 
 /* Panel de usuario y otros estilos relacionados */
 .Panel-User {
-    display: flex;
-    justify-content: space-between;
-    align-items: center;
-    margin-left: 5.5% !important;
-    width: 80.3% !important; /* Igualar el ancho al de Containers-stacks2 */
-    height: 100px;
-    margin-top: 10px;
-    margin-bottom: 20px;
-    background-color: #fffcfc;
-    box-shadow: rgba(0, 0, 0, 0.12) 0px 0px 2px, rgba(0, 0, 0, 0.14) 0px 2px 4px;
+    // display: flex;
+    // justify-content: space-between;
+    // align-items: center;
+    // margin-left: 5.5% !important;
+    // width: 80.3% !important; /* Igualar el ancho al de Containers-stacks2 */
+    // height: 100px;
+    // margin-top: 10px;
+    // margin-bottom: 20px;
+    // background-color: #fffcfc;
+    // box-shadow: rgba(0, 0, 0, 0.12) 0px 0px 2px, rgba(0, 0, 0, 0.14) 0px 2px 4px;
 }
 
 /* Ajustes de estilo para pantallas más pequeñas */
@@ -118,8 +118,8 @@ body {
     }
     
     .Panel-User {
-        margin-left: 5%; /* Cambiado a porcentaje para ser responsive */
-        width: 90%; /* Cambiado a porcentaje para ser responsive */
+        // margin-left: 5%; /* Cambiado a porcentaje para ser responsive */
+        // width: 90%; /* Cambiado a porcentaje para ser responsive */
     }
 }
 
@@ -127,20 +127,20 @@ body {
 
 
 
-.Panel-User .user-info-container {
+/*.Panel-User*/ .user-info-container {
     display: flex;
     align-items: center;
     margin-left: 10px;
 }
 
 
-.Panel-User .user-info-container h1 {
+/*.Panel-User*/ .user-info-container h1 {
     margin-right: 850px; 
     font-size: 20px;
 }
 
 // FIN DEL PANEL DE USUARIO
-.Panel-User .group-user{
+/*.Panel-User*/ .group-user{
     width: 120px;
     margin-right: 20px;
     margin-top: 10px;
@@ -149,7 +149,7 @@ body {
    
 }
 
-.Panel-User .user-info-container {
+/*.Panel-User*/ .user-info-container {
     display: flex;
     flex-direction: column; 
     align-items: flex-start; 
@@ -161,12 +161,12 @@ body {
     margin-right: 0; 
 }
 
-.Panel-User .user-info-container h1.title-user {
+/*.Panel-User*/ .user-info-container h1.title-user {
     margin-right: 0;
     margin-top: 10px;
 }
 
-.Panel-User .user-info-container h1.title-newuser {
+/*.Panel-User*/ .user-info-container h1.title-newuser {
     margin-top: 2px; 
     font-size: 15px;
 }
