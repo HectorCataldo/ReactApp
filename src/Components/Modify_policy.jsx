@@ -81,7 +81,7 @@ export const Modifypolicy = (props) => {
         state: filterPolicy.policyState.name,
         subestado:'',
         dateGiven:filterPolicy.dateGiven,
-        paymentWay: '',
+        paymentWay: filterPolicy.paymentWay.paymentWay,
         num_instalments: '',
         payment_anual: '',
         quote_value:''
@@ -200,7 +200,7 @@ export const Modifypolicy = (props) => {
         state: loading? 'Cargando...' : datapolicy.state,
         subestado: loading? 'Cargando...' : '',
         dateGiven: loading? 'Cargando...' : datapolicy.dateGiven,
-        paymentWay: loading? 'Cargando...' : '',
+        paymentWay: loading? 'Cargando...' : datapolicy.paymentWay,
         num_instalments: loading? 'Cargando...' : '',
         payment_anual: loading? 'Cargando...' : '',
         quote_value: loading? 'Cargando...' : ''
@@ -466,7 +466,7 @@ export const Modifypolicy = (props) => {
                                           
                                           <MenuItem value="d">Días</MenuItem>
                                           <MenuItem value="m">Mes</MenuItem>
-                                          <MenuItem value="a">Año</MenuItem>
+                                          <MenuItem value="y">Año</MenuItem>
                                         </Select>
                                         {editar && touched.durDimension && errors.durDimension && <FormHelperText>{errors.durDimension}</FormHelperText>}
                                       </FormControl>
@@ -675,7 +675,7 @@ export const Modifypolicy = (props) => {
                                    <Item className="group-form">
                                     <Box mb={editar && touched.paymentWay && errors.paymentWay ? 2.5:0}>
                                       <FormControl className="select-form" error={editar && touched.paymentWay && !!errors.paymentWay}>
-                                        <InputLabel htmlFor="paymentWay">Metodo de Pago </InputLabel>
+                                        <InputLabel htmlFor="paymentWay">Método de Pago </InputLabel>
                                         <Select
                                           id="paymentWay"
                                           variant="filled"
@@ -694,6 +694,7 @@ export const Modifypolicy = (props) => {
                                         >
                                           <MenuItem value="PAC">PAC</MenuItem>
                                           <MenuItem value="PAT">PAT</MenuItem>
+                                          <MenuItem value="1">Giro Payment Slip</MenuItem>
                                         </Select>
                                         {editar && touched.paymentWay && errors.paymentWay && <FormHelperText>{errors.paymentWay}</FormHelperText>}
                                       </FormControl>

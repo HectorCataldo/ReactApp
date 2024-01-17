@@ -1,11 +1,10 @@
-import React, { useState, useEffect } from 'react';
-import { useFetch } from '../assets/useFetch';
+import React, { useState, useEffect }       from 'react';
 import '../CSS/insr-obj-style.scss';
-import _ from 'lodash';
-import { DataGrid } from '@mui/x-data-grid';
-import Box from '@mui/material/Box';
-import { useParams } from 'react-router-dom';
-import axios from 'axios';
+import _                                    from 'lodash';
+import { DataGrid }                         from '@mui/x-data-grid';
+import Box                                  from '@mui/material/Box';
+import { useParams }                        from 'react-router-dom';
+import axios                                from 'axios';
 
 
 export const Objannex = (props) => {
@@ -42,14 +41,14 @@ export const Objannex = (props) => {
           const dataAnnex = {
             id          : an.annexId,
             annex_id    : an.annexId,
-            annexno     : null,
+            annexno     : '-',
             annextype   : an.insrType,
-            annexdate   : null,
-            annexstart  : null,
-            annexend    : null,
-            annexstatus : null,
-            annexsubsta : null,
-            annexreason : null
+            annexdate   : '-',
+            annexstart  : '-',
+            annexend    : '-',
+            annexstatus : '-',
+            annexsubsta : '-',
+            annexreason : '-'
           };
           setAnnex(dataAnnex);
           upAnnexRows.push(dataAnnex);

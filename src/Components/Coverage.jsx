@@ -11,9 +11,12 @@ export const Coverage = () => {
   useEffect(()=>{
    const coversApi = async () => {
     const apiList = [];
+    let annid = null;
     try{
       const response = await axios.get(`https://si-client-bkn.kps/api/v1/policy/${id}`);
       const data =  response.data.data.policyAnnex;
+      annid = data.annexId;
+      console.log(annid);
 
       for (let i = 0; i < data.length; i++) {
         const e         = data[i]        ;
@@ -26,16 +29,16 @@ export const Coverage = () => {
           for (let i3 = 0; i3 < eCovers.length; i3++) {
             const e3          = eCovers[i3];
             const CoverObject = {
-              id           : (i3+ 1)          ,
-              idapen       : null             ,
-              coveragename : e3.coverType     ,
-              riskstatus   : e3.riskState     ,
-              coveragevalue: null             ,
-              currencytype : e3.avCurrency    ,
-              dimpremium   : null             ,    
-              porcenttips  : e3.tariffPercent ,
-              prima        : e3.premium       ,
-              anuarypremium: e3.annualPremium ,
+              id           : (i3+ 1)            ,
+              idapen       : e2.annexId         ,
+              coveragename : e3.cover.name      ,
+              riskstatus   : e3.riskState       ,
+              coveragevalue: e3.rateFullPremium ,
+              currencytype : e3.avCurrency      ,
+              dimpremium   : "USD"              ,
+              porcenttips  : e3.tariffPercent   ,
+              prima        : e3.premium         ,
+              anuarypremium: e3.annualPremium   ,
             }
             apiList.push(CoverObject);
           }
