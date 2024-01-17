@@ -126,13 +126,13 @@ export const Registro = (props) => {
         !clientData.secondLastName  ||
         !selectedBirthDate          ||
         !selectedGender             ||
-        !seComuna                   ||
-        !seRegion                   ||
+        //!seComuna                   || 
+       // !seRegion                   ||
         !clientData.nationality     ||
-        !clientData.phoneNumber     ||
-        !clientData.email           ||
-        !clientData.address         ||
-        !clientData.profession      ||       
+        //!clientData.phoneNumber     ||
+        // !clientData.email           ||
+        // !clientData.address         ||
+       !clientData.profession      ||       
         !selectedTipo
         ) {
           Swal.fire({

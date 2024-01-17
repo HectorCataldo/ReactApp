@@ -1,29 +1,29 @@
 import React, { useState, useEffect } from 'react';
-import { useFetch } from '../assets/useFetch';
+import { useFetch }                   from '../assets/useFetch';
+import _                              from 'lodash';
+import { DataGrid }                   from '@mui/x-data-grid';
+import Box                            from '@mui/material/Box';
+import AddCircleIcon                  from '@mui/icons-material/AddCircle';
+import { Modaltel }                   from './modal_tel';
 import '../CSS/contact-style.scss';
-import _ from 'lodash';
-import { DataGrid } from '@mui/x-data-grid';
-import Box from '@mui/material/Box';
-import AddCircleIcon from '@mui/icons-material/AddCircle';
-import { Modaltel } from './modal_tel';
-
 
 export const Telefonos = () => {
-  const { data:Telefono }  = useFetch("https://gist.githubusercontent.com/LeandroGabrielAltamiranoPereira/9d7665ceac24aedbc6661293a3744756/raw/9ef7a5a135a70fe7d3cdd803fcf67b6fd09ad883/objetosasegurados.json");
-  const [insureobjd, setInsrobjd] = useState(null);
-  const [searchTerm, setSearchTerm] = useState('');
-  const [currentPage, setCurrentPage] = useState(1);
-  const [insrobjPerPage,setinsrobjPerPage] = useState(25);
-  const [searchValue, setSearchValue] = useState('');
-  const [modalShow, setModalShow] = useState(false);
+
+  const {data:Telefono                      } = useFetch("https://gist.githubusercontent.com/LeandroGabrielAltamiranoPereira/9d7665ceac24aedbc6661293a3744756/raw/9ef7a5a135a70fe7d3cdd803fcf67b6fd09ad883/objetosasegurados.json");
+  const [insureobjd      ,setInsrobjd       ] = useState(null);
+  const [searchTerm      ,setSearchTerm     ] = useState('');
+  const [currentPage     ,setCurrentPage    ] = useState(1);
+  const [insrobjPerPage  ,setinsrobjPerPage ] = useState(25);
+  const [searchValue     ,setSearchValue    ] = useState('');
+  const [modalShow       ,setModalShow      ] = useState(false);
 
 
 
   useEffect(() => {
     // Actualizar clientsPerPage basado en la longitud de los datos
     if (Telefono) {
-      const additionalinsureobj = Telefono.length - insrobjPerPage; // Calcula la cantidad de clientes adicionales
-      const newinsureobjsPerPage = insrobjPerPage + additionalinsureobj; // Incrementa clientsPerPage
+      const additionalinsureobj  = Telefono.length - insrobjPerPage; // Calcula la cantidad de clientes adicionales
+      const newinsureobjsPerPage = insrobjPerPage  + additionalinsureobj; // Incrementa clientsPerPage
       setinsrobjPerPage(newinsureobjsPerPage); // Actualiza clientsPerPage
     }
   }, [Telefono]);
@@ -47,19 +47,9 @@ export const Telefonos = () => {
     );
   });
 
-
-  const isRowEmpty = (row) => {
-    return (
-      !row.annexid   &&
-      !row.objname   &&
-      !row.objstatus 
-
-    );
-  };
-
-    const indexOfLastClient = currentPage * insrobjPerPage;
+    const indexOfLastClient  = currentPage       * insrobjPerPage;
     const indexOfFirstClient = indexOfLastClient - insrobjPerPage;
-    const currentClients = filteredData.slice(indexOfFirstClient, indexOfLastClient);
+    const currentClients     = filteredData.slice(indexOfFirstClient, indexOfLastClient);
 
     const insureobj = [
   
@@ -76,7 +66,6 @@ export const Telefonos = () => {
   
   
       <div className='App-tel'>
-
         <Box className='boxgrid-a'  xs={12} md={8}>
           <DataGrid
             
@@ -89,11 +78,8 @@ export const Telefonos = () => {
               setInsrobjd(params.row); 
               console.log("Usuario seleccionado:", params.row);
              }}  
-          />
-          
+          />   
         </Box>
-
-        
       </div>
       <Modaltel show={modalShow} onHide={() => setModalShow(false)}/>
     </>

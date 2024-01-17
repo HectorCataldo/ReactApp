@@ -10,7 +10,7 @@ import '../CSS/contact-style.scss';
 
 export const Direcciones = () => {
 
-  const {data:Telefono }                     = useFetch("https://gist.githubusercontent.com/LeandroGabrielAltamiranoPereira/9d7665ceac24aedbc6661293a3744756/raw/9ef7a5a135a70fe7d3cdd803fcf67b6fd09ad883/objetosasegurados.json");
+  const {data:Direccion                    } = useFetch("https://gist.githubusercontent.com/LeandroGabrielAltamiranoPereira/9d7665ceac24aedbc6661293a3744756/raw/9ef7a5a135a70fe7d3cdd803fcf67b6fd09ad883/objetosasegurados.json");
   const [insureobjd     ,setInsrobjd       ] = useState(null);
   const [searchTerm     ,setSearchTerm     ] = useState('');
   const [currentPage    ,setCurrentPage    ] = useState(1);
@@ -22,47 +22,36 @@ export const Direcciones = () => {
 
   useEffect(() => {
     // Actualizar clientsPerPage basado en la longitud de los datos
-    if (Telefono) {
-      const additionalinsureobj  = Telefono.length - insrobjPerPage;      // Calcula la cantidad de clientes adicionales
-      const newinsureobjsPerPage = insrobjPerPage  + additionalinsureobj; // Incrementa clientsPerPage
-      setinsrobjPerPage(newinsureobjsPerPage);                           // Actualiza clientsPerPage
+    if (Direccion) {
+      const additionalinsureobj  = Direccion.length - insrobjPerPage;       // Calcula la cantidad de clientes adicionales
+      const newinsureobjsPerPage = insrobjPerPage   + additionalinsureobj; // Incrementa clientsPerPage
+      setinsrobjPerPage(newinsureobjsPerPage);                            // Actualiza clientsPerPage
     }
-  }, [Telefono]);
-
-  const pag = useEffect(() => {
-    setCurrentPage(1);
-  }, [searchTerm]);
+  }, [Direccion]);
 
 
-  if (!Telefono ) {
+
+  if (!Direccion ) {
     return <div>Cargando...</div>;
   }
 
 
 
-  const filteredData = Telefono.filter((item) => {
+  const filteredData = Direccion.filter((item) => {
     const searchText = searchTerm.toLowerCase();
-    return (
-      (item.objname && item.objname.toString().toLowerCase().includes(searchText)) 
+      return (
+        (item.objname && item.objname.toString().toLowerCase().includes(searchText)) 
 
-    );
+      );
   });
 
 
-  const isRowEmpty = (row) => {
-    return (
-      !row.annexid   &&
-      !row.objname   &&
-      !row.objstatus 
-
-    );
-  };
 
 
 
-    const indexOfLastClient = currentPage * insrobjPerPage;
-    const indexOfFirstClient = indexOfLastClient - insrobjPerPage;
-     const currentClients = filteredData.slice(indexOfFirstClient, indexOfLastClient);
+     const indexOfLastClient  = currentPage       * insrobjPerPage;
+     const indexOfFirstClient = indexOfLastClient - insrobjPerPage;
+     const currentClients     = filteredData.slice(indexOfFirstClient, indexOfLastClient);
 
 
 

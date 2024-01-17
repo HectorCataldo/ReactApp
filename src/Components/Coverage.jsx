@@ -1,54 +1,57 @@
 import React, { useState, useEffect }     from 'react';
-import        { DataGrid }                from '@mui/x-data-grid';
+import { DataGrid }                       from '@mui/x-data-grid';
 import Box                                from '@mui/material/Box';
 import axios                              from 'axios';
-import        { useParams }               from 'react-router-dom';
+import { useParams }                      from 'react-router-dom';
+
 
 export const Coverage = () => {
-  const {id} = useParams();
+
+  const {id}                       = useParams();
   const [coversList, setCoverList] = useState([]);
 
   useEffect(()=>{
+
    const coversApi = async () => {
     const apiList = [];
     let annid = null;
-    try{
-      const response = await axios.get(`https://si-client-bkn.kps/api/v1/policy/${id}`);
-      const data =  response.data.data.policyAnnex;
-      annid = data.annexId;
-      console.log(annid);
+      try{
+        const response = await axios.get(`https://si-client-bkn.kps/api/v1/policy/${id}`);
+        const data     =  response.data.data.policyAnnex;
+        annid          = data.annexId;
+        
 
-      for (let i = 0; i < data.length; i++) {
-        const e         = data[i]        ;
-        const eInsuredO = e.insuredObject;
+        for (let i = 0; i < data.length; i++) {
+          const e         = data[i]        ;
+          const eInsuredO = e.insuredObject;
 
-        for (let i2 = 0; i2 < eInsuredO.length; i2++) {
-          const e2      = eInsuredO[i2];
-          const eCovers = e2.covers;
+          for (let i2 = 0; i2 < eInsuredO.length; i2++) {
+            const e2      = eInsuredO[i2];
+            const eCovers = e2.covers;
 
-          for (let i3 = 0; i3 < eCovers.length; i3++) {
-            const e3          = eCovers[i3];
-            const CoverObject = {
-              id           : (i3+ 1)            ,
-              idapen       : e2.annexId         ,
-              coveragename : e3.cover.name      ,
-              riskstatus   : e3.riskState       ,
-              coveragevalue: e3.rateFullPremium ,
-              currencytype : "USD"/*e3.avCurrency*/,
-              dimpremium   : "-"                ,
-              porcenttips  : e3.tariffPercent   ,
-              prima        : e3.premium         ,
-              anuarypremium: e3.annualPremium   ,
+            for (let i3 = 0; i3 < eCovers.length; i3++) {
+              const e3          = eCovers[i3];
+              const CoverObject = {
+                id           : (i3+ 1)            ,
+                idapen       : e2.annexId         ,
+                coveragename : e3.cover.name      ,
+                riskstatus   : e3.riskState       ,
+                coveragevalue: e3.rateFullPremium ,
+                currencytype : "USD"              ,
+                dimpremium   : "-"                ,
+                porcenttips  : e3.tariffPercent   ,
+                prima        : e3.premium         ,
+                anuarypremium: e3.annualPremium   ,
+              }
+              apiList.push(CoverObject);
             }
-            apiList.push(CoverObject);
           }
         }
+        setCoverList(apiList);
       }
-      setCoverList(apiList);
-    }
-    catch(error){
-      console.error("Error " + error);
-    }
+      catch(error){
+        console.error("Error " + error);
+      }
    }
    coversApi();
   },[])
@@ -59,11 +62,9 @@ if (!coversList ) {
 
 
   const isRowEmpty = (row) => {
-    return (
-      !row.coveragename 
-
-    );
+    return (!row.coveragename);
   };
+
      const coverage = [
         { width: 10, sortable: false, renderCell: (params) => {
             if   (isRowEmpty(params.row)) { return null; } 
@@ -98,10 +99,7 @@ if (!coversList ) {
               console.log("Fila seleccionada:", params.row);
              }}  
           />
-          
         </Box>
-
-        
       </div>
     </>
   );  
