@@ -372,9 +372,9 @@ export const Registro = (props) => {
               {selectedTipo == 1 && (
                   <Stack 
                   direction={{ xs: 'column', sm: 'column', md: 'row' }}
-                  // spacing={30}
+                  
                   spacing={{ xs: 1, sm: 2, md: 4 }}
-                  // className="Containers-stacks-3"
+                   className="Containers-stacks-3"
                   >
                      {/* Contenedor 1 */}
                      <Stack
