@@ -1,25 +1,24 @@
 import React, { useState, useEffect } from 'react';
-import { useFetch } from '../assets/useFetch';
+import { useFetch }                   from '../assets/useFetch';
+import { DataGrid }                   from '@mui/x-data-grid';
+import Box                            from '@mui/material/Box';
+import { Objmodal }                   from './insrobj_modal';
+import { useParams }                  from 'react-router-dom';
+import axios                          from 'axios';
 import '../CSS/insr-obj-style.scss';
-import { DataGrid } from '@mui/x-data-grid';
-import Box from '@mui/material/Box';
-import { Objmodal } from './insrobj_modal';
-import { useParams } from 'react-router-dom';
-import axios from 'axios';
-
 
 export const Insurerclaim = (props) => {
   const {id} = useParams();
-  const { data: insureobjdata } = useFetch("https://gist.githubusercontent.com/LeandroGabrielAltamiranoPereira/9d7665ceac24aedbc6661293a3744756/raw/9ef7a5a135a70fe7d3cdd803fcf67b6fd09ad883/objetosasegurados.json");
-  const [insureobjd, setInsrobjd] = useState(null);
-  const [searchTerm, setSearchTerm] = useState('');
-  const [currentPage, setCurrentPage] = useState(1);
-  const [insrobjPerPage, setinsrobjPerPage] = useState(25);
-  const [searchValue, setSearchValue] = useState('');
-  const [selectedRowIndex, setSelectedRowIndex] = useState(null);
-  const [modalShow, setModalShow] = useState(false);
-  const [objectsRows, setObjectsRows] = useState([]);
-  const [insuredObject, setInsuredObject] = useState({
+  const { data: insureobjdata                  } = useFetch("https://gist.githubusercontent.com/LeandroGabrielAltamiranoPereira/9d7665ceac24aedbc6661293a3744756/raw/9ef7a5a135a70fe7d3cdd803fcf67b6fd09ad883/objetosasegurados.json");
+  const [insureobjd       ,setInsrobjd         ] = useState(null);
+  const [searchTerm       ,setSearchTerm       ] = useState('');
+  const [currentPage      ,setCurrentPage      ] = useState(1);
+  const [insrobjPerPage   ,setinsrobjPerPage   ] = useState(25);
+  const [searchValue      ,setSearchValue      ] = useState('');
+  const [selectedRowIndex ,setSelectedRowIndex ] = useState(null);
+  const [modalShow        ,setModalShow        ] = useState(false);
+  const [objectsRows      ,setObjectsRows      ] = useState([]);
+  const [insuredObject    ,setInsuredObject    ] = useState({
     id              :    1,
     annexid         :    null,
     objname         :    null,
@@ -29,7 +28,6 @@ export const Insurerclaim = (props) => {
     tasa            :    null,
     premium         :    null
   })
-
 
   useEffect(() => {
     const objectList = async () =>{
@@ -96,10 +94,9 @@ export const Insurerclaim = (props) => {
 
   const handleCheckboxChange = (rowIndex) => {
     setSelectedRowIndex(rowIndex);
-    // Puedes realizar otras acciones aquí al seleccionar el checkbox
   };
 
-  const indexOfLastClient = currentPage * insrobjPerPage;
+  const indexOfLastClient  = currentPage       * insrobjPerPage;
   const indexOfFirstClient = indexOfLastClient - insrobjPerPage;
 
   const insureobj = [

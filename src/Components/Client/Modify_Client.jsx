@@ -1,84 +1,84 @@
 import React, { useState, useEffect } from "react";
-import moment from "moment";
-import axios from "axios";
-import Form from 'react-bootstrap/Form';
-import Swal from "sweetalert2";
-import { useFetch } from "../assets/useFetch";
-import TextLinkExample from "./Navbar";
-import Sidebar from "./sidebar";
-import { Formik } from "formik";
-import TextField from "@mui/material/TextField";
-import Select from "@mui/material/Select";
-import MenuItem from "@mui/material/MenuItem";
-import FormControl from "@mui/material/FormControl";
-import InputLabel from "@mui/material/InputLabel";
-import { AdapterDayjs } from '@mui/x-date-pickers/AdapterDayjs';
-import { LocalizationProvider } from '@mui/x-date-pickers/LocalizationProvider';
-import { DatePicker } from '@mui/x-date-pickers/DatePicker';
-import Stack from '@mui/material/Stack';
-import Item from '@mui/material/Stack';
-import '../CSS/register-style.scss';
-import PanelControl from "./Panel-Control";
-import * as Yup from "yup";
-import { Box, FormHelperText } from "@mui/material";
-import { useParams } from 'react-router-dom';
-import dayjs from 'dayjs';
-import { faL } from "@fortawesome/free-solid-svg-icons";
-import { Correos }                             from "./contact_cor";
-import { Telefonos }                           from "./contact_tel";
-import { Direcciones }                         from "./contact_dir";
-
+import moment                         from "moment";
+import axios                          from "axios";
+import Form                           from 'react-bootstrap/Form';
+import Swal                           from "sweetalert2";
+import { useFetch }                   from "../../assets/useFetch";
+import TextLinkExample                from "../Navbar";
+import Sidebar                        from "../sidebar";
+import { Formik }                     from "formik";
+import TextField                      from "@mui/material/TextField";
+import Select                         from "@mui/material/Select";
+import MenuItem                       from "@mui/material/MenuItem";
+import FormControl                    from "@mui/material/FormControl";
+import InputLabel                     from "@mui/material/InputLabel";
+import { AdapterDayjs }               from '@mui/x-date-pickers/AdapterDayjs';
+import { LocalizationProvider }       from '@mui/x-date-pickers/LocalizationProvider';
+import { DatePicker }                 from '@mui/x-date-pickers/DatePicker';
+import Stack                          from '@mui/material/Stack';
+import Item                           from '@mui/material/Stack';
+import PanelControl                   from "../Panel-Control";
+import * as Yup                       from "yup";
+import { Box, FormHelperText }        from "@mui/material";
+import { useParams }                  from 'react-router-dom';
+import dayjs                          from 'dayjs';
+import { Correos }                    from "../contact_cor";
+import { Telefonos }                  from "../contact_tel";
+import { Direcciones }                from "../contact_dir";
+import '../Client/CSS/register-style.scss';
 
 export const Modify = (props) => {
-  const { data: country } = useFetch( "https://gist.githubusercontent.com/HectorCataldo/ceee7aa2b93e83d7d04f752e3adbe623/raw/81b6bc11b965720e6717975f665fe85869c71e81/paises.json" )
-  const { data: regions} = useFetch("https://gist.githubusercontent.com/HectorCataldo/11e149d5ba18e9dfe72b6c21e38ca439/raw/b7281863b44021b362338493025cc0723e39b7a9/regions.json");
-  const { data: clients } = useFetch("http://localhost:8080/api/clients");
-  const { data: profession } = useFetch("http://localhost:8080/api/profession");
-  const { data: gender} = useFetch("http://localhost:8080/api/gender");
-  const [selectedBirthDate, setSelectedBirthDate] = useState(dayjs());
-  const [objetos, setObjetos] = useState();
-  const [selectedcreateDate, setCreateDate] = useState(dayjs(new Date()));
-  const [selectedGender, setSelectedGender] = useState("");
-  const [selectedTipo, setSelectedTipo] = useState("Natural");
-  const [selectedProfession, setSelectedProfession] = useState("");
-  const [Currentdate, setCurrentDate]= useState(dayjs());
-  const [disableGender, setDisableGender] = useState(true);
-  const [editar, setEditar] = useState(false);
+  const { data: country }     = useFetch( "https://gist.githubusercontent.com/HectorCataldo/ceee7aa2b93e83d7d04f752e3adbe623/raw/81b6bc11b965720e6717975f665fe85869c71e81/paises.json" )
+  const { data: regions }     = useFetch("https://gist.githubusercontent.com/HectorCataldo/11e149d5ba18e9dfe72b6c21e38ca439/raw/b7281863b44021b362338493025cc0723e39b7a9/regions.json");
+  const { data: clients }     = useFetch("http://localhost:8080/api/clients");
+  const { data: profession }  = useFetch("http://localhost:8080/api/profession");
+  const { data: gender }      = useFetch("http://localhost:8080/api/gender");
+
+  const [selectedBirthDate  ,setSelectedBirthDate  ] = useState(dayjs());
+  const [objetos            ,setObjetos            ] = useState();
+  const [selectedcreateDate ,setCreateDate         ] = useState(dayjs(new Date()));
+  const [selectedGender     ,setSelectedGender     ] = useState("");
+  const [selectedTipo       ,setSelectedTipo       ] = useState("Natural");
+  const [selectedProfession ,setSelectedProfession ] = useState("");
+  const [Currentdate        ,setCurrentDate        ]= useState(dayjs());
+  const [disableGender      ,setDisableGender      ] = useState(true);
+  const [editar             ,setEditar             ] = useState(false);
+       
  // COMUNAS Y REGIONES 
- const [seRegion, setSeRegion] = useState('');
- const [fcomunas, setfcomunas] = useState([]);
- const [seComuna, setSeComuna] = useState();
-  const { id } = useParams();
-  const {data : cliente} = useFetch(`https://si-client-bkn.kps/api/v1/client/${id}`);
-  const [loading, setLoading] = useState(true);
+ const [seRegion, setSeRegion]      = useState('');
+ const [fcomunas, setfcomunas]      = useState([]);
+ const [seComuna, setSeComuna]      = useState();
+  const { id }                      = useParams();
+  const {data : cliente}            = useFetch(`https://si-client-bkn.kps/api/v1/client/${id}`);
+  const [loading, setLoading]       = useState(true);
   const [clientData, setClientData] = useState({
-    id: null,
+    id:             null,
     documentNumber: null,
-    firstName: null,
-    lastName: null,
+    firstName:      null,
+    lastName:       null,
     secondLastName: null,
-    fantasyName:null,
-    birthDate: null,
+    fantasyName:    null,
+    birthDate:      null,
     gender: {
-      id_gender: null,
-      gender: null,
+      id_gender:    null,
+      gender:       null,
     },
-    nationality: null,
-    phoneNumber: null,
-    email: null,
-    address: null,
-    region: null,
-    comuna: null,
-    giro: null,
+    nationality:    null,
+    phoneNumber:    null,
+    email:          null,
+    address:        null,
+    region:         null,
+    comuna:         null,
+    giro:           null,
     profession: {
-      id_profession: null,
-      profession_Name: null
+     id_profession: null,
+     profession_Name: null
     },
-    tipo_persona: null,
+    tipo_persona:  null,
     fechaCreacion: null
   })
 
-  //Filtrar Generos
+
   const GendersFilter = (e) => {    
       const tp = e.target.value;
       setSelectedTipo(tp);
@@ -99,13 +99,11 @@ export const Modify = (props) => {
       }
     }
   
-  //Filtrado de Comunas por Región
   const RegionChange = (e) => {
-    //Obtenemos Región
     const selectedRegion =  e && e.target? e.target.value: e;
     setSeRegion(selectedRegion);
 
-    const regionData = regions?.regions.find((region) => region.name === selectedRegion);
+  const regionData = regions?.regions.find((region) => region.name === selectedRegion);
     if (regionData) {
       setfcomunas(regionData.communes);
       setSeComuna('');
@@ -121,11 +119,10 @@ export const Modify = (props) => {
     'profession_Name' in selectedProfession;
 
   const professionData = isValidProfession ? {
-    id_profession: selectedProfession.id_profession,
+    id_profession:   selectedProfession.id_profession,
     profession_Name: selectedProfession.profession_Name,
   } : null;
 
-  //Función para activar la edición del cliente
   const handleEdit = ()=>{
     if(editar){
       setEditar(false);
@@ -136,7 +133,6 @@ export const Modify = (props) => {
     console.log(clientData)
   }
 
-  // Función que llama la desactivación del usuario
   const handleState = async () =>{
     try{
       const response = await axios.put(`http://localhost:8080/api/clients/state/${clientData.id}`);
@@ -176,17 +172,17 @@ export const Modify = (props) => {
       if(clientData.tipo_persona === "Natural"){
         if (
           !clientData.documentNumber ||
-          !clientData.firstName ||
-          !clientData.lastName ||
-          !clientData.birthDate ||
-          !clientData.gender ||
-          !clientData.comuna ||
-          !clientData.region||
-          !clientData.nationality ||
-          !clientData.phoneNumber ||
-          !clientData.email ||
-          !clientData.address ||
-          !clientData.profession ||
+          !clientData.firstName      ||
+          !clientData.lastName       ||
+          !clientData.birthDate      ||
+          !clientData.gender         ||
+          !clientData.comuna         ||
+          !clientData.region         ||
+          !clientData.nationality    ||
+          !clientData.phoneNumber    ||
+          !clientData.email          ||
+          !clientData.address        ||
+          !clientData.profession     ||
           !clientData.tipo_persona       
         ) {
           Swal.fire({
@@ -200,14 +196,14 @@ export const Modify = (props) => {
       else{
         if (
           !clientData.documentNumber ||
-          !clientData.firstName ||
-          !clientData.comuna ||
-          !clientData.region||
-          !clientData.giro ||
-          !clientData.nationality ||
-          !clientData.phoneNumber ||
-          !clientData.email ||
-          !clientData.address ||
+          !clientData.firstName      ||
+          !clientData.comuna         ||
+          !clientData.region         ||
+          !clientData.giro           ||
+          !clientData.nationality    ||
+          !clientData.phoneNumber    ||
+          !clientData.email          ||
+          !clientData.address        ||
           !clientData.tipo_persona
         ) {
           Swal.fire({
@@ -221,25 +217,25 @@ export const Modify = (props) => {
       
 
       const response = await axios.put("http://localhost:8080/api/clients", {
-        id: clientData.id,
+        id:             clientData.id,
         documentNumber: clientData.documentNumber,
-        firstName: clientData.firstName,
-        lastName: clientData.lastName,
+        firstName:      clientData.firstName,
+        lastName:       clientData.lastName,
         secondLastName: clientData.secondLastName,
-        fantasyName: clientData.fantasyName,
-        birthDate: clientData.birthDate,
-        gender: clientData.gender,
-        nationality: clientData.nationality,
-        phoneNumber: clientData.phoneNumber,
-        email: clientData.email,
-        address: clientData.address,
-        region: clientData.region,
-        comuna: clientData.comuna,
-        giro: clientData.giro,
-        profession: clientData.profession,
+        fantasyName:    clientData.fantasyName,
+        birthDate:      clientData.birthDate,
+        gender:         clientData.gender,
+        nationality:    clientData.nationality,
+        phoneNumber:    clientData.phoneNumber,
+        email:          clientData.email,
+        address:        clientData.address,
+        region:         clientData.region,
+        comuna:         clientData.comuna,
+        giro:           clientData.giro,
+        profession:     clientData.profession,
         state: true,
-        tipo_persona: clientData.tipo_persona,
-        fechaCreacion: selectedcreateDate,
+        tipo_persona:   clientData.tipo_persona,
+        fechaCreacion:  selectedcreateDate,
       });
 
       console.log("Respuesta de la API:", response.data);
@@ -259,9 +255,9 @@ export const Modify = (props) => {
 
   useEffect(() => {
     if (clients && Array.isArray(clients)) {
-      const length = clients.length;
+      const length       = clients.length;
       const totalObjects = clients[length - 1];
-      const id = totalObjects.id;
+      const id           = totalObjects.id;
       setObjetos(id + 1);
     }
   }, [clients]);
@@ -320,13 +316,8 @@ export const Modify = (props) => {
       updateUserName(cliente.data.gname, cliente.data.sname, cliente.secondLastName);
     }
   },[cliente])
-
-  
-//  const props 
-
  
 
-  //  USER NAME DINAMICO
   const [userName, setUserName] = useState("Usuario");
 
   const updateUserName = (firstName, lastName, secondLastName) => {
@@ -342,12 +333,11 @@ export const Modify = (props) => {
   
     setUserName(userFullName);
   };
-  //Validaciones
-  //Validación de digito verificador:
-  const validarRut = (rut) => {
+
+  const validarRut  = (rut) => {
     const rutLimpio = rut.replace(/[^0-9kK]/g, ''); 
     if (rutLimpio.length > 9) return false;
-    let num = parseInt(rutLimpio.slice(0, -1), 10);
+    let num  = parseInt(rutLimpio.slice(0, -1), 10);
     const dv = rutLimpio.slice(-1).toLowerCase();
     let suma = 0;
     let multiplo = 2;
@@ -366,38 +356,30 @@ export const Modify = (props) => {
     
   //Validaciones con YUP formatos:
   const validationSchema = Yup.object().shape({
-    documentNumber: Yup.string().matches(/^(\d{1,2}(\.?\d{3}){2}[-][0-9kK]{1})$|^(\d{1,2}(-\d)?)$/, "Formato de número de documento inválido").
-    test('validar-rut','Rut inválido', (value) =>{
-      return validarRut(value);
-    }).required("Por favor ingresa un número de documento"),
-    firstName:Yup.string().trim().matches(/^(?!\s*$)[A-Za-záéíóúñÁÉÍÓÚÑ]+(?:\s[A-Za-záéíóúñÁÉÍÓÚÑ]+)*$/,'El nombre solo debe contener letras')
-    .required('Por favor ingresa un nombre'),
-    lastName:Yup.string().trim().matches(/^(?!\s*$)[A-Za-záéíóúñÁÉÍÓÚÑ]+(?:\s[A-Za-záéíóúñÁÉÍÓÚÑ]+)*$/,'El apellido solo debe contener letras')
-    .required('Por favor ingresa un apellido'),
+
+    documentNumber: Yup.string().matches(/^(\d{1,2}(\.?\d{3}){2}[-][0-9kK]{1})$|^(\d{1,2}(-\d)?)$/, "Formato de número de documento inválido").test('validar-rut','Rut inválido', (value) =>{ return validarRut(value); }).required("Por favor ingresa un número de documento"),
+    firstName:      Yup.string().trim().matches(/^(?!\s*$)[A-Za-záéíóúñÁÉÍÓÚÑ]+(?:\s[A-Za-záéíóúñÁÉÍÓÚÑ]+)*$/,'El nombre solo debe contener letras').required('Por favor ingresa un nombre'),
+    lastName:       Yup.string().trim().matches(/^(?!\s*$)[A-Za-záéíóúñÁÉÍÓÚÑ]+(?:\s[A-Za-záéíóúñÁÉÍÓÚÑ]+)*$/,'El apellido solo debe contener letras').required('Por favor ingresa un apellido'),
     secondLastName: Yup.string().trim().notRequired().matches(/^(?!\s*$)[A-Za-záéíóúñÁÉÍÓÚÑ]+(?:\s[A-Za-záéíóúñÁÉÍÓÚÑ]+)*$/,'El apellido solo debe contener letras'),
-    birthDate: Yup.date().required('La fecha de nacimiento es requerida').max(new Date(), 'La fecha de nacimiento no puede ser posterior a la fecha actual'),
-    email: Yup.string().email('Ingrese un email válido').required('Ingrese un email'),
-    phoneNumber: Yup.string().min(9, 'El número debe contener al menos 9 dígitos').matches(/^[+0-9]+$/,'Ingrese un número de teléfono válido').required('Ingrese un número de teléfono'),
-    address: Yup.string().required('Ingrese una dirección'),
-    region: Yup.string().required('Seleccione una región'),
-    comuna: Yup.string().required('Seleccione una comuna'),
-    gender: Yup.string().required('Seleccione un género'),
-    country: Yup.string().required('Seleccione un país'),
-    profession: Yup.string().required('Seleccione una profesión').nonNullable('Seleccione una profesión'),
-    jdocument: Yup.string().matches(/^(\d{1,2}(\.?\d{3}){2}[-][0-9kK]{1})$|^(\d{1,2}(-\d)?)$/, "Formato de número de documento inválido").
-    test('validar-rut','Rut inválido', (value) =>{
-      return validarRut(value);
-    }).required("Por favor ingresa un número de documento"),
-    jrazonsocial: Yup.string().trim().required('Ingrese razón social'),
-    jfname: Yup.string().trim().matches(/^(?!\s*$)[A-Za-záéíóúñÁÉÍÓÚÑ]+(?:\s[A-Za-záéíóúñÁÉÍÓÚÑ0-9]+)*$/,'Escriba un nombre')
-    .notRequired(),
-    jemail: Yup.string().email('Ingrese un email válido').required('Ingrese un email'),
-    jphone: Yup.string().min(9, 'El número debe contener al menos 9 dígitos').matches(/^[+0-9]+$/,'Ingrese un número de teléfono válido').required('Ingrese un número de teléfono'),
-    jaddress: Yup.string().required('Ingrese una dirección'),
-    jregion: Yup.string().required('Seleccione una región'),
-    jcomuna: Yup.string().required('Seleccione una comuna'),
-    jgiro: Yup.string().required('Ingrese su GIRO'),
-    jnationality: Yup.string().required('Seleccione un país')
+    birthDate:      Yup.date().required('La fecha de nacimiento es requerida').max(new Date(), 'La fecha de nacimiento no puede ser posterior a la fecha actual'),
+    email:          Yup.string().email('Ingrese un email válido').required('Ingrese un email'),
+    phoneNumber:    Yup.string().min(9, 'El número debe contener al menos 9 dígitos').matches(/^[+0-9]+$/,'Ingrese un número de teléfono válido').required('Ingrese un número de teléfono'),
+    address:        Yup.string().required('Ingrese una dirección'),
+    region:         Yup.string().required('Seleccione una región'),
+    comuna:         Yup.string().required('Seleccione una comuna'),
+    gender:         Yup.string().required('Seleccione un género'),
+    country:        Yup.string().required('Seleccione un país'),
+    profession:     Yup.string().required('Seleccione una profesión').nonNullable('Seleccione una profesión'),
+    jdocument:      Yup.string().matches(/^(\d{1,2}(\.?\d{3}){2}[-][0-9kK]{1})$|^(\d{1,2}(-\d)?)$/, "Formato de número de documento inválido").test('validar-rut','Rut inválido', (value) =>{ return validarRut(value);}).required("Por favor ingresa un número de documento"),
+    jrazonsocial:   Yup.string().trim().required('Ingrese razón social'),
+    jfname:         Yup.string().trim().matches(/^(?!\s*$)[A-Za-záéíóúñÁÉÍÓÚÑ]+(?:\s[A-Za-záéíóúñÁÉÍÓÚÑ0-9]+)*$/,'Escriba un nombre').notRequired(),
+    jemail:         Yup.string().email('Ingrese un email válido').required('Ingrese un email'),
+    jphone:         Yup.string().min(9, 'El número debe contener al menos 9 dígitos').matches(/^[+0-9]+$/,'Ingrese un número de teléfono válido').required('Ingrese un número de teléfono'),
+    jaddress:       Yup.string().required('Ingrese una dirección'),
+    jregion:        Yup.string().required('Seleccione una región'),
+    jcomuna:        Yup.string().required('Seleccione una comuna'),
+    jgiro:          Yup.string().required('Ingrese su GIRO'),
+    jnationality:   Yup.string().required('Seleccione un país')
   });
   return (
     <>
@@ -406,49 +388,40 @@ export const Modify = (props) => {
     <Sidebar />
     <PanelControl handleSubmit={handleSubmit} objetos={objetos} handleEdit={handleEdit} handleState={handleState} state={clientData.state}/>
 
+    <Formik enableReinitialize={true} onSubmit={(dataClient, { resetForm }) => { console.log(dataClient); console.log("Formulario enviado"); resetForm(); }}
 
-
-    <Formik
-      enableReinitialize={true}
-      onSubmit={(dataClient, { resetForm }) => {
-        console.log(dataClient);
-        console.log("Formulario enviado");
-       
-        resetForm();
-      }}
       initialValues={{ 
-        id: loading ? 'Cargando...' : id || 'No hay id',
-        documentNumber: loading? 'Cargando': newClient.egn,
-        firstName: loading ? 'Cargando...' : newClient.gname,
-        lastName: loading ? 'Cargando...' : newClient.sname,
+        id:             loading ? 'Cargando...' : id || 'No hay id',
+        documentNumber: loading? 'Cargando'     : newClient.egn,
+        firstName:      loading ? 'Cargando...' : newClient.gname,
+        lastName:       loading ? 'Cargando...' : newClient.sname,
         secondLastName: loading ? 'Cargando...' : newClient.fname,
-        birthDate: loading ? 'Cargando...' : clientData.birthDate,
-        phoneNumber: loading ? 'Cargando...' : clientData.phoneNumber,
-        email: loading ? 'Cargando...' : clientData.email,
-        address:loading ? 'Cargando...' : clientData.address,
-        region:loading ? 'Cargando...' : clientData.region,
-        comuna: loading ? 'Cargando...' :clientData.comuna,
-        gender:loading ? 'Cargando...' :selectedGender?.id_gender,
-        country: loading ? 'Cargando...' :clientData.nationality,
-        profession: loading ? 'Cargando...' :clientData.profession?.id_profession,
-        jdocument:loading ? 'Cargando...' :newClient.egn,
-        jrazonsocial: loading ? 'Cargando...' :newClient.gname,
-        jfname:loading ? 'Cargando...' :newClient.sname,
-        jemail: loading ? 'Cargando...' :clientData.email,
-        jphone: loading ? 'Cargando...' :clientData.phoneNumber,
-        jaddress: loading ? 'Cargando...' :clientData.address,
-        jregion: loading ? 'Cargando...' :clientData.region,
-        jcomuna: loading ? 'Cargando...' :clientData.comuna,
-        jgiro: loading ? 'Cargando...' :clientData.giro,
-        jnationality:loading ? 'Cargando...' :clientData.nationality
+        birthDate:      loading ? 'Cargando...' : clientData.birthDate,
+        phoneNumber:    loading ? 'Cargando...' : clientData.phoneNumber,
+        email:          loading ? 'Cargando...' : clientData.email,
+        address:        loading ? 'Cargando...' : clientData.address,
+        region:         loading ? 'Cargando...' : clientData.region,
+        comuna:         loading ? 'Cargando...' : clientData.comuna,
+        gender:         loading ? 'Cargando...' : selectedGender?.id_gender,
+        country:        loading ? 'Cargando...' : clientData.nationality,
+        profession:     loading ? 'Cargando...' : clientData.profession?.id_profession,
+        jdocument:      loading ? 'Cargando...' : newClient.egn,
+        jrazonsocial:   loading ? 'Cargando...' : newClient.gname,
+        jfname:         loading ? 'Cargando...' : newClient.sname,
+        jemail:         loading ? 'Cargando...' : clientData.email,
+        jphone:         loading ? 'Cargando...' : clientData.phoneNumber,
+        jaddress:       loading ? 'Cargando...' : clientData.address,
+        jregion:        loading ? 'Cargando...' : clientData.region,
+        jcomuna:        loading ? 'Cargando...' : clientData.comuna,
+        jgiro:          loading ? 'Cargando...' : clientData.giro,
+        jnationality:   loading ? 'Cargando...' : clientData.nationality
     }}
-    validationSchema = {validationSchema}
-    >
+    validationSchema = {validationSchema}>
+
       {({ errors, touched, handleSubmit: formikHandleSubmit, handleChange, handleBlur, values, setFieldValue, setValues}) => (
         <Form className="formulario-cr" onSubmit={formikHandleSubmit}>
                       {/* PANEL DE CONTROL */}
-
-
+                      
                    <Stack direction="row" className="Panel-User">
                             <div className="user-info-container">
                                  <h1 className="title-user"> {userName ? userName : 'Usuario'}</h1>  

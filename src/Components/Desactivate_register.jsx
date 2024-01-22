@@ -1,6 +1,6 @@
 import React, { useEffect, useState } from "react";
-import axios from "axios";
-import Swal from "sweetalert2";
+import axios                          from "axios";
+import Swal                           from "sweetalert2";
 
 export const Desctivate = (props) => {
   const client = props.selectedClient || {}; // Use an empty object as a default value

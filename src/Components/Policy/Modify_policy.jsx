@@ -1,64 +1,66 @@
 import React, { useState, useEffect, useMemo } from "react";
-import axios from "axios";
-import Form from 'react-bootstrap/Form';
-import Swal from "sweetalert2";
-import { useFetch } from "../assets/useFetch";
-import TextLinkExample from "./Navbar";
-import Sidebar from "./sidebar";
-import { Formik } from "formik";
-import TextField from "@mui/material/TextField";
-import Select from "@mui/material/Select";
-import MenuItem from "@mui/material/MenuItem";
-import FormControl from "@mui/material/FormControl";
-import InputLabel from "@mui/material/InputLabel";
-import { AdapterDayjs } from '@mui/x-date-pickers/AdapterDayjs';
-import { LocalizationProvider } from '@mui/x-date-pickers/LocalizationProvider';
-import { DatePicker } from '@mui/x-date-pickers/DatePicker';
-import Stack from '@mui/material/Stack';
-import Item from '@mui/material/Stack';
-import '../CSS/policy-style.scss';
-import PanelControl from "./Panel-Control";
-import * as Yup from "yup";
-import { Box,FormHelperText } from "@mui/material";
-import { useParams } from "react-router-dom";
-import dayjs from "dayjs";
-import utc from 'dayjs/plugin/utc';
-import timezone from 'dayjs/plugin/timezone';
+import axios                                   from "axios";
+import Form                                    from 'react-bootstrap/Form';
+import Swal                                    from "sweetalert2";
+import { useFetch }                            from "../../assets/useFetch";
+import TextLinkExample                         from "../Navbar";
+import Sidebar                                 from "../sidebar";
+import { Formik }                              from "formik";
+import TextField                               from "@mui/material/TextField";
+import Select                                  from "@mui/material/Select";
+import MenuItem                                from "@mui/material/MenuItem";
+import FormControl                             from "@mui/material/FormControl";
+import InputLabel                              from "@mui/material/InputLabel";
+import { AdapterDayjs }                        from '@mui/x-date-pickers/AdapterDayjs';
+import { LocalizationProvider }                from '@mui/x-date-pickers/LocalizationProvider';
+import { DatePicker }                          from '@mui/x-date-pickers/DatePicker';
+import Stack                                   from '@mui/material/Stack';
+import Item                                    from '@mui/material/Stack';
+import PanelControl                            from "../Panel-Control";
+import * as Yup                                from "yup";
+import { Box,FormHelperText }                  from "@mui/material";
+import { useParams }                           from "react-router-dom";
+import dayjs                                   from "dayjs";
+import utc                                     from 'dayjs/plugin/utc';
+import timezone                                from 'dayjs/plugin/timezone';
 dayjs.extend(utc);
 dayjs.extend(timezone);
-import { Coverage }                            from "./Coverage";
-import { Insurerclaim }                        from "./insurerobj_claim";
-import { Objannex }                            from "./annex_obj";
-import { ObjPaymnt }                           from "./paymentplant_obj";
+import { Coverage }                            from "../Coverage";
+import { Insurerclaim }                        from "../insurerobj_claim";
+import { Objannex }                            from "../annex_obj";
+import { ObjPaymnt }                           from "../paymentplant_obj";
+
+import '../Policy/CSS/policy-style.scss';
+
 export const Modifypolicy = (props) => {
   //  APIS
   const {id} = useParams();
   const {data:policy} = useFetch(`https://si-client-bkn.kps/api/v1/policy/${id}`)
   
   // 
-  const [loading, setLoading] = useState(true);
-  const [editar, setEditar] = useState(false);
+  const [loading ,setLoading ] = useState(true);
+  const [editar  ,setEditar  ] = useState(false);
 
   //TEXT FIELD DE poliza  
-  const [datapolicy, setdatapolicy] = useState({
-    policyid: null,
-    policynumber: null,
-    clientname: null,
-    product: null,
-    insrBegin: null,
-    insrEnd: null,
-    insrDuration: null,
-    durDimension: null,
-    agent:null,
-    office:null,
-    salesChannel: null,
-    state:null,
-    subestado:null,
-    dateGiven:null,
-    paymentWay: null,
+  const [datapolicy ,setdatapolicy ] = useState({
+    policyid:        null,
+    policynumber:    null,
+    clientname:      null,
+    product:         null,
+    insrBegin:       null,
+    insrEnd:         null,
+    insrDuration:    null,
+    durDimension:    null,
+    agent:           null,
+    office:          null,
+    salesChannel:    null,
+    state:           null,
+    subestado:       null,
+    dateGiven:       null,
+    paymentWay:      null,
     num_instalments: null,
-    payment_anual: null,
-    quote_value:null
+    payment_anual:   null,
+    quote_value:     null
   })
 
   //UseEffect que nos ayuda a desplegar lógica cuando allá datos en la API.
@@ -67,24 +69,24 @@ export const Modifypolicy = (props) => {
       const filterPolicy = policy.data;
       setdatapolicy({
         ...datapolicy,
-        policyid: filterPolicy.policyId,
-        policynumber: filterPolicy.policyNo,
-        clientname: filterPolicy.client.people.name,
-        product: filterPolicy.insrType.name,
-        insrBegin: filterPolicy.insrBegin,
-        insrEnd: filterPolicy.insrEnd,
-        insrDuration: filterPolicy.insrDuration,
-        durDimension: filterPolicy.durDimension,
-        agent:filterPolicy.agent.people.name,
-        office:filterPolicy.office.people.name,
-        salesChannel: '',
-        state: filterPolicy.policyState.name,
-        subestado:'',
-        dateGiven:filterPolicy.dateGiven,
-        paymentWay: filterPolicy.paymentWay.paymentWay,
+        policyid:        filterPolicy.policyId,
+        policynumber:    filterPolicy.policyNo,
+        clientname:      filterPolicy.client.people.name,
+        product:         filterPolicy.insrType.name,
+        insrBegin:       filterPolicy.insrBegin,
+        insrEnd:         filterPolicy.insrEnd,
+        insrDuration:    filterPolicy.insrDuration,
+        durDimension:    filterPolicy.durDimension,
+        agent:           filterPolicy.agent.people.name,
+        office:          filterPolicy.office.people.name,
+        salesChannel:    '',
+        state:           filterPolicy.policyState.name,
+        subestado:       '',
+        dateGiven:       filterPolicy.dateGiven,
+        paymentWay:      filterPolicy.paymentWay.paymentWay,
         num_instalments: '',
-        payment_anual: '',
-        quote_value:''
+        payment_anual:   '',
+        quote_value:     ''
       }),
       setLoading(false);
     }
@@ -93,23 +95,23 @@ export const Modifypolicy = (props) => {
   const handleSubmit = async () => {
     try {
       if (
-        !datapolicy.policyid ||
-        !datapolicy.policynumber ||
-        !datapolicy.clientname ||
-        !datapolicy.product ||
-        !datapolicy.insrBegin ||
-        !datapolicy.insrEnd ||
-        !datapolicy.insrDuration||
-        !datapolicy.durDimension ||
-        !datapolicy.agent ||
-        !datapolicy.office ||
-        !datapolicy.salesChannel ||
-        !datapolicy.state ||
-        !datapolicy.subestado ||
-        !datapolicy.dateGiven ||
-        !datapolicy.paymentWay ||
+        !datapolicy.policyid        ||
+        !datapolicy.policynumber    ||
+        !datapolicy.clientname      ||
+        !datapolicy.product         ||
+        !datapolicy.insrBegin       ||
+        !datapolicy.insrEnd         ||
+        !datapolicy.insrDuration    ||
+        !datapolicy.durDimension    ||
+        !datapolicy.agent           ||
+        !datapolicy.office          ||
+        !datapolicy.salesChannel    ||
+        !datapolicy.state           ||
+        !datapolicy.subestado       ||
+        !datapolicy.dateGiven       ||
+        !datapolicy.paymentWay      ||
         !datapolicy.num_instalments ||
-        !datapolicy.payment_anual ||
+        !datapolicy.payment_anual   ||
         !datapolicy.quote_value
       ) {
         Swal.fire({
@@ -150,27 +152,26 @@ export const Modifypolicy = (props) => {
 
 
   //Validaciones con YUP formatos:
-  // if (editar) {    
-  // }
+
   const validationSchema = Yup.object().shape({
-    policyid: Yup.string().min(2, 'El número debe contener al menos 12 dígitos').matches(/^[+0-9]+$/,'Ingrese un id de póliza válido').required('Ingrese un id de póliza'),
-    policynumber: Yup.string().matches(/^(POL-)?[+0-9]+$/, 'Ingrese un número de póliza válido').min(8, 'El número debe contener al menos 12 caracteres').required('Ingrese un número de póliza'),
-    clientname:Yup.string().trim().matches(/^(?!\s*$)[A-Za-záéíóúñÁÉÍÓÚÑ 0-9]+(?:\s[A-Za-záéíóúñÁÉÍÓÚÑ]+)*$/,'El formato es incorrecto').required('Por favor ingresa un nombre'),
-    insrBegin: Yup.date().required('La fecha de inicio de vigencia es requerida').min(new Date(), 'La fecha de inicio de vigencia no puede ser anterior a la fecha actual'),
-    insrEnd: Yup.date().required('La fecha de termino de vigencia es requerida').min(new Date(), 'La fecha de termino de vigencia no puede ser anterior a la fecha actual'),
-    insrDuration: Yup.string().min(1, 'El número debe contener al menos 1 dígito').matches(/^[+0-9]+$/,'Solo se admiten números').required('Ingrese un número de duracion de póliza'),
-    durDimension: Yup.string().required('Seleccione un sistema de tiempo'),
-    paymentWay:Yup.string().required('Seleccione un método de pago'),
-    num_instalments: Yup.string().required('Seleccione perioricidad de pagos'),
-    payment_anual: Yup.string().min(6, 'El número debe contener al menos 6 dígitos').matches(/^[+0-9]+$/,'Ingrese un número de teléfono válido').required('Ingrese un valor de prima anual'), 
-    quote_value:Yup.string().min(5, 'El número debe contener al menos 5 dígitos').matches(/^[+0-9]+$/,'Ingrese un valor valido').required('Ingrese un valor de prima mensual'),
-    agent:Yup.string().trim().matches(/^(?!\s*$)[A-Za-záéíóúñÁÉÍÓÚÑ -()+0-9]+(?:\s[A-Za-záéíóúñÁÉÍÓÚÑ]+)*$/,'Formato de agente incorrecto').required('Por favor ingresa un agente'),
-    office:Yup.string().trim().matches(/^(?!\s*$)[A-Za-záéíóúñÁÉÍÓÚÑ -()+0-9]+(?:\s[A-Za-záéíóúñÁÉÍÓÚÑ]+)*$/,'Formato de la oficina es incorrecto').required('Por favor ingresa una oficina'),
-    product:Yup.string().trim().matches(/^(?!\s*$)[A-Za-záéíóúñÁÉÍÓÚÑ -]*$/,'Formato de producto incorrecto').required('Por favor ingresa un producto'),
-    state:Yup.string().trim().matches(/^(?!\s*$)[A-Za-záéíóúñÁÉÍÓÚÑ]+(?:\s[A-Za-záéíóúñÁÉÍÓÚÑ]+)*$/,'Formato de estado incorrecto').required('Por favor ingresa un estado'),
-    subestado:Yup.string().trim().matches(/^(?!\s*$)[A-Za-záéíóúñÁÉÍÓÚÑ]+(?:\s[A-Za-záéíóúñÁÉÍÓÚÑ]+)*$/,'Formato de subestado incorrecto').required('Por favor ingresa un subestado'),
-    dateGiven: Yup.date().required('La fecha de emision es requerida').min(new Date(), 'La fecha de emision no puede ser anterior a la fecha actual'),
-    salesChannel:Yup.string().required('Por favor ingresa un canal de venta'),
+    policyid:              Yup.string().min(2, 'El número debe contener al menos 12 dígitos').matches(/^[+0-9]+$/,'Ingrese un id de póliza válido').required('Ingrese un id de póliza'),
+    policynumber:          Yup.string().matches(/^(POL-)?[+0-9]+$/, 'Ingrese un número de póliza válido').min(8, 'El número debe contener al menos 12 caracteres').required('Ingrese un número de póliza'),
+    clientname:            Yup.string().trim().matches(/^(?!\s*$)[A-Za-záéíóúñÁÉÍÓÚÑ 0-9]+(?:\s[A-Za-záéíóúñÁÉÍÓÚÑ]+)*$/,'El formato es incorrecto').required('Por favor ingresa un nombre'),
+    insrBegin:             Yup.date().required('La fecha de inicio de vigencia es requerida').min(new Date(), 'La fecha de inicio de vigencia no puede ser anterior a la fecha actual'),
+    insrEnd:               Yup.date().required('La fecha de termino de vigencia es requerida').min(new Date(), 'La fecha de termino de vigencia no puede ser anterior a la fecha actual'),
+    insrDuration:          Yup.string().min(1, 'El número debe contener al menos 1 dígito').matches(/^[+0-9]+$/,'Solo se admiten números').required('Ingrese un número de duracion de póliza'),
+    durDimension:          Yup.string().required('Seleccione un sistema de tiempo'),
+    paymentWay:            Yup.string().required('Seleccione un método de pago'),
+    num_instalments:       Yup.string().required('Seleccione perioricidad de pagos'),
+    payment_anual:         Yup.string().min(6, 'El número debe contener al menos 6 dígitos').matches(/^[+0-9]+$/,'Ingrese un número de teléfono válido').required('Ingrese un valor de prima anual'), 
+    quote_value:           Yup.string().min(5, 'El número debe contener al menos 5 dígitos').matches(/^[+0-9]+$/,'Ingrese un valor valido').required('Ingrese un valor de prima mensual'),
+    agent:                 Yup.string().trim().matches(/^(?!\s*$)[A-Za-záéíóúñÁÉÍÓÚÑ -()+0-9]+(?:\s[A-Za-záéíóúñÁÉÍÓÚÑ]+)*$/,'Formato de agente incorrecto').required('Por favor ingresa un agente'),
+    office:                Yup.string().trim().matches(/^(?!\s*$)[A-Za-záéíóúñÁÉÍÓÚÑ -()+0-9]+(?:\s[A-Za-záéíóúñÁÉÍÓÚÑ]+)*$/,'Formato de la oficina es incorrecto').required('Por favor ingresa una oficina'),
+    product:               Yup.string().trim().matches(/^(?!\s*$)[A-Za-záéíóúñÁÉÍÓÚÑ -]*$/,'Formato de producto incorrecto').required('Por favor ingresa un producto'),
+    state:                 Yup.string().trim().matches(/^(?!\s*$)[A-Za-záéíóúñÁÉÍÓÚÑ]+(?:\s[A-Za-záéíóúñÁÉÍÓÚÑ]+)*$/,'Formato de estado incorrecto').required('Por favor ingresa un estado'),
+    subestado:             Yup.string().trim().matches(/^(?!\s*$)[A-Za-záéíóúñÁÉÍÓÚÑ]+(?:\s[A-Za-záéíóúñÁÉÍÓÚÑ]+)*$/,'Formato de subestado incorrecto').required('Por favor ingresa un subestado'),
+    dateGiven:             Yup.date().required('La fecha de emision es requerida').min(new Date(), 'La fecha de emision no puede ser anterior a la fecha actual'),
+    salesChannel:          Yup.string().required('Por favor ingresa un canal de venta'),
   });
 
   return (
@@ -186,24 +187,24 @@ export const Modifypolicy = (props) => {
         resetForm();
       }}
       initialValues={{
-        policyid: loading? 'Cargando...' : datapolicy.policyid,
-        policynumber: loading? 'Cargando...' : datapolicy.policynumber,
-        clientname: loading? 'Cargando...' : datapolicy.clientname,
-        product: loading? 'Cargando...' : datapolicy.product,
-        insrBegin: loading? 'Cargando...' : datapolicy.insrBegin,
-        insrEnd: loading? 'Cargando...' : datapolicy.insrEnd,
-        insrDuration: loading? 'Cargando...' : datapolicy.insrDuration,
-        durDimension: loading? 'Cargando...' : datapolicy.durDimension,
-        agent: loading? 'Cargando...' : datapolicy.agent,
-        office: loading? 'Cargando...' : datapolicy.office,
-        salesChannel: loading? 'Cargando...' : '',
-        state: loading? 'Cargando...' : datapolicy.state,
-        subestado: loading? 'Cargando...' : '',
-        dateGiven: loading? 'Cargando...' : datapolicy.dateGiven,
-        paymentWay: loading? 'Cargando...' : datapolicy.paymentWay,
+        policyid:        loading? 'Cargando...' : datapolicy.policyid,
+        policynumber:    loading? 'Cargando...' : datapolicy.policynumber,
+        clientname:      loading? 'Cargando...' : datapolicy.clientname,
+        product:         loading? 'Cargando...' : datapolicy.product,
+        insrBegin:       loading? 'Cargando...' : datapolicy.insrBegin,
+        insrEnd:         loading? 'Cargando...' : datapolicy.insrEnd,
+        insrDuration:    loading? 'Cargando...' : datapolicy.insrDuration,
+        durDimension:    loading? 'Cargando...' : datapolicy.durDimension,
+        agent:           loading? 'Cargando...' : datapolicy.agent,
+        office:          loading? 'Cargando...' : datapolicy.office,
+        salesChannel:    loading? 'Cargando...' : '',
+        state:           loading? 'Cargando...' : datapolicy.state,
+        subestado:       loading? 'Cargando...' : '',
+        dateGiven:       loading? 'Cargando...' : datapolicy.dateGiven,
+        paymentWay:      loading? 'Cargando...' : datapolicy.paymentWay,
         num_instalments: loading? 'Cargando...' : '',
-        payment_anual: loading? 'Cargando...' : '',
-        quote_value: loading? 'Cargando...' : ''
+        payment_anual:   loading? 'Cargando...' : '',
+        quote_value:     loading? 'Cargando...' : ''
     }}
     validationSchema = {validationSchema}
     >
@@ -232,8 +233,7 @@ export const Modifypolicy = (props) => {
                               </Stack>
                       </Stack>  
 
-
-                          <Stack direction="row" spacing={30} className="Containers-stacks2">
+                     <Stack direction="row" spacing={30} className="Containers-stacks2">
 
                               {/* Contenedor 1 */}
                               <Stack md="4" className="Containers-Stack">
@@ -258,16 +258,9 @@ export const Modifypolicy = (props) => {
                                             readOnly:true,
                                           }}
                                           onBlur={handleBlur}
-                                          // onKeyPress={(e) => {
-                                          //   const pattern = /^[0-9-.]+$/;
-                                          //   if (!pattern.test(e.key)) {
-                                          //     e.preventDefault();
-                                          //   }
-                                          // }}
+
                                           required
-                                          // inputProps={{ maxLength: 12 }}
-                                          // error={touched.policyid && !!errors.policyid}
-                                          // helperText={touched.policyid && errors.policyid}
+                                         
                                         />
                                       </Item>
              
@@ -788,7 +781,7 @@ export const Modifypolicy = (props) => {
                                       </Item>
                                 </Item>
                               </Stack>
-                          </Stack>
+                     </Stack>
         </Form>
       )}
     </Formik>

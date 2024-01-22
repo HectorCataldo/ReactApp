@@ -1,12 +1,12 @@
 import React, { useState, useEffect, useMemo } from "react";
-import '../CSS/register-style.scss';
+import '../Client/CSS/register-style.scss';
 import moment                                  from "moment";
 import axios                                   from "axios";
 import Form                                    from 'react-bootstrap/Form';
 import Swal                                    from "sweetalert2";
-import { useFetch }                            from "../assets/useFetch";
-import TextLinkExample                         from "./Navbar";
-import Sidebar                                 from "./sidebar";
+import { useFetch }                            from "../../assets/useFetch";
+import TextLinkExample                         from "../Navbar";
+import Sidebar                                 from "../sidebar";
 import { Formik }                              from "formik";
 import TextField                               from "@mui/material/TextField";
 import Select                                  from "@mui/material/Select";
@@ -18,30 +18,31 @@ import { LocalizationProvider }                from '@mui/x-date-pickers/Localiz
 import { DatePicker }                          from '@mui/x-date-pickers/DatePicker';
 import Stack                                   from '@mui/material/Stack';
 import Item                                    from '@mui/material/Stack';
-import { Correos }                             from "./contact_cor";
-import { Telefonos }                           from "./contact_tel";
-import { Direcciones }                         from "./contact_dir";
-import PanelControl                            from "./Panel-Control";
+import { Correos }                             from "../contact_cor";
+import { Telefonos }                           from "../contact_tel";
+import { Direcciones }                         from "../contact_dir";
+import PanelControl                            from "../Panel-Control";
 import * as Yup                                from "yup";
 import { Box,FormHelperText, Grid }            from "@mui/material";
 import dayjs                                   from "dayjs";
-import { BorderStyle } from "@mui/icons-material";
+import { BorderStyle }                         from "@mui/icons-material";
 
 export const Registro = (props) => {
-  const { data: country }                            = useFetch( "https://gist.githubusercontent.com/HectorCataldo/ceee7aa2b93e83d7d04f752e3adbe623/raw/81b6bc11b965720e6717975f665fe85869c71e81/paises.json" )
-  const { data: regions}                             = useFetch("https://gist.githubusercontent.com/HectorCataldo/11e149d5ba18e9dfe72b6c21e38ca439/raw/b7281863b44021b362338493025cc0723e39b7a9/regions.json");
-  const { data: clients }                            = useFetch("http://localhost:8080/api/clients");
-  const { data: profession }                         = useFetch("http://localhost:8080/api/profession");
-  const { data: gender}                              = useFetch("http://localhost:8080/api/gender");
-  const [selectedBirthDate, setSelectedBirthDate]    = useState(dayjs().format("YYYY-MM-DD"));
-  const [objetos, setObjetos]                        = useState();
-  const [selectedcreateDate]                         = useState(dayjs());
-  const [er, setEr]                                  = useState(false);
-  const [selectedGender, setSelectedGender]          = useState("");
-  const [selectedTipo, setSelectedTipo]              = useState(1);
-  const [selectedProfession, setSelectedProfession]  = useState("");
-  const [Currentdate, setCurrentDate]                = useState(moment(new Date()));
-  const [clientData, setClientData]                  = useState({
+  const { data: country }                              = useFetch( "https://gist.githubusercontent.com/HectorCataldo/ceee7aa2b93e83d7d04f752e3adbe623/raw/81b6bc11b965720e6717975f665fe85869c71e81/paises.json" )
+  const { data: regions}                               = useFetch("https://gist.githubusercontent.com/HectorCataldo/11e149d5ba18e9dfe72b6c21e38ca439/raw/b7281863b44021b362338493025cc0723e39b7a9/regions.json");
+  const { data: clients }                              = useFetch("http://localhost:8080/api/clients");
+  const { data: profession }                           = useFetch("http://localhost:8080/api/profession");
+  const { data: gender}                                = useFetch("http://localhost:8080/api/gender");
+  const [selectedcreateDate]                           = useState(dayjs());
+  const [selectedBirthDate  ,setSelectedBirthDate  ]   = useState(dayjs().format("YYYY-MM-DD"));
+  const [objetos            ,setObjetos            ]   = useState();
+  const [er                 ,setEr                 ]   = useState(false);
+  const [selectedGender     ,setSelectedGender     ]   = useState("");
+  const [selectedTipo       ,setSelectedTipo       ]   = useState(1);
+  const [selectedProfession ,setSelectedProfession ]   = useState("");
+  const [Currentdate        ,setCurrentDate        ]   = useState(moment(new Date()));
+  const [clientData         ,setClientData         ]   = useState({
+
     id                  : null,
     documentNumber      : null,
     firstName           : null,
@@ -70,10 +71,9 @@ export const Registro = (props) => {
   const [disableGender, setDisableGender] = useState(false);
 
   // COMUNAS Y REGIONES 
-  const [seRegion, setSeRegion]           = useState('');
-  const [fcomunas, setfcomunas]           = useState([]);
-  const [seComuna, setSeComuna]           = useState();
-
+  const [seRegion ,setSeRegion]           = useState('');
+  const [fcomunas ,setfcomunas]           = useState([]);
+  const [seComuna ,setSeComuna]           = useState();
 
 
   //Filtrar Generos
@@ -126,13 +126,13 @@ export const Registro = (props) => {
         !clientData.secondLastName  ||
         !selectedBirthDate          ||
         !selectedGender             ||
-        //!seComuna                   || 
-       // !seRegion                   ||
+        //!seComuna                 || 
+       // !seRegion                 ||
         !clientData.nationality     ||
-        //!clientData.phoneNumber     ||
-        // !clientData.email           ||
-        // !clientData.address         ||
-       !clientData.profession      ||       
+        //!clientData.phoneNumber   ||
+        // !clientData.email        ||
+        // !clientData.address      ||
+       !clientData.profession       ||       
         !selectedTipo
         ) {
           Swal.fire({
@@ -142,8 +142,9 @@ export const Registro = (props) => {
           });
           return;
         }
+
       const NombreCompleto = clientData.firstName + " " + clientData.lastName;
-      const response = await axios.post("https://si-client-bkn.kps/api/v1/client/", {
+      const response       = await axios.post("https://si-client-bkn.kps/api/v1/client/", {
         manComp   : selectedTipo,
         egn       : clientData.documentNumber ,
         name      : NombreCompleto            ,
@@ -194,7 +195,7 @@ export const Registro = (props) => {
   const [userName, setUserName] = useState("Usuario");
 
   const updateUserName = (firstName, lastName, secondLastName) => {
-    let userFullName = firstName || "Usuario";
+    let userFullName   = firstName || "Usuario";
   
     if (lastName) {
       userFullName += ` ${lastName}`;

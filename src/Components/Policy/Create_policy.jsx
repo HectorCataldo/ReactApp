@@ -3,8 +3,8 @@ import moment                                  from "moment";
 import axios                                   from "axios";
 import Form                                    from 'react-bootstrap/Form';
 import Swal                                    from "sweetalert2";
-import TextLinkExample                         from "./Navbar";
-import Sidebar                                 from "./sidebar";
+import TextLinkExample                         from "../Navbar";
+import Sidebar                                 from "../sidebar";
 import { Formik }                              from "formik";
 import TextField                               from "@mui/material/TextField";
 import Select                                  from "@mui/material/Select";
@@ -16,8 +16,8 @@ import { LocalizationProvider }                from '@mui/x-date-pickers/Localiz
 import { DatePicker }                          from '@mui/x-date-pickers/DatePicker';
 import Stack                                   from '@mui/material/Stack';
 import Item                                    from '@mui/material/Stack';
-import '../CSS/policy-style.scss';
-import PanelControl                            from "./Panel-Control";
+
+import PanelControl                            from "../Panel-Control";
 import * as Yup                                from "yup";
 import { Box,FormHelperText }                  from "@mui/material";
 import dayjs                                   from "dayjs";
@@ -25,12 +25,13 @@ import utc                                     from 'dayjs/plugin/utc';
 import timezone                                from 'dayjs/plugin/timezone';
 dayjs.extend(utc);
 dayjs.extend(timezone);
-import { Coverage }                            from "./Coverage";
-import { Insurerclaim }                        from "./insurerobj_claim";
-import { Objannex }                            from "./annex_obj";
-import { ObjPaymnt }                           from "./paymentplant_obj";
-import { ModalClient }                         from "./modalclient";
+import { Coverage }                            from "../Coverage";
+import { Insurerclaim }                        from "../insurerobj_claim";
+import { Objannex }                            from "../annex_obj";
+import { ObjPaymnt }                           from "../paymentplant_obj";
+import { ModalClient }                         from "../modalclient";
 import SearchIcon                              from '@mui/icons-material/Search';
+import '../Policy/CSS/policy-style.scss';
 
 export const Policy = (props) => {
 /// selected     
@@ -38,28 +39,27 @@ export const Policy = (props) => {
 
   //TEXT FIELD DE poliza  
   const [datapolicy, setdatapolicy] = useState({
-    policyid: null,
-    policynumber: null,
-    clientname: null,
-    product: null,
-    insrBegin: null,
-    insrEnd: null,
-    insrDuration: null,
-    durDimension: null,
-    agent:null,
-    office:null,
-    salesChannel: null,
-    state:null,
-    subestado:null,
-    dateGiven:null,
-    paymentWay: null,
+    policyid:        null,
+    policynumber:    null,
+    clientname:      null,
+    product:         null,
+    insrBegin:       null,
+    insrEnd:         null,
+    insrDuration:    null,
+    durDimension:    null,
+    agent:           null,
+    office:          null,
+    salesChannel:    null,
+    state:           null,
+    subestado:       null,
+    dateGiven:       null,
+    paymentWay:      null,
     num_instalments: null,
-    payment_anual: null,
-    quote_value:null
+    payment_anual:   null,
+    quote_value:     null
   });
 
   const [modalShow, setModalShow] = useState(false);
-
 
   const handleSubmit = async () => {
     try {
@@ -73,9 +73,6 @@ export const Policy = (props) => {
         });
         return;
       }
-
-      // const response = await axios.post(, {        
-      // });
 
       console.log("Respuesta de la API:", response.data);
       Swal.fire({
@@ -94,24 +91,24 @@ export const Policy = (props) => {
 
   //Validaciones con YUP formatos:
   const validationSchema = Yup.object().shape({
-    policyid: Yup.string().min(2, 'El número debe contener al menos 12 dígitos').matches(/^[+0-9]+$/,'Ingrese un id de póliza válido').required('Ingrese un id de póliza'),
-    policynumber: Yup.string().matches(/^(POL-)?[+0-9]+$/, 'Ingrese un número de póliza válido').min(8, 'El número debe contener al menos 12 caracteres').required('Ingrese un número de póliza'),
-    clientname:Yup.string().trim().matches(/^(?!\s*$)[A-Za-záéíóúñÁÉÍÓÚÑ 0-9]+(?:\s[A-Za-záéíóúñÁÉÍÓÚÑ]+)*$/,'El formato es incorrecto').required('Por favor ingresa un nombre'),
-    insrBegin: Yup.date().required('La fecha de inicio de vigencia es requerida').min(new Date(), 'La fecha de inicio de vigencia no puede ser anterior a la fecha actual'),
-    insrEnd: Yup.date().required('La fecha de termino de vigencia es requerida').min(new Date(), 'La fecha de termino de vigencia no puede ser anterior a la fecha actual'),
-    insrDuration: Yup.string().min(1, 'El número debe contener al menos 1 dígito').matches(/^[+0-9]+$/,'Solo se admiten números').required('Ingrese un número de duracion de póliza'),
-    durDimension: Yup.string().required('Seleccione un sistema de tiempo'),
-    paymentWay:Yup.string().required('Seleccione un método de pago'),
+    policyid:        Yup.string().min(2, 'El número debe contener al menos 12 dígitos').matches(/^[+0-9]+$/,'Ingrese un id de póliza válido').required('Ingrese un id de póliza'),
+    policynumber:    Yup.string().matches(/^(POL-)?[+0-9]+$/, 'Ingrese un número de póliza válido').min(8, 'El número debe contener al menos 12 caracteres').required('Ingrese un número de póliza'),
+    clientname:      Yup.string().trim().matches(/^(?!\s*$)[A-Za-záéíóúñÁÉÍÓÚÑ 0-9]+(?:\s[A-Za-záéíóúñÁÉÍÓÚÑ]+)*$/,'El formato es incorrecto').required('Por favor ingresa un nombre'),
+    insrBegin:       Yup.date().required('La fecha de inicio de vigencia es requerida').min(new Date(), 'La fecha de inicio de vigencia no puede ser anterior a la fecha actual'),
+    insrEnd:         Yup.date().required('La fecha de termino de vigencia es requerida').min(new Date(), 'La fecha de termino de vigencia no puede ser anterior a la fecha actual'),
+    insrDuration:    Yup.string().min(1, 'El número debe contener al menos 1 dígito').matches(/^[+0-9]+$/,'Solo se admiten números').required('Ingrese un número de duracion de póliza'),
+    durDimension:    Yup.string().required('Seleccione un sistema de tiempo'),
+    paymentWay:      Yup.string().required('Seleccione un método de pago'),
     num_instalments: Yup.string().required('Seleccione perioricidad de pagos'),
-    payment_anual: Yup.string().min(6, 'El número debe contener al menos 6 dígitos').matches(/^[+0-9]+$/,'Ingrese un número de teléfono válido').required('Ingrese un valor de prima anual'), 
-    quote_value:Yup.string().min(5, 'El número debe contener al menos 5 dígitos').matches(/^[+0-9]+$/,'Ingrese un valor valido').required('Ingrese un valor de prima mensual'),
-    agent:Yup.string().trim().matches(/^(?!\s*$)[A-Za-záéíóúñÁÉÍÓÚÑ -()+0-9]+(?:\s[A-Za-záéíóúñÁÉÍÓÚÑ]+)*$/,'Formato de agente incorrecto').required('Por favor ingresa un agente'),
-    office:Yup.string().trim().matches(/^(?!\s*$)[A-Za-záéíóúñÁÉÍÓÚÑ -()+0-9]+(?:\s[A-Za-záéíóúñÁÉÍÓÚÑ]+)*$/,'Formato de la oficina es incorrecto').required('Por favor ingresa una oficina'),
-    product:Yup.string().trim().matches(/^(?!\s*$)[A-Za-záéíóúñÁÉÍÓÚÑ -]*$/,'Formato de producto incorrecto').required('Por favor ingresa un producto'),
-    state:Yup.string().trim().matches(/^(?!\s*$)[A-Za-záéíóúñÁÉÍÓÚÑ]+(?:\s[A-Za-záéíóúñÁÉÍÓÚÑ]+)*$/,'Formato de estado incorrecto').required('Por favor ingresa un estado'),
-    subestado:Yup.string().trim().matches(/^(?!\s*$)[A-Za-záéíóúñÁÉÍÓÚÑ]+(?:\s[A-Za-záéíóúñÁÉÍÓÚÑ]+)*$/,'Formato de subestado incorrecto').required('Por favor ingresa un subestado'),
-    dateGiven: Yup.date().required('La fecha de emision es requerida').min(new Date(), 'La fecha de emision no puede ser anterior a la fecha actual'),
-    salesChannel:Yup.string().required('Por favor ingresa un canal de venta'),
+    payment_anual:   Yup.string().min(6, 'El número debe contener al menos 6 dígitos').matches(/^[+0-9]+$/,'Ingrese un número de teléfono válido').required('Ingrese un valor de prima anual'), 
+    quote_value:     Yup.string().min(5, 'El número debe contener al menos 5 dígitos').matches(/^[+0-9]+$/,'Ingrese un valor valido').required('Ingrese un valor de prima mensual'),
+    agent:           Yup.string().trim().matches(/^(?!\s*$)[A-Za-záéíóúñÁÉÍÓÚÑ -()+0-9]+(?:\s[A-Za-záéíóúñÁÉÍÓÚÑ]+)*$/,'Formato de agente incorrecto').required('Por favor ingresa un agente'),
+    office:          Yup.string().trim().matches(/^(?!\s*$)[A-Za-záéíóúñÁÉÍÓÚÑ -()+0-9]+(?:\s[A-Za-záéíóúñÁÉÍÓÚÑ]+)*$/,'Formato de la oficina es incorrecto').required('Por favor ingresa una oficina'),
+    product:         Yup.string().trim().matches(/^(?!\s*$)[A-Za-záéíóúñÁÉÍÓÚÑ -]*$/,'Formato de producto incorrecto').required('Por favor ingresa un producto'),
+    state:           Yup.string().trim().matches(/^(?!\s*$)[A-Za-záéíóúñÁÉÍÓÚÑ]+(?:\s[A-Za-záéíóúñÁÉÍÓÚÑ]+)*$/,'Formato de estado incorrecto').required('Por favor ingresa un estado'),
+    subestado:       Yup.string().trim().matches(/^(?!\s*$)[A-Za-záéíóúñÁÉÍÓÚÑ]+(?:\s[A-Za-záéíóúñÁÉÍÓÚÑ]+)*$/,'Formato de subestado incorrecto').required('Por favor ingresa un subestado'),
+    dateGiven:       Yup.date().required('La fecha de emision es requerida').min(new Date(), 'La fecha de emision no puede ser anterior a la fecha actual'),
+    salesChannel:    Yup.string().required('Por favor ingresa un canal de venta'),
   });
 
   return (
@@ -120,70 +117,64 @@ export const Policy = (props) => {
     <Sidebar />
     <PanelControl handleSubmit={handleSubmit} />
 
+    <Formik onSubmit={(response, { resetForm }) => { response(); console.log("Formulario enviado"); resetForm(); }}
 
-    <Formik
-      onSubmit={(response, { resetForm }) => {
-        response();
-        console.log("Formulario enviado");
-        resetForm();
-      }}
       initialValues={{
-        policyid: '',
-        policynumber: '',
-        clientname: '',
-        product: '',
-        // insrBegin: null,
-        // insrEnd: null,
-        insrDuration: '',
-        durDimension: '',
-        agent: '',
-        office: '',
-        salesChannel: '',
-        state: '',
-        subestado:'',
-        // dateGiven: dayjs(new Date()).format("DD/MM/YYYY"),
-        paymentWay:'',
-        num_instalments:'',
-        payment_anual:'', 
-        quote_value:''
+                      policyid:       '',
+                      policynumber:   '',
+                      clientname:     '',
+                      product:        '',
+                      // insrBegin:   null,
+                      // insrEnd:     null,
+                      insrDuration:   '',
+                      durDimension:   '',
+                      agent:          '',
+                      office:         '',
+                      salesChannel:   '',
+                      state:          '',
+                      subestado:      '',
+                      // dateGiven:   dayjs(new Date()).format("DD/MM/YYYY"),
+                      paymentWay:     '',
+                      num_instalments:'',
+                      payment_anual:  '', 
+                      quote_value:    ''
     }}
-    validationSchema = {validationSchema}
+      validationSchema = {validationSchema}
     >
+      
       {({ errors, touched, handleSubmit: formikHandleSubmit, handleChange, handleBlur, values, setFieldValue, setValues}) => (
         <Form className="formulario" onSubmit={formikHandleSubmit}>
-                      {/* PANEL DE CONTROL */}
-                      <Stack direction="row"className="Panel-User">
-                            <div className="user-info-container">
-                              <span className="title-stack">Resumen de Póliza</span>
-                            </div>
-                              <Stack direction="row">
-                              <Item className="group-user">
-                                        <TextField
-                                          id="dateGiven"
-                                          label="Fecha Emisión"
-                                          type="text"
-                                          variant="filled"
-                                          fullWidth
-                                          handleBlur={handleBlur}
-                                          value={dayjs().format("DD/MM/YYYY")}
-                                          InputProps={{
-                                            readOnly: true,
-                                          }}
-                                          disabled
-                                        />
-                                      </Item>
-                              </Stack>
-                      </Stack>  
+           {/* PANEL DE CONTROL */}
+           <Stack direction="row"className="Panel-User">
+              <div className="user-info-container">
+                <span className="title-stack">Resumen de Póliza</span>
+              </div>
+                <Stack direction="row">
+                    <Item className="group-user">
+                      <TextField
+                        id="dateGiven"
+                        label="Fecha Emisión"
+                        type="text"
+                        variant="filled"
+                        fullWidth
+                        handleBlur={handleBlur}
+                        value={dayjs().format("DD/MM/YYYY")}
+                        InputProps={{
+                          readOnly: true,
+                        }}
+                        disabled
+                      />
+                    </Item>
+                </Stack>
+           </Stack>  
 
 
-                          <Stack direction="row" spacing={30} className="Containers-stacks2">
+           <Stack direction="row" spacing={30} className="Containers-stacks2">
+               <Stack md="4" className="Containers-Stack">
+                   <Item md="12" className="Containers-Item">
+                       <span className="title-stack">Datos de la Póliza</span>
 
-                              {/* Contenedor 1 */}
-                              <Stack md="4" className="Containers-Stack">
-                                <Item md="12" className="Containers-Item">
-                                <span className="title-stack">Datos de la Póliza</span>
-
-                                      <Item className="group-form">
+                         <Item className="group-form">
                                         <TextField
                                           id="policyid"
                                           className="text-field custom-text-field"
@@ -209,9 +200,9 @@ export const Policy = (props) => {
                                           error={touched.policyid && !!errors.policyid}
                                           helperText={touched.policyid && errors.policyid}
                                         />
-                                      </Item>
-             
-                                      <Item className="group-form">
+                         </Item>
+
+                         <Item className="group-form">
                                         <TextField
                                           id="policynumber"
                                           label="N° de Póliza"
@@ -229,9 +220,9 @@ export const Policy = (props) => {
                                           error={touched.policynumber && !!errors.policynumber}
                                           helperText={touched.policynumber && errors.policynumber}
                                         />
-                                      </Item>
+                         </Item>
 
-                                      <Item className="group-form">
+                         <Item className="group-form">
                                      
                                         <TextField
                                           id="clientname"
@@ -264,9 +255,9 @@ export const Policy = (props) => {
                                           helperText={touched.clientname && errors.clientname}
                                    
                                         />
-                                      </Item>
+                         </Item>
 
-                                      <Item md="6" className="group-form">
+                         <Item md="6" className="group-form">
                                         <TextField
                                           label="Producto"
                                           id="product"
@@ -290,9 +281,9 @@ export const Policy = (props) => {
                                           error={touched.product && !!errors.product}
                                           helperText={touched.product && errors.product}
                                         />
-                                      </Item>
+                         </Item>
 
-                                      <Item className="group-form">
+                         <Item className="group-form">
                                         <Box mb={errors.insrBegin ? 2.5:0}>
                                           <LocalizationProvider dateAdapter={AdapterDayjs} error={!!errors.insrBegin}>
                                             <DatePicker
@@ -323,9 +314,9 @@ export const Policy = (props) => {
                                             />
                                           </LocalizationProvider>
                                         </Box>
-                                      </Item>
+                         </Item>
 
-                                      <Item className="group-form">
+                         <Item className="group-form">
                                         <Box mb={errors.insrEnd ? 2.5:0}>
                                           <LocalizationProvider dateAdapter={AdapterDayjs} error={touched.insrEnd && !!errors.insrEnd}>
                                             <DatePicker
@@ -355,8 +346,9 @@ export const Policy = (props) => {
                                             />
                                           </LocalizationProvider>
                                         </Box>
-                                      </Item>
-                                      <Box mb={(touched.insrDuration && !!errors.insrDuration) || (touched.durDimension && errors.durDimension) ? 2.5:0}>
+                         </Item>
+
+                         <Box mb={(touched.insrDuration && !!errors.insrDuration) || (touched.durDimension && errors.durDimension) ? 2.5:0}>
                                       <Item direction="row" className="group-form">
                                         <TextField
                                           id="insrDuration"
@@ -401,17 +393,17 @@ export const Policy = (props) => {
                                       </Item>
                                       </Box>
                                       
-                                </Item>
-                              </Stack>
+                   </Item>
+               </Stack>
 
 
 
-                              {/* Contenedor 2 */}
-                              <Stack md="4" className="Containers-Stack">
-                                <Item md="12" className="Containers-Item">                 
-                                   <span className="title-stack" >Datos Adicionales</span> 
+                {/* Contenedor 2 */}
+                 <Stack md="4" className="Containers-Stack">
+                     <Item md="12" className="Containers-Item">                 
+                         <span className="title-stack" >Datos Adicionales</span> 
 
-                                  <Item className="group-form">
+                            <Item className="group-form">
                                         <TextField
                                           id="agent"
                                           label="Agente"
@@ -435,10 +427,9 @@ export const Policy = (props) => {
                                           error={touched.agent && !!errors.agent}
                                           helperText={touched.agent && errors.agent}
                                         />
-                                      </Item>
+                            </Item>
 
-
-                                      <Item className="group-form">
+                            <Item className="group-form">
                                         <TextField
                                           id="office"
                                           label="Oficina"
@@ -462,11 +453,9 @@ export const Policy = (props) => {
                                           error={touched.office && !!errors.office}
                                           helperText={touched.office && errors.office}
                                         />
-                                      </Item>
+                            </Item>
 
-                                     
-                               
-                                      <Item className="group-form">
+                             <Item className="group-form">
                                       <Box mb={touched.salesChannel && !!errors.salesChannel ? 2.5:0}></Box>
                                       <FormControl className="select-form">
                                         <InputLabel htmlFor="salesChannel">Canal de venta </InputLabel>
@@ -490,10 +479,9 @@ export const Policy = (props) => {
                                       </FormControl>
                                       {errors.salesChannel && touched.salesChannel && <FormHelperText>{errors.salesChannel}</FormHelperText>}
 
-                                    </Item>
+                             </Item>
 
-                          
-                                      <Item md="6" className="group-form">
+                            <Item md="6" className="group-form">
                                         <TextField
                                           label="Estado"
                                           id="state"
@@ -517,9 +505,9 @@ export const Policy = (props) => {
                                           error={touched.state && !!errors.state}
                                           helperText={touched.state && errors.state}
                                         />
-                                      </Item>
+                            </Item>
 
-                                      <Item md="6" className="group-form">
+                            <Item md="6" className="group-form">
                                         <TextField
                                           label="Sub Estado"
                                           id="subestado"
@@ -540,8 +528,9 @@ export const Policy = (props) => {
                                           error={touched.subestado && !!errors.subestado}
                                           helperText={touched.subestado && errors.subestado}
                                         />
-                                      </Item>
-                                      <Item className="group-form">
+                            </Item>
+
+                            <Item className="group-form">
                                         <Box mb={touched.dateGiven && !!errors.dateGiven ? 2.5:0}>
                                           <LocalizationProvider dateAdapter={AdapterDayjs} error={touched.dateGiven && !!errors.dateGiven}>
                                             <DatePicker
@@ -570,18 +559,17 @@ export const Policy = (props) => {
                                             />
                                           </LocalizationProvider>
                                         </Box>
-                                      </Item>                                      
-                                </Item>
-                              </Stack>
+                            </Item>                                      
+                     </Item>
+                 </Stack>
                               
 
-                             {/* Contenedor 3  PRIMA */}
-                            <Stack md="4" className="Containers-Stack">
-                                <Item md="12" className="Containers-Item">                 
-                                   <span className="title-stack" >Prima</span> 
+                  {/* Contenedor 3  PRIMA */}
+                 <Stack md="4" className="Containers-Stack">
+                   <Item md="12" className="Containers-Item">                 
+                       <span className="title-stack" >Prima</span> 
 
-
-                                   <Item className="group-form">
+                          <Item className="group-form">
                                     <Box mb={touched.paymentWay && errors.paymentWay ? 2.5:0}>
                                       <FormControl className="select-form">
                                         <InputLabel htmlFor="paymentWay">Metodo de Pago </InputLabel>
@@ -604,9 +592,9 @@ export const Policy = (props) => {
                                       </FormControl>
                                       {errors.paymentWay && touched.paymentWay && <FormHelperText>{errors.paymentWay}</FormHelperText>}
                                     </Box>
-                                    </Item>
+                           </Item>
 
-                                      <Item className="group-form">
+                             <Item className="group-form">
                                         <Box mb={touched.num_instalments && !!errors.num_instalments ? 2.5:0}>
                                         <FormControl variant="filled" className="select-form" error={touched.num_instalments && !!errors.num_instalments}>
                                           <InputLabel htmlFor="num_instalments">Periocidad de Pagos </InputLabel>
@@ -626,9 +614,9 @@ export const Policy = (props) => {
                                           {touched.num_instalments && errors.num_instalments && <FormHelperText>{errors.num_instalments}</FormHelperText>}
                                         </FormControl>
                                         </Box>                                   
-                                      </Item>
+                             </Item>
 
-                                      <Item md="6" className="group-form">
+                             <Item md="6" className="group-form">
                                         <TextField
                                           label="Prima Anual"
                                           id="payment_anual"
@@ -652,9 +640,9 @@ export const Policy = (props) => {
                                           error={touched.payment_anual && !!errors.payment_anual}
                                           helperText={touched.payment_anual && errors.payment_anual}
                                         />
-                                      </Item>
+                             </Item>
 
-                                      <Item md="6" className="group-form">
+                             <Item md="6" className="group-form">
                                         <TextField
                                           label="Valor Cuota"
                                           id="quote_value"
@@ -678,10 +666,10 @@ export const Policy = (props) => {
                                           error={touched.quote_value && !!errors.quote_value}
                                           helperText={touched.quote_value && errors.quote_value}
                                         />
-                                      </Item>                           
-                                </Item>
-                              </Stack>
-                          </Stack>
+                             </Item>                           
+                   </Item>
+                </Stack>
+           </Stack>
         </Form>
       )}
     </Formik>

@@ -1,77 +1,77 @@
 import React, { useState, useEffect, useMemo } from "react";
-import moment from "moment";
-import axios from "axios";
-import Form from 'react-bootstrap/Form';
-import Swal from "sweetalert2";
-import TextLinkExample from "./Navbar";
-import Sidebar from "./sidebar";
-import { Formik } from "formik";
-import TextField from "@mui/material/TextField";
-import Select from "@mui/material/Select";
-import MenuItem from "@mui/material/MenuItem";
-import FormControl from "@mui/material/FormControl";
-import InputLabel from "@mui/material/InputLabel";
-import { AdapterDayjs } from '@mui/x-date-pickers/AdapterDayjs';
-import { LocalizationProvider } from '@mui/x-date-pickers/LocalizationProvider';
-import { DatePicker } from '@mui/x-date-pickers/DatePicker';
-import Stack from '@mui/material/Stack';
-import Item from '@mui/material/Stack';
-import PanelControl from "./Panel-Control";
-import * as Yup from "yup";
-import { Box,FormHelperText } from "@mui/material";
+import moment                                  from "moment";
+import axios                                   from "axios";
+import Form                                    from 'react-bootstrap/Form';
+import Swal                                    from "sweetalert2";
+import TextLinkExample                         from "../Navbar";
+import Sidebar                                 from "../sidebar";
+import { Formik }                              from "formik";
+import TextField                               from "@mui/material/TextField";
+import Select                                  from "@mui/material/Select";
+import MenuItem                                from "@mui/material/MenuItem";
+import FormControl                             from "@mui/material/FormControl";
+import InputLabel                              from "@mui/material/InputLabel";
+import { AdapterDayjs }                        from '@mui/x-date-pickers/AdapterDayjs';
+import { LocalizationProvider }                from '@mui/x-date-pickers/LocalizationProvider';
+import { DatePicker }                          from '@mui/x-date-pickers/DatePicker';
+import Stack                                   from '@mui/material/Stack';
+import Item                                    from '@mui/material/Stack';
+import PanelControl                            from "../Panel-Control";
+import * as Yup                                from "yup";
+import { FormHelperText }                      from "@mui/material";
 
-export const Quotation = (props) => {
+
+export const Modifyquotation = (props) => {
   //  APIS
- 
-  const [objetos, setObjetos] = useState();
-  const [selectedcreateDate] = useState(moment(new Date()));
+
+  const [objetos ,setObjetos ] = useState();
+  const [selectedcreateDate  ] = useState(moment(new Date()));
 /// selected 
 
-    const [selectedstartpolicy    ,setSelectedstartpolicy] = useState(new Date());
-    const [selectedendpolicy      ,setSelectedendpolicy]     = useState(new Date());
-    const [selectedDatetipe       ,setSelectedDatetipe] = useState("");
-    const [selectedPpagos         ,setSelectedPpagos] = useState("");
-    const [selectedpaymentmethod  ,setPaymentmethod] = useState("");
-    const [selectedchannelsale    ,setSelectedChannelsale]= useState("");
+    const [selectedstartpolicy   ,setSelectedstartpolicy ] = useState(new Date());
+    const [selectedendpolicy     ,setSelectedendpolicy   ] = useState(new Date());
+    const [selectedDatetipe      ,setSelectedDatetipe    ] = useState("");
+    const [selectedPpagos        ,setSelectedPpagos      ] = useState("");
+    const [selectedpaymentmethod ,setPaymentmethod       ] = useState("");
+    const [selectedchannelsale   ,setSelectedChannelsale ] = useState("");
 
   //TEXT FIELD DE poliza
-  const [quotationdata, setquotationdata] = useState({
-    policyid: "",
+  const [quotationdata ,setquotationdata] = useState({
+    policyid:        "",
     quotationnumber: "",
-    clientname: "",
-    datetipe:"",
-    paymentmethod:"",
-    datepolicy: "",
-    primanual: "",
-    primam:"",
-    fechaCreacion:"",
-    agents:"",
-    office:"",
-    channelsale:"",
-
-
+    clientname:      "",
+    datetipe:        "",
+    paymentmethod:   "",
+    datepolicy:      "",
+    primanual:       "",
+    primam:          "",
+    fechaCreacion:   "",
+    agents:          "",
+    office:          "",
+    channelsale:     "",
   });
-  const [dataquotation, setdataquotation] = useState({
-    policyid: null,
+
+  const [dataquotation ,setdataquotation] = useState({
+    policyid:        null,
     quotationnumber: null,
-    clientname: null,
-    product: null,
-    startpolicy:null,
-    endpolicy: null,
-    datepolicy: null,
-    datetipe:null,
-    agents:null,
-    office:null,
-    channelsale:null,
-    status:null,
-    substatus:null,
-    datequotation:null,
-    dateconst:null,
-    paymentmethod:null,
-    Ppagos:null,
-    primanual: null,
-    primam: null,
-    fechaCreacion: null
+    clientname:      null,
+    product:         null,
+    startpolicy:     null,
+    endpolicy:       null,
+    datepolicy:      null,
+    datetipe:        null,
+    agents:          null,
+    office:          null,
+    channelsale:     null,
+    status:          null,
+    substatus:       null,
+    datequotation:   null,
+    dateconst:       null,
+    paymentmethod:   null,
+    Ppagos:          null,
+    primanual:       null,
+    primam:          null,
+    fechaCreacion:   null
   })
 
   const [isTouched, setIsTouched] = useState(false);
@@ -80,23 +80,21 @@ export const Quotation = (props) => {
   const handleSubmit = async () => {
     try {
       if (
-        !dataquotation.policyid ||
+        !dataquotation.policyid        ||
         !dataquotation.quotationnumber ||
-        !dataquotation.clientname ||
-        !dataquotation.product ||
-        !dataquotation.datepolicy ||
-        !dataquotation.primanual ||
-        !dataquotation.primam ||
-        !dataquotation.fechaCreacion||
-        !selectedstartpolicy||
-        !selectedendpolicy||
-        !selectedDatetipe||
-        !selectedpaymentmethod||
-        !selectedPpagos||
+        !dataquotation.clientname      ||
+        !dataquotation.product         ||
+        !dataquotation.datepolicy      ||
+        !dataquotation.primanual       ||
+        !dataquotation.primam          ||
+        !dataquotation.fechaCreacion   ||
+        !selectedstartpolicy           ||
+        !selectedendpolicy             ||
+        !selectedDatetipe              ||
+        !selectedpaymentmethod         ||
+        !selectedPpagos                ||
         console.log(dataquotation),
         console.log(objetos)
-
-
       ) {
         Swal.fire({
           icon: "error",
@@ -115,7 +113,6 @@ export const Quotation = (props) => {
         endpolicy:       selectedendpolicy,       
         datepolicy:      dataquotation.datepolicy,
         datetipe:        selectedDatetipe,
-        channelsale:     selectedchannelsale,
         primaanual:      dataquotation.primanual,
         paymentmethod:   selectedpaymentmethod,
         Ppagos:          selectedPpagos,
@@ -131,6 +128,7 @@ export const Quotation = (props) => {
         text: "Póliza Registrada!",
       });
 
+
       setTimeout(() => {
         window.location.reload();
       }, 2000);
@@ -139,40 +137,39 @@ export const Quotation = (props) => {
     }
   };
 
+    useEffect(() => {
+      const interval = setInterval(() => {
+        setCurrentDate(new Date());
+      }, 1000);
 
-  useEffect(() => {
-    const interval = setInterval(() => {
-      setCurrentDate(new Date());
-    }, 1000);
-
-    return () => {
-      clearInterval(interval);
-    };
-  }, []);
+      return () => {
+        clearInterval(interval);
+      };
+    }, []);
 
 
 
   //Validaciones con YUP formatos:
   const validationSchema = Yup.object().shape({
 
-    policyid: Yup.string().min(2, 'El número debe contener al menos 12 dígitos').matches(/^[+0-9]+$/,'Ingrese un id de póliza válido').required('Ingrese un id de póliza'),
+    policyid:        Yup.string().min(2, 'El número debe contener al menos 12 dígitos').matches(/^[+0-9]+$/,'Ingrese un id de póliza válido').required('Ingrese un id de póliza'),
     quotationnumber: Yup.string().matches(/^(POL-)?[+0-9]+$/, 'Ingrese un número de cotización válido').min(8, 'El número debe contener al menos 12 caracteres').required('Ingrese un número de cotización'),
-    clientname:Yup.string().trim().matches(/^(?!\s*$)[A-Za-záéíóúñÁÉÍÓÚÑ]+(?:\s[A-Za-záéíóúñÁÉÍÓÚÑ]+)*$/,'El nombre solo debe contener letras').required('Por favor ingresa un nombre'),
-    startpolicy: Yup.date().required('La fecha de inicio de vigencia es requerida').max(new Date(), 'La fecha de inicio de vigencia no puede ser posterior a la fecha actual'),
-    endpolicy: Yup.date().required('La fecha de termino de vigencia es requerida').max(new Date(), 'La fecha de termino de vigencia no puede ser posterior a la fecha actual'),
-    datepolicy: Yup.string().min(1, 'El número debe contener al menos 1 dígito').matches(/^[+0-9]+$/,'Ingrese un número').required('Ingrese un número de duracion de póliza'),
-    datetipe: Yup.string().required('Seleccione un sistema de tiempo'),
-    paymentmethod:Yup.string().trim().matches(/^(?!\s*$)[A-Za-záéíóúñÁÉÍÓÚÑ]+(?:\s[A-Za-záéíóúñÁÉÍÓÚÑ]+)*$/,'El metodo de pago solo debe contener letras').required('Por favor ingresa un metodo de pago'),
-    primanual: Yup.string().min(6, 'El número debe contener al menos 6 dígitos').matches(/^[+0-9]+$/,'Ingrese un número de teléfono válido').required('Ingrese un valor de prima anual'), 
-    primam:Yup.string().min(5, 'El número debe contener al menos 5 dígitos').matches(/^[+0-9]+$/,'Ingrese un valor valido').required('Ingrese un valor de prima mensual'),
-    agents:Yup.string().trim().matches(/^(?!\s*$)[A-Za-záéíóúñÁÉÍÓÚÑ]+(?:\s[A-Za-záéíóúñÁÉÍÓÚÑ]+)*$/,'El nombre solo debe contener letras').required('Por favor ingresa un nombre'),
-    office:Yup.string().trim().matches(/^(?!\s*$)[A-Za-záéíóúñÁÉÍÓÚÑ]+(?:\s[A-Za-záéíóúñÁÉÍÓÚÑ]+)*$/,'El nombre solo debe contener letras').required('Por favor ingresa un nombre de la oficina'),
-    product:Yup.string().trim().matches(/^(?!\s*$)[A-Za-záéíóúñÁÉÍÓÚÑ]+(?:\s[A-Za-záéíóúñÁÉÍÓÚÑ]+)*$/,'El producto solo debe contener letras').required('Por favor ingresa un producto'),
-    status:Yup.string().trim().matches(/^(?!\s*$)[A-Za-záéíóúñÁÉÍÓÚÑ]+(?:\s[A-Za-záéíóúñÁÉÍÓÚÑ]+)*$/,'El Estado solo debe contener letras').required('Por favor ingresa un estado'),
-    substatus:Yup.string().trim().matches(/^(?!\s*$)[A-Za-záéíóúñÁÉÍÓÚÑ]+(?:\s[A-Za-záéíóúñÁÉÍÓÚÑ]+)*$/,'El subestado solo debe contener letras').required('Por favor ingresa un subestado'),
-    datequotation: Yup.date().required('La fecha de cotización es requerida').max(new Date(), 'La fecha de cotización no puede ser posterior a la fecha actual'),
-    dateconst: Yup.date().required('La fecha de contratación es requerida').max(new Date(), 'La fecha de contratación no puede ser posterior a la fecha actual'),
-    channelsale:Yup.string().trim().matches(/^(?!\s*$)[A-Za-záéíóúñÁÉÍÓÚÑ]+(?:\s[A-Za-záéíóúñÁÉÍÓÚÑ]+)*$/,'El subestado solo debe contener letras').required('Por favor ingresa un canal de venta'),
+    clientname:      Yup.string().trim().matches(/^(?!\s*$)[A-Za-záéíóúñÁÉÍÓÚÑ]+(?:\s[A-Za-záéíóúñÁÉÍÓÚÑ]+)*$/,'El nombre solo debe contener letras').required('Por favor ingresa un nombre'),
+    startpolicy:     Yup.date().required('La fecha de inicio de vigencia es requerida').max(new Date(), 'La fecha de inicio de vigencia no puede ser posterior a la fecha actual'),
+    endpolicy:       Yup.date().required('La fecha de termino de vigencia es requerida').max(new Date(), 'La fecha de termino de vigencia no puede ser posterior a la fecha actual'),
+    datepolicy:      Yup.string().min(1, 'El número debe contener al menos 1 dígito').matches(/^[+0-9]+$/,'Ingrese un número').required('Ingrese un número de duracion de póliza'),
+    datetipe:        Yup.string().required('Seleccione un sistema de tiempo'),
+    paymentmethod:   Yup.string().trim().matches(/^(?!\s*$)[A-Za-záéíóúñÁÉÍÓÚÑ]+(?:\s[A-Za-záéíóúñÁÉÍÓÚÑ]+)*$/,'El metodo de pago solo debe contener letras').required('Por favor ingresa un metodo de pago'),
+    primanual:       Yup.string().min(6, 'El número debe contener al menos 6 dígitos').matches(/^[+0-9]+$/,'Ingrese un número de teléfono válido').required('Ingrese un valor de prima anual'), 
+    primam:          Yup.string().min(5, 'El número debe contener al menos 5 dígitos').matches(/^[+0-9]+$/,'Ingrese un valor valido').required('Ingrese un valor de prima mensual'),
+    agents:          Yup.string().trim().matches(/^(?!\s*$)[A-Za-záéíóúñÁÉÍÓÚÑ]+(?:\s[A-Za-záéíóúñÁÉÍÓÚÑ]+)*$/,'El nombre solo debe contener letras').required('Por favor ingresa un nombre'),
+    office:          Yup.string().trim().matches(/^(?!\s*$)[A-Za-záéíóúñÁÉÍÓÚÑ]+(?:\s[A-Za-záéíóúñÁÉÍÓÚÑ]+)*$/,'El nombre solo debe contener letras').required('Por favor ingresa un nombre de la oficina'),
+    product:         Yup.string().trim().matches(/^(?!\s*$)[A-Za-záéíóúñÁÉÍÓÚÑ]+(?:\s[A-Za-záéíóúñÁÉÍÓÚÑ]+)*$/,'El producto solo debe contener letras').required('Por favor ingresa un producto'),
+    status:          Yup.string().trim().matches(/^(?!\s*$)[A-Za-záéíóúñÁÉÍÓÚÑ]+(?:\s[A-Za-záéíóúñÁÉÍÓÚÑ]+)*$/,'El Estado solo debe contener letras').required('Por favor ingresa un estado'),
+    substatus:       Yup.string().trim().matches(/^(?!\s*$)[A-Za-záéíóúñÁÉÍÓÚÑ]+(?:\s[A-Za-záéíóúñÁÉÍÓÚÑ]+)*$/,'El subestado solo debe contener letras').required('Por favor ingresa un subestado'),
+    datequotation:   Yup.date().required('La fecha de cotización es requerida').max(new Date(), 'La fecha de emision no puede ser posterior a la fecha actual'),
+    dateconst:       Yup.date().required('La fecha de contratación es requerida').max(new Date(), 'La fecha de contratación no puede ser posterior a la fecha actual'),
+    channelsale:     Yup.string().trim().matches(/^(?!\s*$)[A-Za-záéíóúñÁÉÍÓÚÑ]+(?:\s[A-Za-záéíóúñÁÉÍÓÚÑ]+)*$/,'El subestado solo debe contener letras').required('Por favor ingresa un canal de venta'),
 
   }); 
 
@@ -190,20 +187,19 @@ export const Quotation = (props) => {
         resetForm();
       }}
       initialValues={{
-        policyid:"",
+        policyid:       "",
         quotationnumber:"",
-        clientname:"",
-        datepolicy: "",
-        datetipe: "",
-        primanual: "",
-        primam:"",
-        agents:"",
-        office:"",
-        product:"",
-        status:"",
-        substatus:"",
-        dateconst: "",
- 
+        clientname:     "",
+        paymentmethod:  "",
+        primanual:      "",
+        primam:         "",
+        agents:         "",
+        office:         "",
+        product:        "",
+        status:         "",
+        substatus:      "",
+        dateconst:      "",
+        channelsale:    "",
     }}
     validationSchema = {validationSchema}
     >
@@ -483,12 +479,6 @@ export const Quotation = (props) => {
                                           required
                                           placeholder="Casa Matriz"
                                           inputProps={{maxLength : 12}}
-                                          // onKeyPress={(e) => {
-                                          //   const pattern = /^[A-Za-záéíóúñÁÉÍÓÚÑ ]+$/;
-                                          //   if (!pattern.test(e.key)) {
-                                          //     e.preventDefault();
-                                          //   }
-                                          // }}
                                           onChange={(e) => {handleChange(e);setdataquotation({ ...dataquotation, office: e.target.value })}}
                                           onBlur={handleBlur}
                                           value={values.office}
@@ -522,6 +512,7 @@ export const Quotation = (props) => {
                                       )}
 
                                     </Item>
+
                           
                                       <Item md="6" className="group-form">
                                         <TextField
@@ -605,7 +596,6 @@ export const Quotation = (props) => {
                                    <span className="title-stack" >Prima</span> 
 
 
-                         
                                    <Item className="group-form">
                                       <FormControl className="select-form">
                                         <InputLabel htmlFor="paymentmethod">Metodo de Pago </InputLabel>
@@ -698,9 +688,6 @@ export const Quotation = (props) => {
                                 </Item>
                               </Stack>
                           </Stack>  
-                                                          
-                        
-
         </Form>
       )}
     </Formik>
@@ -708,3 +695,4 @@ export const Quotation = (props) => {
   </>
   );
 };
+export default Modifyquotation;

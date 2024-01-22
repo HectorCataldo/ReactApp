@@ -1,24 +1,19 @@
-import React, { useState } from 'react';
-import Modal from 'react-bootstrap/Modal';
-import '../CSS/insr-obj-style.scss';
-import TextField from "@mui/material/TextField";
-import Select from "@mui/material/Select";
-import MenuItem from "@mui/material/MenuItem";
-import FormControl from "@mui/material/FormControl";
-import InputLabel from "@mui/material/InputLabel";
-import Stack from '@mui/material/Stack';
-import Item from '@mui/material/Stack';
+import React, { useState }    from 'react';
+import Modal                  from 'react-bootstrap/Modal';
+import TextField              from "@mui/material/TextField";
+import Select                 from "@mui/material/Select";
+import MenuItem               from "@mui/material/MenuItem";
+import FormControl            from "@mui/material/FormControl";
+import InputLabel             from "@mui/material/InputLabel";
+import Stack                  from '@mui/material/Stack';
+import Item                   from '@mui/material/Stack';
 import { Box,FormHelperText } from "@mui/material"
-
-import Button from '@mui/material/Button';
-
-
-import CancelIcon from '@mui/icons-material/Cancel';
-
+import Button                 from '@mui/material/Button';
+import CancelIcon             from '@mui/icons-material/Cancel';
+import '../CSS/insr-obj-style.scss';
 
 
 export const Objmodal = (props) => {
-
 
   const handleClose = () => {
     props.onHide(); // Llama a la función onHide proporcionada por react-bootstrap para cerrar el modal
@@ -33,10 +28,10 @@ export const Objmodal = (props) => {
         <Modal.Header >
             <h1 className='title-header'>Objeto asegurado</h1>
             
-            <Stack direction="row" spacing={2}>
-            <Button className='btn-header' onClick={handleClose} variant="contained"><CancelIcon className='icons'></CancelIcon>      Cerrar          </Button>
-  
-            </Stack>
+              <Stack direction="row" spacing={2}>
+                <Button className='btn-header' onClick={handleClose} variant="contained"><CancelIcon className='icons'></CancelIcon>      Cerrar          </Button>
+              </Stack>
+              
         </Modal.Header>
 
         <Modal.Body className='modal-body'>

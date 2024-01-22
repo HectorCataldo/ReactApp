@@ -1,9 +1,9 @@
 import React, { useState, useEffect } from 'react';
-import '../CSS/index.scss';
+import '../Client/CSS/index.scss';
 import _                              from 'lodash';
-import  TextLinkExample               from './Navbar';
-import Sidebar                        from './sidebar'; 
-import PanelControl                   from "./Panel-Control";
+import  TextLinkExample               from '../Navbar';
+import Sidebar                        from '../sidebar'; 
+import PanelControl                   from "../Panel-Control";
 import { DataGrid }                   from '@mui/x-data-grid';
 import Box                            from   '@mui/material/Box';
 import FormControl                    from '@mui/material/FormControl';
@@ -11,7 +11,7 @@ import InputLabel                     from '@mui/material/InputLabel';
 import Input                          from '@mui/material/Input';
 import InputAdornment                 from '@mui/material/InputAdornment';
 import SearchIcon                     from '@mui/icons-material/Search';
-import Modify                         from './Modify_register';
+import Modify                         from './Modify_Client';
 import axios from 'axios';
 
 export const App = () => {

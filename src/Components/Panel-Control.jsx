@@ -1,7 +1,7 @@
-import React, { useState } from "react";
-import Button from "react-bootstrap/Button";
+import React, { useState }   from "react";
+import Button                from "react-bootstrap/Button";
 import { Link, useLocation } from 'react-router-dom';
-import { CloseOutlined,SearchOutlined, SaveOutlined, ArrowLeftOutlined, EyeOutlined, EditOutlined, PlusOutlined, StopOutlined,CheckCircleOutlined } from '@ant-design/icons';
+import { CloseOutlined, SaveOutlined, ArrowLeftOutlined, EditOutlined, PlusOutlined, StopOutlined,CheckCircleOutlined } from '@ant-design/icons';
 import '../CSS/Panel-Control.scss';
 
 const PanelControl = (props) => {
@@ -13,7 +13,7 @@ const PanelControl = (props) => {
   // POLIZA
   const isPolicylistpage   = location.pathname === "/policylist";
   const isPolicycreatepage = location.pathname ==="/Policy";
-  const isModifyPolicy = location.pathname.includes ("/modifypolicy/");
+  const isModifyPolicy     = location.pathname.includes ("/modifypolicy/");
   const isPolicyModifypage = location.pathname.includes ("/Modifypolicy/");
  // COTIZACION 
   const isQuotationlistpage    = location.pathname === "/Quotationlist";

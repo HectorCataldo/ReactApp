@@ -1,16 +1,16 @@
 import React, { useState } from 'react';
-import Modal from 'react-bootstrap/Modal';
+import Modal               from 'react-bootstrap/Modal';
+import TextField           from "@mui/material/TextField";
+import Select              from "@mui/material/Select";
+import MenuItem            from "@mui/material/MenuItem";
+import FormControl         from "@mui/material/FormControl";
+import InputLabel          from "@mui/material/InputLabel";
+import Stack               from '@mui/material/Stack';
+import Item                from '@mui/material/Stack';
+import PanelControlModal   from './Panel-Control-modal';
 import '../CSS/contact-style.scss';
-import TextField from "@mui/material/TextField";
-import Select from "@mui/material/Select";
-import MenuItem from "@mui/material/MenuItem";
-import FormControl from "@mui/material/FormControl";
-import InputLabel from "@mui/material/InputLabel";
-import Stack from '@mui/material/Stack';
-import Item from '@mui/material/Stack';
-import PanelControlModal from './Panel-Control-modal';
-export const Modaltel = (props) => {
 
+export const Modaltel = (props) => {
 
 
   return (

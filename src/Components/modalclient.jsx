@@ -1,7 +1,7 @@
 import React, { useState } from 'react';
-import Modal from 'react-bootstrap/Modal';
+import Modal               from 'react-bootstrap/Modal';
+import { Clientlist }      from './clientlist';
 import '../CSS/modal-client.scss';
-import { Clientlist } from './clientlist';
 
 export const ModalClient = (props) => {
 

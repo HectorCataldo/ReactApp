@@ -1,40 +1,30 @@
 import React, { useState, useEffect } from 'react';
-import { useFetch } from '../assets/useFetch';
+import { useFetch }                   from '../assets/useFetch';
+import _                              from 'lodash';
+import { DataGrid }                   from '@mui/x-data-grid';
+import Box                            from '@mui/material/Box';
 import '../CSS/insr-obj-style.scss';
-import _ from 'lodash';
-import { DataGrid } from '@mui/x-data-grid';
-import Box from '@mui/material/Box';
-
 
 export const ObjPaymnt = () => {
   const { data:paymentdata  }  = useFetch("https://gist.githubusercontent.com/LeandroGabrielAltamiranoPereira/074eb42afbfca2158f56ef8eab70b571/raw/90721d2585e91c4a9614bb3a3039c3d2e2803942/paymentplan.json");  
-  const [insureobjd, setInsrobjd] = useState(null);
-  const [searchTerm, setSearchTerm] = useState('');
-  const [currentPage, setCurrentPage] = useState(1);
-  const [insrobjPerPage,setinsrobjPerPage] = useState(25);
-
-
+  const [insureobjd     ,setInsrobjd       ] = useState(null);
+  const [searchTerm     ,setSearchTerm     ] = useState('');
+  const [currentPage    ,setCurrentPage    ] = useState(1);
+  const [insrobjPerPage ,setinsrobjPerPage ] = useState(25);
 
 
   useEffect(() => {
-    // Actualizar clientsPerPage basado en la longitud de los datos
     if (paymentdata) {
-      const additionalinsureobj = paymentdata.length - insrobjPerPage; // Calcula la cantidad de clientes adicionales
-      const newinsureobjsPerPage = insrobjPerPage + additionalinsureobj; // Incrementa clientsPerPage
-      setinsrobjPerPage(newinsureobjsPerPage); // Actualiza clientsPerPage
+      const additionalinsureobj  = paymentdata.length - insrobjPerPage;        // Calcula la cantidad de clientes adicionales
+      const newinsureobjsPerPage = insrobjPerPage     + additionalinsureobj;  // Incrementa clientsPerPage
+      setinsrobjPerPage(newinsureobjsPerPage);                               // Actualiza clientsPerPage
     }
   }, [paymentdata]);
-
-  const pag = useEffect(() => {
-    setCurrentPage(1);
-  }, [searchTerm]);
 
 
   if (!paymentdata ) {
     return <div>Cargando...</div>;
   }
-
-
 
   const filteredData = paymentdata.filter((item) => {
     const searchText = searchTerm.toLowerCase();
@@ -44,7 +34,6 @@ export const ObjPaymnt = () => {
     );
   });
 
-
   const isRowEmpty = (row) => {
     return (
       !row.currency 
@@ -52,9 +41,9 @@ export const ObjPaymnt = () => {
   };
 
 
-    const indexOfLastClient = currentPage * insrobjPerPage;
-    const indexOfFirstClient = indexOfLastClient - insrobjPerPage;
-     const currentClients = filteredData.slice(indexOfFirstClient, indexOfLastClient);
+     const indexOfLastClient  = currentPage       * insrobjPerPage;
+     const indexOfFirstClient = indexOfLastClient - insrobjPerPage;
+     const currentClients     = filteredData.slice(indexOfFirstClient, indexOfLastClient);
 
 
 
@@ -70,34 +59,25 @@ export const ObjPaymnt = () => {
       ];
 
 
-   
-
-
-
   return (
     <>
-
-  
       <div className='App-cov'>
         <div className='container-sm container-title-br'>
-          <h4 className='title-obj'>Plan de pago </h4>
+           <h4 className='title-obj'>Plan de pago </h4>
         </div>
 
-        <Box className='boxgrid-cov' >
-          <DataGrid
-            className='dataGrid-annex'
-            initialState={{ pagination: { paginationModel: { page: 0, pageSize: 5 }, }}}
-            rows={currentClients}
-            columns={coverage}  
-            onRowClick={(params) => {
-              setInsrobjd(params.row); 
-              console.log("Usuario seleccionado:", params.row);
-             }}  
-          />
-          
-        </Box>
-
-        
+          <Box className='boxgrid-cov' >
+            <DataGrid
+              className='dataGrid-annex'
+              initialState={{ pagination: { paginationModel: { page: 0, pageSize: 5 }, }}}
+              rows={currentClients}
+              columns={coverage}  
+              onRowClick={(params) => {
+                setInsrobjd(params.row); 
+                console.log("Usuario seleccionado:", params.row);
+              }}  
+            />  
+          </Box>
       </div>
     </>
   );  

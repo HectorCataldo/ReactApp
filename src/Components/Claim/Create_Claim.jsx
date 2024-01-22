@@ -3,8 +3,8 @@ import moment                         from "moment";
 import axios                          from "axios";
 import Form                           from 'react-bootstrap/Form';
 import Swal                           from "sweetalert2";
-import TextLinkExample                from "./Navbar";
-import Sidebar                        from "./sidebar";
+import TextLinkExample                from "../Navbar";
+import Sidebar                        from "../sidebar";
 import { Formik }                     from "formik";
 import TextField                      from "@mui/material/TextField";
 import Select                         from "@mui/material/Select";
@@ -16,12 +16,12 @@ import { LocalizationProvider }       from '@mui/x-date-pickers/LocalizationProv
 import { DatePicker }                 from '@mui/x-date-pickers/DatePicker';
 import Stack                          from '@mui/material/Stack';
 import Item                           from '@mui/material/Stack';
-import { useFetch }                   from "../assets/useFetch";
-import PanelControl                   from "./Panel-Control";
+import { useFetch }                   from "../../assets/useFetch";
+import PanelControl                   from "../Panel-Control";
 import * as Yup                       from "yup";
 import { Box,FormHelperText }         from "@mui/material"
-import { Insurerclaim }               from "./insurerobj_claim";
-import '../CSS/register-style.scss';
+import { Insurerclaim }               from "../insurerobj_claim";
+import '../Client/CSS/register-style.scss';
 
 export const Claim = (props) => {
   //  APIS

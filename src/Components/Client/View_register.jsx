@@ -1,52 +1,54 @@
-import React, { useState, useEffect } from "react";
+import React, { useState, useEffect }  from "react";
+import moment                          from "moment";
+import axios                           from "axios";
+import Form                            from 'react-bootstrap/Form';
+import Swal                            from "sweetalert2";
+import { useFetch }                    from "../../assets/useFetch";
+import TextLinkExample                 from "../Navbar";
+import Sidebar                         from "../sidebar";
+import { Formik }                      from "formik";
+import TextField                       from "@mui/material/TextField";
+import Select                          from "@mui/material/Select";
+import MenuItem                        from "@mui/material/MenuItem";
+import FormControl                     from "@mui/material/FormControl";
+import InputLabel                      from "@mui/material/InputLabel";
+import { AdapterDayjs }                from '@mui/x-date-pickers/AdapterDayjs';
+import { LocalizationProvider }        from '@mui/x-date-pickers/LocalizationProvider';
+import { DatePicker }                  from '@mui/x-date-pickers/DatePicker';
+import Stack                           from '@mui/material/Stack';
+import Item                            from '@mui/material/Stack';
+import PanelControl                    from "../Panel-Control";
 
-import moment from "moment";
-import axios from "axios";
-import Form from 'react-bootstrap/Form';
-import Swal from "sweetalert2";
-import { useFetch } from "../assets/useFetch";
-import TextLinkExample from "./Navbar";
-import Sidebar from "./sidebar";
-import { Formik } from "formik";
-import TextField from "@mui/material/TextField";
-import Select from "@mui/material/Select";
-import MenuItem from "@mui/material/MenuItem";
-import FormControl from "@mui/material/FormControl";
-import InputLabel from "@mui/material/InputLabel";
-import { AdapterDayjs } from '@mui/x-date-pickers/AdapterDayjs';
-import { LocalizationProvider } from '@mui/x-date-pickers/LocalizationProvider';
-import { DatePicker } from '@mui/x-date-pickers/DatePicker';
-import Stack from '@mui/material/Stack';
-import Item from '@mui/material/Stack';
 import '../CSS/register-style.scss';
-import PanelControl from "./Panel-Control";
+
+
 
 
 
 
 export const Registro = (props) => {
-  const { data: country } = useFetch( "https://gist.githubusercontent.com/HectorCataldo/ceee7aa2b93e83d7d04f752e3adbe623/raw/81b6bc11b965720e6717975f665fe85869c71e81/paises.json" )
-  const { data: regions} = useFetch("https://gist.githubusercontent.com/HectorCataldo/11e149d5ba18e9dfe72b6c21e38ca439/raw/b7281863b44021b362338493025cc0723e39b7a9/regions.json");
-  const { data: clients } = useFetch("http://localhost:8080/api/clients");
-  const { data: profession } = useFetch("http://localhost:8080/api/profession");
-  const { data: gender} = useFetch("http://localhost:8080/api/gender");
-  const [selectedBirthDate, setSelectedBirthDate] = useState(new Date());
-  const [objetos, setObjetos] = useState();
-  const [selectedcreateDate] = useState(moment(new Date()));
-  const [selectedGender, setSelectedGender] = useState("");
-  const [selectedTipo, setSelectedTipo] = useState("");
-  const [selectedNationality, setSelectedNationality] = useState("");
-  const [selectedProfession, setSelectedProfession] = useState("");
-  const [Currentdate, setCurrentDate]= useState(moment(new Date()));
-  const [dataClient, setDataClient] = useState({
-    id: "",
+  const { data: country                               } = useFetch( "https://gist.githubusercontent.com/HectorCataldo/ceee7aa2b93e83d7d04f752e3adbe623/raw/81b6bc11b965720e6717975f665fe85869c71e81/paises.json" )
+  const { data: regions                               } = useFetch("https://gist.githubusercontent.com/HectorCataldo/11e149d5ba18e9dfe72b6c21e38ca439/raw/b7281863b44021b362338493025cc0723e39b7a9/regions.json");
+  const { data: clients                               } = useFetch("http://localhost:8080/api/clients");
+  const { data: profession                            } = useFetch("http://localhost:8080/api/profession");
+  const { data: gender                                } = useFetch("http://localhost:8080/api/gender");
+  const [selectedBirthDate   ,setSelectedBirthDate    ] = useState(new Date());
+  const [objetos             ,setObjetos              ] = useState();
+  const [selectedcreateDate                           ] = useState(moment(new Date()));
+  const [selectedGender      ,setSelectedGender       ] = useState("");
+  const [selectedTipo        ,setSelectedTipo         ] = useState("");
+  const [selectedNationality ,setSelectedNationality  ] = useState("");
+  const [selectedProfession  ,setSelectedProfession   ] = useState("");
+  const [Currentdate         ,setCurrentDate          ] = useState(moment(new Date()));
+  const [dataClient          ,setDataClient           ] = useState({
+    id:             "",
     documentNumber: "",
-    firstName: "",
-    lastName: "",
+    firstName:      "",
+    lastName:       "",
     secondLastName: "",
-    phoneNumber: "",
-    email: "",
-    address: "",
+    phoneNumber:    "",
+    email:          "",
+    address:        "",
   });
   const [disableGender, setDisableGender] = useState(true);
 
@@ -100,27 +102,27 @@ export const Registro = (props) => {
   };
 
   const isValidProfession = typeof selectedProfession === 'object' &&
-    'id_profession' in selectedProfession &&
+    'id_profession'   in selectedProfession &&
     'profession_Name' in selectedProfession;
 
-  const professionData = isValidProfession ? {
-    id_profession: selectedProfession.id_profession,
+  const professionData  = isValidProfession ? {
+    id_profession:   selectedProfession.id_profession,
     profession_Name: selectedProfession.profession_Name,
   } : null;
 
   const handleSubmit = async () => {
     try {
       if (
-        !dataClient.documentNumber ||
-        !dataClient.firstName ||
-        !dataClient.lastName ||
-        !dataClient.secondLastName ||
-        !selectedBirthDate ||
-        !selectedGender ||
-        !selectedNationality ||
-        !dataClient.phoneNumber ||
-        !dataClient.email ||
-        !dataClient.address ||
+        !dataClient.documentNumber        ||
+        !dataClient.firstName             ||
+        !dataClient.lastName              ||
+        !dataClient.secondLastName        ||
+        !selectedBirthDate                ||
+        !selectedGender                   ||
+        !selectedNationality              ||
+        !dataClient.phoneNumber           ||
+        !dataClient.email                 ||
+        !dataClient.address               ||
         !selectedProfession.id_profession ||
         !selectedTipo
       ) {
@@ -136,19 +138,19 @@ export const Registro = (props) => {
       const response = await axios.post("http://localhost:8080/api/clients", {
         id: objetos,
         documentNumber: dataClient.documentNumber,
-        firstName: dataClient.firstName,
-        lastName: dataClient.lastName,
+        firstName:      dataClient.firstName,
+        lastName:       dataClient.lastName,
         secondLastName: dataClient.secondLastName,
-        birthDate: selectedBirthDate,   
-        gender: selectedGender,
-        nationality: selectedNationality,
-        phoneNumber: dataClient.phoneNumber,
-        email: dataClient.email,
-        address: dataClient.address,
-        profession: professionData,
-        state: "True",
-        tipo_persona: selectedTipo,
-        fechaCreacion: selectedcreateDate,
+        birthDate:      selectedBirthDate,   
+        gender:         selectedGender,
+        nationality:    selectedNationality,
+        phoneNumber:    dataClient.phoneNumber,
+        email:          dataClient.email,
+        address:        dataClient.address,
+        profession:     professionData,
+        state:          "True",
+        tipo_persona:   selectedTipo,
+        fechaCreacion:  selectedcreateDate,
       });
 
       console.log("Respuesta de la API:", response.data);
@@ -168,9 +170,9 @@ export const Registro = (props) => {
 
   useEffect(() => {
     if (clients && Array.isArray(clients)) {
-      const length = clients.length;
+      const length       = clients.length;
       const totalObjects = clients[length - 1];
-      const id = totalObjects.id;
+      const id           = totalObjects.id;
       setObjetos(id + 1);
     }
   }, [clients]);
@@ -191,15 +193,11 @@ export const Registro = (props) => {
   const [userName, setUserName] = useState("Usuario");
 
   const updateUserName = (firstName, lastName, secondLastName) => {
-    let userFullName = firstName || "Usuario";
+    let userFullName   = firstName || "Usuario";
   
-    if (lastName) {
-      userFullName += ` ${lastName}`;
-    }
+    if (lastName)       {userFullName += ` ${lastName}`;}
   
-    if (secondLastName) {
-      userFullName += ` ${secondLastName}`;
-    }
+    if (secondLastName) {userFullName += ` ${secondLastName}`;}
   
     setUserName(userFullName);
   };
@@ -220,14 +218,14 @@ export const Registro = (props) => {
         resetForm();
       }}
       initialValues={{
-        id: objetos,
-        numberdoc: "",
-        name: "",
-        lastName1: "",
+        id:             objetos,
+        numberdoc:      "",
+        name:           "",
+        lastName1:      "",
         secondLastName: "",
-        phone: "",
-        email: "",
-        address: "",
+        phone:          "",
+        email:          "",
+        address:        "",
       }}
     >
       {({ errors, touched, handleSubmit: formikHandleSubmit, handleChange, handleBlur }) => (

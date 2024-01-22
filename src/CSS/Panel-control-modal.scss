@@ -4,22 +4,23 @@
     justify-content: space-between;
     align-items: center;
     width: 100%;
-     }
-.Panel-Control-modal
-{
-    
-    background-color:#F0F0F0;
+}
+
+.Panel-Control-modal {
+
+    background-color: #F0F0F0;
     margin-bottom: 20px !important;
     margin-left: 0px;
-    width:210 !important ;
+    width: 210 !important;
     height: 60px;
     margin-bottom: 0px;
 
 }
+
 /* FIN DEL PANEL CONTROL*/
 
 /* CONTENEDOR DE BOTONES */
-.container-buttons{
+.container-buttons {
     width: 500px;
     height: 60px;
 }
@@ -29,8 +30,8 @@
 
 /* BOTONES */
 .Panel-Control-modal Button {
-    background-color:transparent  ;
-    color:#000000 ;
+    background-color: transparent;
+    color: #000000;
     height: 50px;
     padding-bottom: 10px;
     margin-top: 5px;
@@ -39,28 +40,36 @@
     vertical-align: super;
 }
 
-.Panel-Control-modal Button:hover{ 
-    background-color: #0056b3; /* Cambia el color de fondo en hover */
-    color: #fff; 
+.Panel-Control-modal Button:hover {
+    background-color: #0056b3;
+    /* Cambia el color de fondo en hover */
+    color: #fff;
 }
 
-.btn_back .back-log{
-    vertical-align: middle;  
+.btn_back .back-log {
+    vertical-align: middle;
 }
 
 
-.btn_create, .create-log, .cancel-log, .edit-log, .btn_edit, .btn_desactive ,.desactive-log, .active-log{
-        vertical-align: middle;   
+.btn_create,
+.create-log,
+.cancel-log,
+.edit-log,
+.btn_edit,
+.btn_desactive,
+.desactive-log,
+.active-log {
+    vertical-align: middle;
 }
 
-.btn_cancel{
-    vertical-align: middle;   
+.btn_cancel {
+    vertical-align: middle;
 }
 
 
 /* FIN DEL LOS BOTONES */
 
-.search-container{
+.search-container {
     width: 250px;
     display: flex;
     align-items: center;
@@ -76,65 +85,68 @@
 /*LOGIN CONFIGURATION*/
 
 
-.formulario-login{
+.formulario-login {
     width: 100%;
     height: 100vh;
 }
-.Containers-Item-login
-{
+
+.Containers-Item-login {
     margin-top: 0% !important;
     width: 50%;
     margin-right: 20px !important;
 
-  
+
 }
-.Containers-Item-login .foto{
+
+.Containers-Item-login .foto {
     width: 100%;
     height: 100vh;
 }
 
-.Containers-Item-login-2
-{
+.Containers-Item-login-2 {
     margin-top: 15% !important;
     width: 50%;
     margin-right: 20px !important;
     padding-left: 100px;
     padding-right: 100px;
-   
+
 }
-.buttons-check{
+
+.buttons-check {
     display: flex;
     justify-content: space-between;
     margin-top: 10px;
 }
 
-.group-form-login{
+.group-form-login {
     margin-bottom: 12px;
     width: 700px;
 }
-.btn-login{
-    background-color:#0F62FE;
-    color:#fff;
+
+.btn-login {
+    background-color: #0F62FE;
+    color: #fff;
     border-style: none;
     border-radius: 2px;
     width: 700px;
     margin-bottom: 10px;
     margin-top: 10px;
 }
-.btn-login:hover{
-    background-color:#064fd8;
+
+.btn-login:hover {
+    background-color: #064fd8;
 }
 
-.title-login{
-    font-size:40px;
+.title-login {
+    font-size: 40px;
     font-weight: 600;
     margin-bottom: 10px;
 }
 
 
 .forgot,
-.noacount{
-    color:#001D6C;
+.noacount {
+    color: #001D6C;
     text-decoration: none;
 
 }
