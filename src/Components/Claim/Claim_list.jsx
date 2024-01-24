@@ -1,10 +1,10 @@
 
 import React, { useState, useEffect } from 'react';
-import { useFetch }                   from '../assets/useFetch';
+import { useFetch }                   from '../../assets/useFetch';
 import _                              from 'lodash';
-import  TextLinkExample               from './Navbar';
-import Sidebar                        from './sidebar'; 
-import PanelControl                   from "./Panel-Control";
+import  TextLinkExample               from '../Navbar';
+import Sidebar                        from '../Sidebar/sidebar'; 
+import PanelControl                   from "../PanelControl/Panel-Control";
 import { DataGrid }                   from '@mui/x-data-grid';
 import Box                            from '@mui/material/Box';
 import FormControl                    from '@mui/material/FormControl';

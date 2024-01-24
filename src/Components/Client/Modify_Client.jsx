@@ -5,7 +5,7 @@ import Form                           from 'react-bootstrap/Form';
 import Swal                           from "sweetalert2";
 import { useFetch }                   from "../../assets/useFetch";
 import TextLinkExample                from "../Navbar";
-import Sidebar                        from "../sidebar";
+import Sidebar                        from "../Sidebar/sidebar";
 import { Formik }                     from "formik";
 import TextField                      from "@mui/material/TextField";
 import Select                         from "@mui/material/Select";
@@ -17,14 +17,14 @@ import { LocalizationProvider }       from '@mui/x-date-pickers/LocalizationProv
 import { DatePicker }                 from '@mui/x-date-pickers/DatePicker';
 import Stack                          from '@mui/material/Stack';
 import Item                           from '@mui/material/Stack';
-import PanelControl                   from "../Panel-Control";
+import PanelControl                   from "../PanelControl/Panel-Control";
 import * as Yup                       from "yup";
 import { Box, FormHelperText }        from "@mui/material";
 import { useParams }                  from 'react-router-dom';
 import dayjs                          from 'dayjs';
-import { Correos }                    from "../contact_cor";
-import { Telefonos }                  from "../contact_tel";
-import { Direcciones }                from "../contact_dir";
+import { Correos }                    from "../Contacts/contact_cor";
+import { Telefonos }                  from "../Contacts/contact_tel";
+import { Direcciones }                from "../Contacts/contact_dir";
 import '../Client/CSS/register-style.scss';
 
 export const Modify = (props) => {

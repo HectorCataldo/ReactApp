@@ -1,9 +1,9 @@
 import React, { useState, useEffect } from 'react';
-import { useFetch }                   from '../assets/useFetch';
+import { useFetch }                   from '../../assets/useFetch';
 import _                              from 'lodash';
 import { DataGrid }                   from '@mui/x-data-grid';
 import Box                            from '@mui/material/Box';
-import '../Components/Client/CSS/index.scss';
+import '../Client/CSS/index.scss';
 
 
 export const Insurer = () => {

@@ -1,11 +1,11 @@
 import React, { useState, useEffect }  from 'react';
-import { useFetch }                    from '../assets/useFetch';
+import { useFetch }                    from '../../assets/useFetch';
 import _                               from 'lodash';
 import { DataGrid }                    from '@mui/x-data-grid';
 import Box                             from '@mui/material/Box';
 import AddCircleIcon                   from '@mui/icons-material/AddCircle';
 import { Modalcor }                    from './modal_cor';
-import '../CSS/contact-style.scss';
+import '../../CSS/contact-style.scss';
 
 export const Correos = () => {
   const { data:Correos                     } = useFetch("https://gist.githubusercontent.com/LeandroGabrielAltamiranoPereira/9d7665ceac24aedbc6661293a3744756/raw/9ef7a5a135a70fe7d3cdd803fcf67b6fd09ad883/objetosasegurados.json");

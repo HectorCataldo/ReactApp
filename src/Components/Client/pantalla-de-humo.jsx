@@ -1,6 +1,6 @@
 import React           from "react";
 import TextLinkExample from "../Navbar";
-import Sidebar         from "../sidebar";
+import Sidebar         from "../Sidebar/sidebar";
 import PlumbingIcon    from '@mui/icons-material/Plumbing';
 import '../Client/CSS/register-style.scss';
 

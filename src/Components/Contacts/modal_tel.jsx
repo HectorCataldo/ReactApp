@@ -7,8 +7,8 @@ import FormControl         from "@mui/material/FormControl";
 import InputLabel          from "@mui/material/InputLabel";
 import Stack               from '@mui/material/Stack';
 import Item                from '@mui/material/Stack';
-import PanelControlModal   from './Panel-Control-modal';
-import '../CSS/contact-style.scss';
+import PanelControlModal   from '../PanelControl/Panel-Control-modal';
+import '../../CSS/contact-style.scss';
 
 export const Modaltel = (props) => {
 

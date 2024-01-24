@@ -1,11 +1,11 @@
 import React, { useState, useEffect } from 'react';
-import { useFetch }                   from '../assets/useFetch';
+import { useFetch }                   from '../../assets/useFetch';
 import _                              from 'lodash';
 import { DataGrid }                   from '@mui/x-data-grid';
 import Box                            from '@mui/material/Box';
 import AddCircleIcon                  from '@mui/icons-material/AddCircle';
 import { Modaltel }                   from './modal_tel';
-import '../CSS/contact-style.scss';
+import '../../CSS/contact-style.scss';
 
 export const Telefonos = () => {
 

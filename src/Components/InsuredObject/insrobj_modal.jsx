@@ -10,7 +10,7 @@ import Item                   from '@mui/material/Stack';
 import { Box,FormHelperText } from "@mui/material"
 import Button                 from '@mui/material/Button';
 import CancelIcon             from '@mui/icons-material/Cancel';
-import '../CSS/insr-obj-style.scss';
+import '../../CSS/insr-obj-style.scss';
 
 
 export const Objmodal = (props) => {

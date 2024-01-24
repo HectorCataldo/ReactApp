@@ -1,11 +1,11 @@
 import React, { useState, useEffect } from 'react';
-import { useFetch }                   from '../assets/useFetch';
+import { useFetch }                   from '../../assets/useFetch';
 import { DataGrid }                   from '@mui/x-data-grid';
 import Box                            from '@mui/material/Box';
 import { Objmodal }                   from './insrobj_modal';
 import { useParams }                  from 'react-router-dom';
 import axios                          from 'axios';
-import '../CSS/insr-obj-style.scss';
+import '../../CSS/insr-obj-style.scss';
 
 export const Insurerclaim = (props) => {
   const {id} = useParams();

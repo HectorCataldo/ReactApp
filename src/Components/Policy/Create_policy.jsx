@@ -4,7 +4,7 @@ import axios                                   from "axios";
 import Form                                    from 'react-bootstrap/Form';
 import Swal                                    from "sweetalert2";
 import TextLinkExample                         from "../Navbar";
-import Sidebar                                 from "../sidebar";
+import Sidebar                                 from "../Sidebar/sidebar";
 import { Formik }                              from "formik";
 import TextField                               from "@mui/material/TextField";
 import Select                                  from "@mui/material/Select";
@@ -17,7 +17,7 @@ import { DatePicker }                          from '@mui/x-date-pickers/DatePic
 import Stack                                   from '@mui/material/Stack';
 import Item                                    from '@mui/material/Stack';
 
-import PanelControl                            from "../Panel-Control";
+import PanelControl                            from "../PanelControl/Panel-Control";
 import * as Yup                                from "yup";
 import { Box,FormHelperText }                  from "@mui/material";
 import dayjs                                   from "dayjs";
@@ -26,7 +26,7 @@ import timezone                                from 'dayjs/plugin/timezone';
 dayjs.extend(utc);
 dayjs.extend(timezone);
 import { Coverage }                            from "../Coverage";
-import { Insurerclaim }                        from "../insurerobj_claim";
+import { Insurerclaim }                        from "../InsuredObject/insurerobj_claim";
 import { Objannex }                            from "../annex_obj";
 import { ObjPaymnt }                           from "../paymentplant_obj";
 import { ModalClient }                         from "../modalclient";

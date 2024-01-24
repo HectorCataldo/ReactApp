@@ -2,7 +2,7 @@ import React, { useState }   from "react";
 import Button                from "react-bootstrap/Button";
 import { Link, useLocation } from 'react-router-dom';
 import { CloseOutlined, SaveOutlined, ArrowLeftOutlined, EditOutlined, PlusOutlined, StopOutlined,CheckCircleOutlined } from '@ant-design/icons';
-import '../CSS/Panel-Control.scss';
+import '../../CSS/Panel-Control.scss';
 
 const PanelControl = (props) => {
   const location = useLocation();
