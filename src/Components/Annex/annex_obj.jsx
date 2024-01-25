@@ -1,5 +1,5 @@
 import React, { useState, useEffect }       from 'react';
-import '../CSS/insr-obj-style.scss';
+import '../../CSS/insr-obj-style.scss';
 import _                                    from 'lodash';
 import { DataGrid }                         from '@mui/x-data-grid';
 import Box                                  from '@mui/material/Box';

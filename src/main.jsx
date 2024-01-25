@@ -8,8 +8,8 @@ import { Modify }                                 from './Components/Client/Modi
 import { Policylist }                             from './Components/Policy/Policy_list';
 import { Policy }                                 from './Components/Policy/Create_policy';
 import { Modifypolicy }                           from './Components/Policy/Modify_policy';
-import { Login }                                  from './Components/Login';
-import { Coverage }                               from './Components/Coverage';
+import { Login }                                  from './Components/Login/Login';
+import { Coverage }                               from './Components/Coverage/Coverage';
 import { Insurer }                                from './Components/InsuredObject/insurer_obj';
 import { Quotation }                              from './Components/Quotation/Create_Quotation';
 import { Quotationlist }                          from './Components/Quotation/Quotation_list';
@@ -18,16 +18,16 @@ import { Claim }                                  from './Components/Claim/Creat
 import { Claimlist }                              from './Components/Claim/Claim_list';
 import { Modifyclaim }                            from './Components/Claim/Modify_Claim';
 import { Objmodal }                               from './Components/InsuredObject/insrobj_modal';
-import { Objannex }                               from './Components/annex_obj';
-import { ObjPaymnt }                              from './Components/paymentplant_obj';
+import { Objannex }                               from './Components/Annex/annex_obj';
+import { ObjPaymnt }                              from './Components/Payment/paymentplant_obj';
 import { Correos }                                from './Components/Contacts/contact_cor';
 import { Telefonos }                              from './Components/Contacts/contact_tel';
 import { Direcciones }                            from './Components/Contacts/contact_dir';
 import { Modaltel }                               from './Components/Contacts/modal_tel';
 import { Modalcor }                               from './Components/Contacts/modal_cor';
 import { Modaldir }                               from './Components/Contacts/modal_dir';
-import { ModalClient }                            from './Components/modalclient';
-import { Clientlist }                             from './Components/clientlist';
+import { ModalClient }                            from './Components/Client/modalclient';
+import { Clientlist }                             from './Components/Client/clientlist';
 import { PANTALLA }                               from './Components/Client/pantalla-de-humo';
 import './Components/Client/CSS/index.scss';
 // ventanas modales 

@@ -3,7 +3,7 @@ import axios                                   from "axios";
 import Form                                    from 'react-bootstrap/Form';
 import Swal                                    from "sweetalert2";
 import { useFetch }                            from "../../assets/useFetch";
-import TextLinkExample                         from "../Navbar";
+import TextLinkExample                         from "../Navbar/Navbar";
 import Sidebar                                 from "../Sidebar/sidebar";
 import { Formik }                              from "formik";
 import TextField                               from "@mui/material/TextField";
@@ -25,10 +25,10 @@ import utc                                     from 'dayjs/plugin/utc';
 import timezone                                from 'dayjs/plugin/timezone';
 dayjs.extend(utc);
 dayjs.extend(timezone);
-import { Coverage }                            from "../Coverage";
+import { Coverage }                            from "../Coverage/Coverage";
 import { Insurerclaim }                        from "../InsuredObject/insurerobj_claim";
-import { Objannex }                            from "../annex_obj";
-import { ObjPaymnt }                           from "../paymentplant_obj";
+import { Objannex }                            from "../Annex/annex_obj";
+import { ObjPaymnt }                           from "../Payment/paymentplant_obj";
 
 import '../Policy/CSS/policy-style.scss';
 

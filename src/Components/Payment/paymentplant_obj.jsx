@@ -1,9 +1,9 @@
 import React, { useState, useEffect } from 'react';
-import { useFetch }                   from '../assets/useFetch';
+import { useFetch }                   from '../../assets/useFetch';
 import _                              from 'lodash';
 import { DataGrid }                   from '@mui/x-data-grid';
 import Box                            from '@mui/material/Box';
-import '../CSS/insr-obj-style.scss';
+import '../../CSS/insr-obj-style.scss';
 
 export const ObjPaymnt = () => {
   const { data:paymentdata  }  = useFetch("https://gist.githubusercontent.com/LeandroGabrielAltamiranoPereira/074eb42afbfca2158f56ef8eab70b571/raw/90721d2585e91c4a9614bb3a3039c3d2e2803942/paymentplan.json");  

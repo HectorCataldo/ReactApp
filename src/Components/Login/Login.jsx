@@ -1,6 +1,6 @@
 import React, { useState, useEffect, useMemo } from "react";
 import Form                                    from 'react-bootstrap/Form';
-import TextLinkExample                         from "./Navbar";
+import TextLinkExample                         from "../Navbar/Navbar";
 import { Formik }                              from "formik";
 import TextField                               from "@mui/material/TextField";
 import Swal                                    from "sweetalert2";
@@ -16,7 +16,7 @@ import VisibilityOff                           from "@mui/icons-material/Visibil
 import Checkbox                                from '@mui/material/Checkbox';
 import FormControlLabel                        from '@mui/material/FormControlLabel';
 import { Link }                                from 'react-router-dom';
-import '../Components/Client/CSS/register-style.scss'
+import '../../Components/Client/CSS/register-style.scss'
 export const Login = (props) => {
  
  const[logindata,setLogindata] = useState({

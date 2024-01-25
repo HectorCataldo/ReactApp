@@ -1,6 +1,6 @@
 import React             from 'react';
 import { Link }          from 'react-router-dom';
-import  TextLinkExample  from './Navbar';
+import  TextLinkExample  from './Navbar/Navbar';
 
 
 export const Principal = () => {

@@ -5,7 +5,7 @@ import axios                                   from "axios";
 import Form                                    from 'react-bootstrap/Form';
 import Swal                                    from "sweetalert2";
 import { useFetch }                            from "../../assets/useFetch";
-import TextLinkExample                         from "../Navbar";
+import TextLinkExample                         from "../Navbar/Navbar";
 import Sidebar                                 from "../Sidebar/sidebar";
 import { Formik }                              from "formik";
 import TextField                               from "@mui/material/TextField";
@@ -144,7 +144,7 @@ export const Registro = (props) => {
         }
 
       const NombreCompleto = clientData.firstName + " " + clientData.lastName;
-      const response       = await axios.post("https://si-client-bkn.kps/api/v1/client/", {
+      const response       = await axios.post(`https://si-client-bkn.kps/api/v1/client`, {
         manComp   : selectedTipo,
         egn       : clientData.documentNumber ,
         name      : NombreCompleto            ,

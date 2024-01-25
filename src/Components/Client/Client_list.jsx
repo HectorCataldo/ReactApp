@@ -1,7 +1,7 @@
 import React, { useState, useEffect } from 'react';
 import '../Client/CSS/index.scss';
 import _                              from 'lodash';
-import  TextLinkExample               from '../Navbar';
+import  TextLinkExample               from '../Navbar/Navbar';
 import Sidebar                        from '../Sidebar/sidebar'; 
 import PanelControl                   from "../PanelControl/Panel-Control";
 import { DataGrid }                   from '@mui/x-data-grid';

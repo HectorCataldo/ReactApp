@@ -2,7 +2,7 @@ import {useState}              from 'react';
 import {Button,Spinner}        from 'react-bootstrap';
 import * as XLSX               from "xlsx";
 import VerticalAlignBottomIcon from '@mui/icons-material/VerticalAlignBottom';
-import '../CSS/icons-things-style.scss';
+import '../../CSS/icons-things-style.scss';
 
 export const ButtonExport = (props) =>{
 

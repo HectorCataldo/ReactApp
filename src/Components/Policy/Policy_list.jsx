@@ -1,7 +1,7 @@
 import React, { useState, useEffect }       from 'react';
 import '../Client/CSS/index.scss';
 import _                                    from 'lodash';
-import  TextLinkExample                     from '../Navbar';
+import  TextLinkExample                     from '../Navbar/Navbar';
 import Sidebar                              from '../Sidebar/sidebar'; 
 import PanelControl                         from "../PanelControl/Panel-Control";
 import { DataGrid}                          from '@mui/x-data-grid';
@@ -16,7 +16,7 @@ import dayjs                                from 'dayjs';
 import utc                                  from 'dayjs/plugin/utc';
 import timezone                             from 'dayjs/plugin/timezone';
 import axios                                from 'axios';
-import { ButtonExport }                     from '../ButtonExport';
+import { ButtonExport }                     from './ButtonExport';
 import { Button }                           from 'react-bootstrap';
 import SimCardDownloadIcon from '@mui/icons-material/SimCardDownload';
 dayjs.extend(utc);
