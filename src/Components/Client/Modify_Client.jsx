@@ -1,5 +1,4 @@
 import React, { useState, useEffect } from "react";
-import moment                         from "moment";
 import axios                          from "axios";
 import Form                           from 'react-bootstrap/Form';
 import Swal                           from "sweetalert2";
@@ -22,12 +21,13 @@ import * as Yup                       from "yup";
 import { Box, FormHelperText }        from "@mui/material";
 import { useParams }                  from 'react-router-dom';
 import dayjs                          from 'dayjs';
+import utc                            from 'dayjs/plugin/utc';
 import { Correos }                    from "../Contacts/contact_cor";
 import { Telefonos }                  from "../Contacts/contact_tel";
 import { Direcciones }                from "../Contacts/contact_dir";
 import '../Client/CSS/register-style.scss';
 
-export const Modify = (props) => {
+export const Modify = () => {
   const { data: country }     = useFetch( "https://gist.githubusercontent.com/HectorCataldo/ceee7aa2b93e83d7d04f752e3adbe623/raw/81b6bc11b965720e6717975f665fe85869c71e81/paises.json" )
   const { data: regions }     = useFetch("https://gist.githubusercontent.com/HectorCataldo/11e149d5ba18e9dfe72b6c21e38ca439/raw/b7281863b44021b362338493025cc0723e39b7a9/regions.json");
   const { data: clients }     = useFetch("http://localhost:8080/api/clients");
@@ -35,7 +35,6 @@ export const Modify = (props) => {
   const { data: gender }      = useFetch("http://localhost:8080/api/gender");
 
   const [selectedBirthDate  ,setSelectedBirthDate  ] = useState(dayjs());
-  const [objetos            ,setObjetos            ] = useState();
   const [selectedcreateDate ,setCreateDate         ] = useState(dayjs(new Date()));
   const [selectedGender     ,setSelectedGender     ] = useState("");
   const [selectedTipo       ,setSelectedTipo       ] = useState("Natural");
@@ -48,37 +47,74 @@ export const Modify = (props) => {
  const [seRegion, setSeRegion]      = useState('');
  const [fcomunas, setfcomunas]      = useState([]);
  const [seComuna, setSeComuna]      = useState();
+
   const { id }                      = useParams();
-  const {data : cliente}            = useFetch(`https://si-client-bkn.kps/api/v1/client/${id}`);
   const [loading, setLoading]       = useState(true);
   const [clientData, setClientData] = useState({
-    id:             null,
-    documentNumber: null,
-    firstName:      null,
-    lastName:       null,
-    secondLastName: null,
-    fantasyName:    null,
-    birthDate:      null,
-    gender: {
-      id_gender:    null,
-      gender:       null,
-    },
-    nationality:    null,
-    phoneNumber:    null,
-    email:          null,
-    address:        null,
-    region:         null,
-    comuna:         null,
-    giro:           null,
-    profession: {
-     id_profession: null,
-     profession_Name: null
-    },
-    tipo_persona:  null,
-    fechaCreacion: null
+    manComp         : null,
+    egn             : '',
+    name            : '',
+    gname           : '',
+    sname           : '',
+    fname           : '',
+    homeCountry     : '',
+    industryCode    : '',
+    sexo            : '',
+    birthDate       : '',
+    registrationDate: '',
+    contacts        : [],
+    address         : [],
+    country         : ''
   })
 
+  //Buscamos cliente por ID a través de endpoint con Axios:
+  useEffect(() => {
+    const ObtenerCliente = async () =>
+    {
+      let bd = '';
+      let countryClient = '';
+      try
+      {
+        const response = await axios.get(`https://si-client-bkn.kps/api/v1/client/${id}`);
+        const cliente = response.data.data;
+        const Arrayaddress = cliente.address
+        if(Arrayaddress.length > 0){
+          for (let i = 0; i < Arrayaddress.length; i++) {
+            const add     = Arrayaddress[i];
+            countryClient = add.country;
+          }
+        }
+        setClientData(() => ({
+        ...clientData,
+        manComp         : cliente.manComp,
+        egn             : cliente.egn,
+        name            : cliente.name,
+        gname           : cliente.gname,
+        sname           : cliente.sname,
+        fname           : cliente.fname,
+        homeCountry     : cliente.homeCountry,
+        industryCode    : cliente.industryCode,
+        sexo            : cliente.sexo,
+        birthDate       : cliente.birthDate,
+        registrationDate: cliente.registrationDate,
+        contacts        : cliente.contacts,
+        address         : cliente.address,
+        country         : countryClient
+        }))
+        bd = dayjs(cliente.birthDate).format('DD-MM-YYYY');
+        setSelectedBirthDate(bd);
+      }
+      catch (error)
+      {
+        console.error(`Error:  + ${error}`);
+      }      
+    };
+    
+    ObtenerCliente();
+  }, [clientData, selectedBirthDate])
+  //------------------------
 
+  //Función que Filtra los género o sexo según sea Compañia o Persona Natural
   const GendersFilter = (e) => {    
       const tp = e.target.value;
       setSelectedTipo(tp);
@@ -98,7 +134,9 @@ export const Modify = (props) => {
         setSelectedTipo('');
       }
     }
+  //-------------------------
   
+  //Función que obtiene las comunas según región seleccionada
   const RegionChange = (e) => {
     const selectedRegion =  e && e.target? e.target.value: e;
     setSeRegion(selectedRegion);
@@ -113,16 +151,9 @@ export const Modify = (props) => {
       setSeComuna('');
     }
   };
+  //-------------------
 
-  const isValidProfession = typeof selectedProfession === 'object' &&
-    'id_profession' in selectedProfession &&
-    'profession_Name' in selectedProfession;
-
-  const professionData = isValidProfession ? {
-    id_profession:   selectedProfession.id_profession,
-    profession_Name: selectedProfession.profession_Name,
-  } : null;
-
+  //Función que permite editar los campos cuando se seleccione el botón editar
   const handleEdit = ()=>{
     if(editar){
       setEditar(false);
@@ -132,8 +163,10 @@ export const Modify = (props) => {
     }
     console.log(clientData)
   }
+  //-------------------
 
-  const handleState = async () =>{
+  //¡¡¡Futura función que desactivará a un cliente a través de endpoint!!!!
+  /*const handleState = async () =>{
     try{
       const response = await axios.put(`http://localhost:8080/api/clients/state/${clientData.id}`);
       if(clientData.state){
@@ -164,10 +197,11 @@ export const Modify = (props) => {
     catch (error) {
         console.error("Error Al enviar la solicitud PUT", error);
     }
-  }
+  } */
+  //--------------
 
+  //¡¡¡Función que inserta la informacion actualizada o modificada, a traves de un endpoint, en base de datos de un cliente!!!
   const handleSubmit = async () => {
-    console.log(clientData)
     try {
       if(clientData.tipo_persona === "Natural"){
         if (
@@ -215,27 +249,11 @@ export const Modify = (props) => {
         }
       };
       
-
       const response = await axios.put("http://localhost:8080/api/clients", {
-        id:             clientData.id,
-        documentNumber: clientData.documentNumber,
-        firstName:      clientData.firstName,
-        lastName:       clientData.lastName,
-        secondLastName: clientData.secondLastName,
-        fantasyName:    clientData.fantasyName,
-        birthDate:      clientData.birthDate,
-        gender:         clientData.gender,
-        nationality:    clientData.nationality,
-        phoneNumber:    clientData.phoneNumber,
-        email:          clientData.email,
-        address:        clientData.address,
-        region:         clientData.region,
-        comuna:         clientData.comuna,
-        giro:           clientData.giro,
-        profession:     clientData.profession,
-        state: true,
-        tipo_persona:   clientData.tipo_persona,
-        fechaCreacion:  selectedcreateDate,
+        //Datos del objeto cliente
+        //...
+        //..
+        //.        
       });
 
       console.log("Respuesta de la API:", response.data);
@@ -252,16 +270,9 @@ export const Modify = (props) => {
       console.error("Error Al enviar la solicitud PUT", error);
     }
   };
+  //--------------------------
 
-  useEffect(() => {
-    if (clients && Array.isArray(clients)) {
-      const length       = clients.length;
-      const totalObjects = clients[length - 1];
-      const id           = totalObjects.id;
-      setObjetos(id + 1);
-    }
-  }, [clients]);
-
+  // ¿¿¿¿???
   useEffect(() => {
     const interval = setInterval(() => {
       setCurrentDate(new Date());
@@ -271,19 +282,13 @@ export const Modify = (props) => {
       clearInterval(interval);
     };
   }, []);
+  //-----------------------------
 
-  const[newClient, setNewClient] =  useState({});
-  useEffect(()=>{
-    if(cliente)
-    {
-      setNewClient(cliente.data);
-      setClientData((prevClientData)=>({...prevClientData, documentNumber: cliente.data.egn}));
-      setSelectedBirthDate(dayjs(cliente.birthDate));
-      setCreateDate(dayjs(cliente.fechaCreacion))
+  // ¿¿¿¿¿¿????
+  useEffect(()=>{    
       setLoading(false);
       setDisableGender(false);
-
-      if(cliente.data.manComp == 2){
+      if(clientData.manComp == 2){
         setSelectedTipo("Juridica");
         setClientData({...clientData, tipo_persona: 'Juridica'});
         setSelectedGender({
@@ -295,29 +300,26 @@ export const Modify = (props) => {
       else{
         setSelectedTipo("Natural");
         setClientData({...clientData, tipo_persona: 'Natural'});
-        if(cliente.data.sexo == 1){
+        if(clientData.sexo == 1){
           setSelectedGender({
             ...selectedGender,
             id_gender: 1,
             gender: 'Masculino'
           })
         }
-        else if(cliente.data.sexo == 2){
+        else if(clientData.sexo == 2){
           setSelectedGender({
             ...selectedGender,
             id_gender: 2,
             gender: 'Femenino'
           })
         }
-        
-      }
-
-      RegionChange(cliente.region);
-      updateUserName(cliente.data.gname, cliente.data.sname, cliente.secondLastName);
+      updateUserName(clientData.gname, clientData.sname, clientData.fname);
     }
-  },[cliente])
- 
+  },[clientData])
+  //------------------------------------
 
+  //Función que muestra en tiempo real el nombre del usuario en el PanelControl
   const [userName, setUserName] = useState("Usuario");
 
   const updateUserName = (firstName, lastName, secondLastName) => {
@@ -333,7 +335,9 @@ export const Modify = (props) => {
   
     setUserName(userFullName);
   };
+  //----------------------------------------
 
+  //Función para validar digito verificador de un rut
   const validarRut  = (rut) => {
     const rutLimpio = rut.replace(/[^0-9kK]/g, ''); 
     if (rutLimpio.length > 9) return false;
@@ -353,6 +357,7 @@ export const Modify = (props) => {
 
     return dv === dvCalculado;
   }
+  //-----------------------------------
     
   //Validaciones con YUP formatos:
   const validationSchema = Yup.object().shape({
@@ -383,19 +388,18 @@ export const Modify = (props) => {
   });
   return (
     <>
-
     <TextLinkExample />
     <Sidebar />
-    <PanelControl handleSubmit={handleSubmit} objetos={objetos} handleEdit={handleEdit} handleState={handleState} state={clientData.state}/>
+    <PanelControl handleSubmit={handleSubmit} handleEdit={handleEdit} /*handleState={handleState}*/ state={clientData.state}/>
 
     <Formik enableReinitialize={true} onSubmit={(dataClient, { resetForm }) => { console.log(dataClient); console.log("Formulario enviado"); resetForm(); }}
 
       initialValues={{ 
         id:             loading ? 'Cargando...' : id || 'No hay id',
-        documentNumber: loading? 'Cargando'     : newClient.egn,
-        firstName:      loading ? 'Cargando...' : newClient.gname,
-        lastName:       loading ? 'Cargando...' : newClient.sname,
-        secondLastName: loading ? 'Cargando...' : newClient.fname,
+        documentNumber: loading? 'Cargando'     : clientData.egn,
+        firstName:      loading ? 'Cargando...' : clientData.gname,
+        lastName:       loading ? 'Cargando...' : clientData.sname,
+        secondLastName: loading ? 'Cargando...' : clientData.fname,
         birthDate:      loading ? 'Cargando...' : clientData.birthDate,
         phoneNumber:    loading ? 'Cargando...' : clientData.phoneNumber,
         email:          loading ? 'Cargando...' : clientData.email,
@@ -403,11 +407,11 @@ export const Modify = (props) => {
         region:         loading ? 'Cargando...' : clientData.region,
         comuna:         loading ? 'Cargando...' : clientData.comuna,
         gender:         loading ? 'Cargando...' : selectedGender?.id_gender,
-        country:        loading ? 'Cargando...' : clientData.nationality,
+        country:        loading ? 'Cargando...' : clientData.country,
         profession:     loading ? 'Cargando...' : clientData.profession?.id_profession,
-        jdocument:      loading ? 'Cargando...' : newClient.egn,
-        jrazonsocial:   loading ? 'Cargando...' : newClient.gname,
-        jfname:         loading ? 'Cargando...' : newClient.sname,
+        jdocument:      loading ? 'Cargando...' : clientData.egn,
+        jrazonsocial:   loading ? 'Cargando...' : clientData.gname,
+        jfname:         loading ? 'Cargando...' : clientData.sname,
         jemail:         loading ? 'Cargando...' : clientData.email,
         jphone:         loading ? 'Cargando...' : clientData.phoneNumber,
         jaddress:       loading ? 'Cargando...' : clientData.address,
@@ -673,7 +677,7 @@ export const Modify = (props) => {
                                             className="datepicker"
                                             name="birthDate"
                                             label="Fecha de Nacimiento"
-                                            value={selectedBirthDate}
+                                            value={dayjs.utc(selectedBirthDate, 'DD-MM-YYYY')}
                                             readOnly = {!editar}
                                             onChange={(value) => {
                                               setFieldValue('birthDate', value);
@@ -690,8 +694,8 @@ export const Modify = (props) => {
                                                 textField:{
                                                   required: true,
                                                   variant: 'filled',
-                                                  error: editar && Boolean(errors.birthDate),
-                                                  helperText: editar && errors.birthDate ? errors.birthDate: ''
+                                                  // error: editar && Boolean(errors.birthDate),
+                                                  // helperText: editar && errors.birthDate ? errors.birthDate: ''
                                                 }
                                               }
                                             }
@@ -722,7 +726,7 @@ export const Modify = (props) => {
                                               <MenuItem value = "">Seleccione un País</MenuItem>
                                               {Array.isArray(country?.paises) &&
                                                 country.paises.map((pais, index) =>
-                                                (<MenuItem key={index} value={pais}>
+                                                (<MenuItem key={index} value={pais.toString().toUpperCase()}>
                                                     {pais}
                                                   </MenuItem>
                                                 ))}                                     
