@@ -35,7 +35,7 @@ export const Modify = () => {
   const { data: gender }      = useFetch("http://localhost:8080/api/gender");
 
   const [selectedBirthDate  ,setSelectedBirthDate  ] = useState(dayjs());
-  const [selectedcreateDate ,setCreateDate         ] = useState(dayjs(new Date()));
+  const [selectedcreateDate ,setCreateDate         ] = useState(dayjs.utc(new Date()).format('DD/MM/YYYY'));
   const [selectedGender     ,setSelectedGender     ] = useState("");
   const [selectedTipo       ,setSelectedTipo       ] = useState("Natural");
   const [selectedProfession ,setSelectedProfession ] = useState("");
@@ -83,6 +83,11 @@ export const Modify = () => {
             const add     = Arrayaddress[i];
             countryClient = add.country;
           }
+        }
+        // console.log(dayjs.utc(cliente.registrationDate).format('DD/MM/YYYY'))
+        if(cliente.registrationDate.length > 0){
+          const registrationDate = dayjs.utc(cliente.registrationDate).format('DD/MM/YYYY');
+          setCreateDate(registrationDate);
         }
         setClientData(() => ({
         ...clientData,
@@ -454,7 +459,7 @@ export const Modify = () => {
                                           variant="filled"
                                           fullWidth
                                           handleBlur={handleBlur}
-                                          value={selectedcreateDate.format("DD/MM/YYYY")}
+                                          value={selectedcreateDate}
                                           InputProps={{
                                             readOnly: true,
                                           }}
