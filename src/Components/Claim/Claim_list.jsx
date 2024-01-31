@@ -12,11 +12,11 @@ import InputLabel                     from '@mui/material/InputLabel';
 import Input                          from '@mui/material/Input';
 import InputAdornment                 from '@mui/material/InputAdornment';
 import SearchIcon                     from '@mui/icons-material/Search';
+import axios from 'axios';
 
 
 export const Claimlist = () => {
-  const { data:claim } = useFetch("https://gist.githubusercontent.com/LeandroGabrielAltamiranoPereira/fe71a15cf2701ca4bad3949ea971a5d2/raw/42385b224c4226f248a5072d43a45a71e9c4bef7/siniestros.json");
-
+  const [claim           ,setClaim          ] = useState();
   const [selectedClient  ,setSelectedClient ] = useState(null);
   const [searchTerm      ,setSearchTerm     ] = useState('');
   const [currentPage     ,setCurrentPage    ] = useState(1);
@@ -26,6 +26,17 @@ export const Claimlist = () => {
 
 
   useEffect(() => {
+    const claimApi = async () =>{
+      try{
+        const response = await axios.get(`https://gist.githubusercontent.com/LeandroGabrielAltamiranoPereira/fe71a15cf2701ca4bad3949ea971a5d2/raw/42385b224c4226f248a5072d43a45a71e9c4bef7/siniestros.json`);
+        const data = response.data
+        setClaim(data);
+      }
+      catch(error){
+        console.error(`Error: ${error}`);
+      }
+    }
+    claimApi();
     // Actualizar clientsPerPage basado en la longitud de los datos
     if (claim) {
       const additionalClients = claim.length   - clientsPerPage;    // Calcula la cantidad de clientes adicionales

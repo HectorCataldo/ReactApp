@@ -4,9 +4,10 @@ import _                              from 'lodash';
 import { DataGrid }                   from '@mui/x-data-grid';
 import Box                            from '@mui/material/Box';
 import '../../CSS/insr-obj-style.scss';
+import axios from 'axios';
 
 export const ObjPaymnt = () => {
-  const { data:paymentdata  }  = useFetch("https://gist.githubusercontent.com/LeandroGabrielAltamiranoPereira/074eb42afbfca2158f56ef8eab70b571/raw/90721d2585e91c4a9614bb3a3039c3d2e2803942/paymentplan.json");  
+  const [paymentdata    ,setPaymentdata    ] = useState();
   const [insureobjd     ,setInsrobjd       ] = useState(null);
   const [searchTerm     ,setSearchTerm     ] = useState('');
   const [currentPage    ,setCurrentPage    ] = useState(1);
@@ -14,6 +15,17 @@ export const ObjPaymnt = () => {
 
 
   useEffect(() => {
+    const paymentApi = async () =>{
+      try {
+        const response =  await axios.get(`https://gist.githubusercontent.com/LeandroGabrielAltamiranoPereira/074eb42afbfca2158f56ef8eab70b571/raw/90721d2585e91c4a9614bb3a3039c3d2e2803942/paymentplan.json`);
+        const data = response.data;
+        setPaymentdata(data);
+      } catch (error) {
+        console.error(`Error: ${error}`);
+      }
+    }
+    paymentApi();
+
     if (paymentdata) {
       const additionalinsureobj  = paymentdata.length - insrobjPerPage;        // Calcula la cantidad de clientes adicionales
       const newinsureobjsPerPage = insrobjPerPage     + additionalinsureobj;  // Incrementa clientsPerPage

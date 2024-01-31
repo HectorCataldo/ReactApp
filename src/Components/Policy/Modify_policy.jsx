@@ -2,7 +2,6 @@ import React, { useState, useEffect, useMemo } from "react";
 import axios                                   from "axios";
 import Form                                    from 'react-bootstrap/Form';
 import Swal                                    from "sweetalert2";
-import { useFetch }                            from "../../assets/useFetch";
 import TextLinkExample                         from "../Navbar/Navbar";
 import Sidebar                                 from "../Sidebar/sidebar";
 import { Formik }                              from "formik";
@@ -35,7 +34,7 @@ import '../Policy/CSS/policy-style.scss';
 export const Modifypolicy = (props) => {
   //  APIS
   const {id} = useParams();
-  const {data:policy} = useFetch(`https://si-client-bkn.kps/api/v1/policy/${id}`)
+  const [policy, setPolicy] = useState();
   
   // 
   const [loading ,setLoading ] = useState(true);
@@ -65,25 +64,36 @@ export const Modifypolicy = (props) => {
 
   //UseEffect que nos ayuda a desplegar lógica cuando allá datos en la API.
   useEffect(()=>{
+    const policyApi = async () =>{
+      try {
+        const response =  await axios.get(`https://si-client-bkn.kps/api/v1/policy/${id}`);
+        const data =  response.data.data
+        setPolicy(data);
+      } catch (error) {
+        console.error(`Error: ${error}`);
+      }      
+    }
+
+    policyApi();
+
     if(policy){
-      const filterPolicy = policy.data;
       setdatapolicy({
         ...datapolicy,
-        policyid:        filterPolicy.policyId,
-        policynumber:    filterPolicy.policyNo,
-        clientname:      filterPolicy.client.people.name,
-        product:         filterPolicy.insrType.name,
-        insrBegin:       filterPolicy.insrBegin,
-        insrEnd:         filterPolicy.insrEnd,
-        insrDuration:    filterPolicy.insrDuration,
-        durDimension:    filterPolicy.durDimension,
-        agent:           filterPolicy.agent.people.name,
-        office:          filterPolicy.office.people.name,
+        policyid:        policy.policyId,
+        policynumber:    policy.policyNo,
+        clientname:      policy.client.people.name,
+        product:         policy.insrType.name,
+        insrBegin:       policy.insrBegin,
+        insrEnd:         policy.insrEnd,
+        insrDuration:    policy.insrDuration,
+        durDimension:    policy.durDimension,
+        agent:           policy.agent.people.name,
+        office:          policy.office.people.name,
         salesChannel:    '',
-        state:           filterPolicy.policyState.name,
+        state:           policy.policyState.name,
         subestado:       '',
-        dateGiven:       filterPolicy.dateGiven,
-        paymentWay:      filterPolicy.paymentWay.paymentWay,
+        dateGiven:       policy.dateGiven,
+        paymentWay:      policy.paymentWay.paymentWay,
         num_instalments: '',
         payment_anual:   '',
         quote_value:     ''

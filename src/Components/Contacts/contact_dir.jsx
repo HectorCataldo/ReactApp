@@ -6,11 +6,12 @@ import Box                                from '@mui/material/Box';
 import AddCircleIcon                      from '@mui/icons-material/AddCircle';
 import { Modaldir }                       from './modal_dir';
 import '../../CSS/contact-style.scss';
+import axios from 'axios';
 
 
 export const Direcciones = () => {
 
-  const {data:Direccion                    } = useFetch("https://gist.githubusercontent.com/LeandroGabrielAltamiranoPereira/9d7665ceac24aedbc6661293a3744756/raw/9ef7a5a135a70fe7d3cdd803fcf67b6fd09ad883/objetosasegurados.json");
+  const [direccion      ,setDireccion      ] = useState();
   const [insureobjd     ,setInsrobjd       ] = useState(null);
   const [searchTerm     ,setSearchTerm     ] = useState('');
   const [currentPage    ,setCurrentPage    ] = useState(1);
@@ -21,23 +22,35 @@ export const Direcciones = () => {
 
 
   useEffect(() => {
+    const dirApi = async () =>{
+      try {
+        const response = await axios.get(`https://gist.githubusercontent.com/LeandroGabrielAltamiranoPereira/9d7665ceac24aedbc6661293a3744756/raw/9ef7a5a135a70fe7d3cdd803fcf67b6fd09ad883/objetosasegurados.json`);
+        const data = response.data;
+        setDireccion(data);
+
+      } catch (error) {
+        console.error(`Error: ${error}`);
+      }
+    }
+    dirApi();
+
     // Actualizar clientsPerPage basado en la longitud de los datos
-    if (Direccion) {
-      const additionalinsureobj  = Direccion.length - insrobjPerPage;       // Calcula la cantidad de clientes adicionales
+    if (direccion) {
+      const additionalinsureobj  = direccion.length - insrobjPerPage;       // Calcula la cantidad de clientes adicionales
       const newinsureobjsPerPage = insrobjPerPage   + additionalinsureobj; // Incrementa clientsPerPage
       setinsrobjPerPage(newinsureobjsPerPage);                            // Actualiza clientsPerPage
     }
-  }, [Direccion]);
+  }, [direccion]);
 
 
 
-  if (!Direccion ) {
+  if (!direccion ) {
     return <div>Cargando...</div>;
   }
 
 
 
-  const filteredData = Direccion.filter((item) => {
+  const filteredData = direccion.filter((item) => {
     const searchText = searchTerm.toLowerCase();
       return (
         (item.objname && item.objname.toString().toLowerCase().includes(searchText)) 
@@ -57,7 +70,7 @@ export const Direcciones = () => {
 
     const insureobj = [
   
-      { field: 'annexid' ,headerName: 'Direccion' ,width: 100 },
+      { field: 'annexid' ,headerName: 'direccion' ,width: 100 },
       {  headerName: 'Acciones',
          width: 80, renderHeader: () => (<button className='btn-add' onClick={()=> setModalShow(true)} ><AddCircleIcon /></button>)
         ,disableColumnMenu:true 

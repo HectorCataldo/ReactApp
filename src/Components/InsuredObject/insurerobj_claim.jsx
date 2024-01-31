@@ -9,7 +9,6 @@ import '../../CSS/insr-obj-style.scss';
 
 export const Insurerclaim = (props) => {
   const {id} = useParams();
-  const { data: insureobjdata                  } = useFetch("https://gist.githubusercontent.com/LeandroGabrielAltamiranoPereira/9d7665ceac24aedbc6661293a3744756/raw/9ef7a5a135a70fe7d3cdd803fcf67b6fd09ad883/objetosasegurados.json");
   const [insureobjd       ,setInsrobjd         ] = useState(null);
   const [searchTerm       ,setSearchTerm       ] = useState('');
   const [currentPage      ,setCurrentPage      ] = useState(1);
@@ -72,17 +71,7 @@ export const Insurerclaim = (props) => {
   const pag = useEffect(() => {
     setCurrentPage(1);
   }, [searchTerm]);
-
-  if (!insureobjdata) {
-    return <div>Cargando...</div>;
-  }
-
-  const filteredData = insureobjdata.filter((item) => {
-    const searchText = searchTerm.toLowerCase();
-    return (
-      (item.objname && item.objname.toString().toLowerCase().includes(searchText))
-    );
-  });
+  
 
   const isRowEmpty = (row) => {
     return (

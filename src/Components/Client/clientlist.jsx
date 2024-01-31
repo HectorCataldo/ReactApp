@@ -1,5 +1,4 @@
 import React, { useState, useEffect }      from 'react';
-import { useFetch }                        from '../../assets/useFetch';
 import '../../CSS/modal-client.scss';
 import _                                   from 'lodash';
 import { DataGrid }                        from '@mui/x-data-grid';
@@ -9,11 +8,12 @@ import InputLabel                          from '@mui/material/InputLabel';
 import Input                               from '@mui/material/Input';
 import InputAdornment                      from '@mui/material/InputAdornment';
 import SearchIcon                          from '@mui/icons-material/Search';
+import axios from 'axios';
 
 
 export const Clientlist = () => {
 
-  const { data:client }                     = useFetch("https://si-client-bkn.kps/api/v1/client/");
+  const [ client, setClient ]               = useState([]);
   const [selectedClient, setSelectedClient] = useState();
   const [searchTerm, setSearchTerm]         = useState('');
   const [currentPage, setCurrentPage]       = useState(1);
@@ -22,6 +22,18 @@ export const Clientlist = () => {
 
 
   useEffect(() => {
+    const ClientApi = async () =>{
+      
+      try{
+        const response = await axios.get(`https://si-client-bkn.kps/api/v1/client/`);
+        const data = response.data.data;
+        setClient(data);
+      }
+      catch(error){
+        console.error(`Error: ${error}`);
+      }
+    }
+    ClientApi();
     // Actualizar clientsPerPage basado en la longitud de los datos
     if (client) {
       const additionalClients = client.length - clientsPerPage; // Calcula la cantidad de clientes adicionales
@@ -51,7 +63,7 @@ export const Clientlist = () => {
       return <div>Cargando...</div>;
     }
 
-    const filteredData = client.data.filter((item) => {
+    const filteredData = client.filter((item) => {
       const searchText = searchTerm.toLowerCase();
       return (
         (String(item.manId) && String(item.manId).toLowerCase().includes(searchText)) ||

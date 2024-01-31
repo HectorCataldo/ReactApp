@@ -84,7 +84,7 @@ export const Modify = () => {
             countryClient = add.country;
           }
         }
-        // console.log(dayjs.utc(cliente.registrationDate).format('DD/MM/YYYY'))
+
         if(cliente.registrationDate.length > 0){
           const registrationDate = dayjs.utc(cliente.registrationDate).format('DD/MM/YYYY');
           setCreateDate(registrationDate);

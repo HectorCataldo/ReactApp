@@ -6,9 +6,10 @@ import Box                             from '@mui/material/Box';
 import AddCircleIcon                   from '@mui/icons-material/AddCircle';
 import { Modalcor }                    from './modal_cor';
 import '../../CSS/contact-style.scss';
+import axios                           from 'axios';
 
 export const Correos = () => {
-  const { data:Correos                     } = useFetch("https://gist.githubusercontent.com/LeandroGabrielAltamiranoPereira/9d7665ceac24aedbc6661293a3744756/raw/9ef7a5a135a70fe7d3cdd803fcf67b6fd09ad883/objetosasegurados.json");
+  const [correos        ,setCorreos        ] = useState();
   const [insureobjd     ,setInsrobjd       ] = useState(null);
   const [searchTerm     ,setSearchTerm     ] = useState('');
   const [currentPage    ,setCurrentPage    ] = useState(1);
@@ -19,24 +20,34 @@ export const Correos = () => {
 
 
   useEffect(() => {
+    const correosApi = async () => {
+      try {
+        const response = await axios.get(`https://gist.githubusercontent.com/LeandroGabrielAltamiranoPereira/9d7665ceac24aedbc6661293a3744756/raw/9ef7a5a135a70fe7d3cdd803fcf67b6fd09ad883/objetosasegurados.json`);
+        const data = response.data;
+        setCorreos(data);
+      } catch (error) {
+        console.error(`Error: ${error}`);
+      }
+    }
+    correosApi();
     // Actualizar clientsPerPage basado en la longitud de los datos
-    if (Correos) {
-      const additionalinsureobj  = Correos.length - insrobjPerPage;       // Calcula la cantidad de clientes adicionales
+    if (correos) {
+      const additionalinsureobj  = correos.length - insrobjPerPage;       // Calcula la cantidad de clientes adicionales
       const newinsureobjsPerPage = insrobjPerPage + additionalinsureobj; // Incrementa clientsPerPage
       setinsrobjPerPage(newinsureobjsPerPage);                          // Actualiza clientsPerPage
     }
-  }, [Correos]);
+  }, [correos]);
 
   const pag = useEffect(() => { setCurrentPage(1);}, [searchTerm]);
 
 
-  if (!Correos ) {
+  if (!correos ) {
  return <div>Cargando...</div>;
   }
 
 
 
-  const filteredData = Correos.filter((item) => {
+  const filteredData = correos.filter((item) => {
     const searchText = searchTerm.toLowerCase();
     return (
       (item.objname && item.objname.toString().toLowerCase().includes(searchText)) 

@@ -4,10 +4,11 @@ import _                              from 'lodash';
 import { DataGrid }                   from '@mui/x-data-grid';
 import Box                            from '@mui/material/Box';
 import '../Client/CSS/index.scss';
+import axios from 'axios';
 
 
 export const Insurer = () => {
-  const { data:insureobjdata                } = useFetch("https://gist.githubusercontent.com/LeandroGabrielAltamiranoPereira/9d7665ceac24aedbc6661293a3744756/raw/9ef7a5a135a70fe7d3cdd803fcf67b6fd09ad883/objetosasegurados.json");
+  const [insuredobject   ,setInsuredO       ] = useState();
   const [insureobjd      ,setInsrobjd       ] = useState(null);
   const [searchTerm      ,setSearchTerm     ] = useState('');
   const [currentPage     ,setCurrentPage    ] = useState(1);
@@ -17,26 +18,36 @@ export const Insurer = () => {
 
 
   useEffect(() => {
+    const IoApi = async ()=>{
+      try {
+        const response = await axios.get(`https://gist.githubusercontent.com/LeandroGabrielAltamiranoPereira/9d7665ceac24aedbc6661293a3744756/raw/9ef7a5a135a70fe7d3cdd803fcf67b6fd09ad883/objetosasegurados.json`);
+        const data = response.data;
+        setInsuredO(data);
+      } catch (error) {
+        console.error(`Error: ${error}`);
+      }
+    }
+    IoApi();
                                                                                     // Actualizar clientsPerPage basado en la longitud de los datos
-    if (insureobjdata) {
-      const additionalinsureobj  = insureobjdata.length - insrobjPerPage;         // Calcula la cantidad de clientes adicionales
+    if (insuredobject) {
+      const additionalinsureobj  = insuredobject.length - insrobjPerPage;         // Calcula la cantidad de clientes adicionales
       const newinsureobjsPerPage = insrobjPerPage       + additionalinsureobj;   // Incrementa clientsPerPage
       setinsrobjPerPage(newinsureobjsPerPage);                                  // Actualiza clientsPerPage
     }
-  }, [insureobjdata]);
+  }, [insuredobject]);
 
   const pag = useEffect(() => {
     setCurrentPage(1);
   }, [searchTerm]);
 
 
-  if (!insureobjdata ) {
+  if (!insuredobject ) {
     return <div>Cargando...</div>;
   }
 
 
 
-  const filteredData = insureobjdata.filter((item) => {
+  const filteredData = insuredobject.filter((item) => {
     const searchText = searchTerm.toLowerCase();
     return (
       (item.objname && item.objname.toString().toLowerCase().includes(searchText)) 
